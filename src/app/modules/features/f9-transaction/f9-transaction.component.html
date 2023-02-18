@@ -1,0 +1,381 @@
+<div class="card mb-5 mb-xl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Transaction</span>
+      <span class="text-muted mt-1 fw-bold fs-7">Selected {{ getSelection().length }} records</span>
+    </h3>
+    <div class="card-toolbar">
+      <!-- delete -->
+      <!-- <div class="card-toolbar" *ngIf="getSelection().length > 0">
+        <a
+          routerLink="/features/transactions"
+          data-toggle="modal"
+          data-target="#deleteManyModal"
+          class="btn btn-sm btn-light-danger mr-1"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+            class="svg-icon svg-icon-3"
+          ></span>
+          Delete
+        </a>
+      </div> -->
+
+      <!-- accept -->
+      <div class="card-toolbar" *ngIf="getSelection().length > 0">
+        <a routerLink="/features/transactions" data-toggle="modal" data-target="#acceptManyModal"
+          class="btn btn-sm btn-light-success mr-1">
+          <span [inlineSVG]="'./assets/media/icons/duotune/general/gen043.svg'" class="svg-icon svg-icon-3"></span>
+          Accept
+        </a>
+      </div>
+
+      <!-- WithDraw -->
+      <div class="card-toolbar" *ngIf="getSelection().length > 0">
+        <a routerLink="/features/transactions" data-toggle="modal" data-target="#withDrawManyModal"
+          class="btn btn-sm btn-light-warning mr-1">
+          <span [inlineSVG]="'./assets/media/icons/duotune/general/gen043.svg'" class="svg-icon svg-icon-3"></span>
+          WithDraw
+        </a>
+      </div>
+
+      <!-- new data -->
+      <!-- <div class="card-toolbar">
+        <a routerLink="/features/transactions/add" class="btn btn-sm btn-light-primary mr-1">
+          <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+          Add New
+        </a>
+      </div> -->
+
+      <!-- begin::Menu -->
+      <button type="button" class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
+        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen024.svg'" class="svg-icon svg-icon-2"></span>
+      </button>
+      <!-- begin::Menu 1 -->
+      <f9-transaction-filter
+       [users]="userDatas" 
+       (applyBtnClick)="onApplyBtnClick($event)">
+      </f9-transaction-filter>
+      <!-- end::Menu 1 -->
+      <!-- end::Menu -->
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-muted">
+            <th class="w-25px">
+              <div class="form-check form-check-sm form-check-custom form-check-solid">
+                <input [(ngModel)]="isSelectAll" (click)="onCheckAllSelected()" class="form-check-input" type="checkbox"
+                  data-kt-check="true" data-kt-check-target=".widget-13-check" />
+              </div>
+            </th>
+            <!-- <th class="min-w-150px">ID</th> -->
+            <th class="min-w-150px">Id User</th>
+            <th class="min-w-150px">Method Transaction</th>
+            <th class="min-w-150px">Type Transaction</th>
+            <th class="min-w-150px">Status Transaction</th>
+            <th class="min-w-120px">Money</th>
+            <th class="min-w-130px">TransactionImage</th>
+            <!-- <th class="min-w-150px text-end">Actions</th> -->
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr *ngFor="let data of dataSources">
+            <!-- Select -->
+            <td>
+              <div class="form-check form-check-sm form-check-custom form-check-solid">
+                <input [(ngModel)]="data.checked" (click)="onItemSelected(data.id)"
+                  class="form-check-input widget-13-check" type="checkbox" value="1" />
+              </div>
+            </td>
+
+            <!-- ID -->
+            <!-- <td>
+              <a routerLink="/features/transactions/update/{{ data.id }}"
+                class="text-dark fw-bolder text-hover-primary fs-6">
+                <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6">
+                  {{ data.id }}
+                </p>
+              </a>
+            </td> -->
+
+            <!-- Id IdUser -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6">
+                {{ getUserById(data.idUser) }}
+              </p>
+            </td>
+
+            <!-- MethodTransaction -->
+            <td>
+              <span [class.badge-warning]="
+                  data.methodTransaction === methodTransaction.transfers
+                " [class.badge-info]="
+                  data.methodTransaction === methodTransaction.momo
+                " [class.badge-success]="
+                  data.methodTransaction === methodTransaction.viettelpay
+                " class="badge fs-6 mb-1">
+                {{ data.methodTransaction }}</span>
+            </td>
+
+            <!-- TypeTransaction -->
+            <td>
+              <span [class.badge-info]="
+                  data.typeTransaction === typeTransaction.withdraw
+                " [class.badge-success]="
+                  data.typeTransaction === typeTransaction.recharge
+                " class="badge fs-6 mb-1">
+                {{ data.typeTransaction }}</span>
+            </td>
+
+            <!-- StatusTransaction -->
+            <td>
+              <span [class.badge-warning]="
+                  data.statusTransaction === statusTransaction.waiting
+                " [class.badge-info]="
+                  data.statusTransaction === statusTransaction.failure
+                " [class.badge-success]="
+                  data.statusTransaction === statusTransaction.success
+                " class="badge fs-6 mb-1">
+                {{ data.statusTransaction }}</span>
+            </td>
+
+            <!-- Money -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6">
+                {{ data.money | currency: "VND" }}
+              </p>
+            </td>
+
+            <!-- TransactionImage -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6">
+                <img src="{{ data.transactionImage }}" alt="image.png" style="width: 85px; height: 85px" />
+              </p>
+            </td>
+
+            <!-- Action -->
+            <td class="text-end">
+              <!-- update -->
+              <!-- <a
+                routerLink="/features/transactions/update/{{ data.id }}"
+                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
+              >
+                <span
+                  [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
+                  class="svg-icon svg-icon-3"
+                >
+                </span>
+              </a> -->
+
+              <!-- delete -->
+              <!-- <a
+                (click)="updateDeleteId(data.id)"
+                data-toggle="modal"
+                data-target="#deleteOneModal"
+                routerLink="/features/transactions"
+                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+              >
+                <span
+                  [inlineSVG]="
+                    './assets/media/icons/duotune/general/gen027.svg'
+                  "
+                  class="svg-icon svg-icon-3"
+                >
+                </span>
+              </a> -->
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+
+      <!-- test -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- begin::Body -->
+</div>
+
+<div class="d-flex flex-stack flex-wrap pt-10" style="float: right" *ngIf="dataSources">
+  <div class="fs-6 fw-bold text-gray-700">Items per page:</div>
+
+  <div>
+    <select [(ngModel)]="pageSize" (change)="onChangeSize()" class="form-select form-select-solid form-select-md"
+      name="currency">
+      <option value="5">5</option>
+      <option value="20">20</option>
+      <option value="50">50</option>
+      <option value="80">80</option>
+    </select>
+  </div>
+
+  <!-- <div class="fs-6 fw-bold text-gray-700">Showing {{(pageIndex-1)*pageSize+1}} to
+        {{(pageIndex-1)*pageSize+dataSources.length}}
+        of {{pageLength}} entries</div> -->
+
+  <div class="fs-6 fw-bold text-gray-700 mr-lr-20">
+    {{ (pageIndex - 1) * pageSize + 1 }} -
+    {{ (pageIndex - 1) * pageSize + dataSources.length }}
+    of {{ pageLength }}
+  </div>
+
+  <ul class="pagination">
+    <!-- begin page -->
+    <li class="page-item previous" (click)="onBeginClick()" disabled="true">
+      <a class="page-link cursor-pointer">
+        <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr079.svg'" class="svg-icon svg-icon-3"></span>
+      </a>
+    </li>
+
+    <!-- previous page -->
+    <li class="page-item previous" (click)="onPreviousClick()">
+      <a class="page-link cursor-pointer">
+        <i class="previous"></i>
+      </a>
+    </li>
+
+    <!-- next page -->
+    <li class="page-item next" (click)="onNextClick()">
+      <a class="page-link cursor-pointer">
+        <i class="next"></i>
+      </a>
+    </li>
+
+    <!-- end page -->
+    <li class="page-item next" (click)="onEndClick()">
+      <a class="page-link cursor-pointer">
+        <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr080.svg'" class="svg-icon svg-icon-3"></span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- Delete one Modal -->
+<div class="modal fade" id="deleteOneModal" tabindex="-1" role="dialog" aria-labelledby="deleteOneModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteOneModalLabel">
+          <b>CONFIRM REMOVE DATA</b>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Do you really want to delete these records? This process cannot be
+        undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="onDeleteBtnClick()">
+          Accept
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete many Modal -->
+<div class="modal fade" id="deleteManyModal" tabindex="-1" role="dialog" aria-labelledby="deleteManyModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteManyModalLabel">
+          <b>CONFIRM REMOVE DATA</b>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Do you really want to delete {{ getSelection().length }} select records?
+        This process cannot be undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="onDeleteManyBtnClick()">
+          Accept
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Accept many Modal -->
+<div class="modal fade" id="acceptManyModal" tabindex="-1" role="dialog" aria-labelledby="deleteManyModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteManyModalLabel">
+          <b>CONFIRM ACCEPT MONEY DATA</b>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Do you really want to accept money {{ getSelection().length }} select
+        records? This process cannot be undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="onAcceptManyBtnClick()">
+          Accept
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Accept many Modal -->
+<div class="modal fade" id="withDrawManyModal" tabindex="-1" role="dialog" aria-labelledby="deleteManyModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteManyModalLabel">
+          <b>CONFIRM WITH DRAW MONEY DATA</b>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Do you really want to accept money {{ getSelection().length }} select
+        records? This process cannot be undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" (click)="onWithDrawManyBtnClick()">
+          WithDraw
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

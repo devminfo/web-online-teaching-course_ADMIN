@@ -1,0 +1,30 @@
+<div class="px-7 py-5">
+  <div class="fs-5 text-dark fw-bolder">Filter</div>
+</div>
+<div class="separator border-gray-200"></div>
+<div class="px-7 py-5">
+
+  <!-- Select Type -->
+  <div class="mb-3">
+    <label class="form-label fw-bold">Group Service:</label>
+    <div>
+      <select [(ngModel)]="groupSelect" class="form-select form-select-solid" data-kt-select2="true"
+        data-placeholder="Select option" data-allow-clear="true">
+        <option value="0">All</option>
+        <option *ngFor="let item of groupServices" value="{{ item._id }}">
+          {{ item.title }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Button -->
+  <div class="d-flex justify-content-end">
+    <button type="reset" class="btn btn-sm btn-secondary btn-active-light-primary me-2" data-kt-menu-dismiss="true">
+      Reset
+    </button>
+    <button (click)="onFilterBtnClick()" type="submit" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true">
+      Comfirm
+    </button>
+  </div>
+</div>

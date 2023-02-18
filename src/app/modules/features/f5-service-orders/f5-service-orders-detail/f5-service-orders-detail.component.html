@@ -1,0 +1,239 @@
+<div id="kt_account_profile_details" class="collapse show">
+  <div class="row">
+    <!-- thumbnail-->
+    <div
+      class="col-2 d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10"
+    >
+      <div class="card card-flush py-4">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Image</h2>
+          </div>
+        </div>
+        <div class="card-body text-center pt-0">
+          <span *ngFor="let dataThumbnails of dataThumbnail">
+            <label for="fileImage">
+              <img
+                class="img-color avatar-input-wrapper w-150px h-150px rounded"
+                [src]="
+                  dataThumbnails ? dataThumbnails : common.uploadImageDefault
+                "
+              />
+            </label>
+          </span>
+          <br />
+          <!--end::Avatar input-->
+
+          <!--begin::Description-->
+          <div class="text-muted fs-7">
+            Set the store thumbnail image. Only *.png, *.jpg and *.jpeg avatar
+            files are accepted
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="col tab-pane fade show active"
+      id="kt_ecommerce_add_product_general"
+      role="tab-panel"
+    >
+      <div class="d-flex flex-column gap-7 gap-lg-10">
+        <!--begin::Add Voucher options-->
+        <div class="card card-flush py-4">
+          <div class="card-header">
+            <div class="card-title">
+              <span
+                [inlineSVG]="'./assets/media/icons/duotune/general/gen068.svg'"
+                class="svg-icon svg-icon-3 float-right"
+              ></span>
+              <h2>Detail Service Order</h2>
+            </div>
+            <div class="card-toolbar">
+              <div>
+                <a
+                  type="button"
+                  class="btn btn-light-primary mr-3"
+                  routerLink="/features/servicesorders"
+                >
+                  <span
+                    [inlineSVG]="
+                      './assets/media/icons/duotune/general/gen075.svg'
+                    "
+                  ></span>
+                  Back</a
+                >
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Store :</h3>
+            <p class="mr-5 float-right">
+              {{ detail?.idStore?.name }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">
+              Selected Service :
+            </h3>
+            <p
+              class="mr-5 float-right"
+              *ngFor="let selectedServices of detail?.selectedServices"
+            >
+              {{ selectedServices?.idStoreService?.title }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Customer :</h3>
+            <p class="mr-5 float-right">
+              {{ detail.idCustomer.fullName }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Status :</h3>
+            <p class="mr-5 float-right">
+              {{ detail.status }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">
+              Date Time Checkin :
+            </h3>
+            <p class="mr-5 float-right">
+              {{ detail?.dateTimeCheckIn | date : "HH:mm a dd/MM/yyyy" }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">
+              Date Time Checkout :
+            </h3>
+            <p class="mr-5 float-right">
+              <span *ngIf="detail?.dateTimeCheckOut === 0">{{
+                detail?.dateTimeCheckOut
+              }}</span>
+              <span *ngIf="detail?.dateTimeCheckOut !== 0">{{
+                detail?.dateTimeCheckOut | date : "HH:mm a dd/MM/yyyy"
+              }}</span>
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Voucher :</h3>
+            <a
+              class="mr-5 float-right"
+              data-toggle="modal"
+              data-target="#voucherModal"
+            >
+              <span
+                [inlineSVG]="'./assets/media/icons/duotune/general/gen074.svg'"
+              ></span>
+              {{ detail.idVoucher?.title }}
+            </a>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">
+              Service Fee Total :
+            </h3>
+            <p class="mr-5 float-right">
+              {{ common.formatPriceDots(detail.serviceFeeTotal) }} $
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Tip Total :</h3>
+            <p class="mr-5 float-right">
+              {{ common.formatPriceDots(detail.tipTotal) }} $
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Promotion :</h3>
+            <p class="mr-5 float-right">
+              {{ common.formatPriceDots(detail.promotion) }} $
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Total Money :</h3>
+            <p class="mr-5 float-right">
+              {{ common.formatPriceDots(detail.totalMoney) }} $
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--  Voucher Modal -->
+<div
+  class="modal fade"
+  id="voucherModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="deleteOneModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content pl-5 pr-5">
+      <h2 class="modal-title text-center pt-3" id="deleteOneModalLabel">
+        <div>Voucher</div>
+      </h2>
+      <hr />
+
+      <div>
+        <h3 class="fw-bolder text-dark">
+          Voucher Code :<span class="voucher">
+            {{ detail.idVoucher?.code ? detail.idVoucher?.code : "NaN" }}</span
+          >
+        </h3>
+      </div>
+
+      <div>
+        <h3 class="fw-bolder text-dark">
+          Voucher Name :
+          <span class="voucher">{{
+            detail.idVoucher?.title ? detail.idVoucher?.title : "NaN"
+          }}</span>
+        </h3>
+      </div>
+
+      <div>
+        <h3 class="fw-bolder text-dark">
+          Type of discount :
+          <span class="voucher">
+            {{
+              detail.idVoucher?.unitTypeDiscount
+                ? detail.idVoucher?.unitTypeDiscount
+                : "NaN"
+            }}
+          </span>
+        </h3>
+      </div>
+
+      <div>
+        <h3 class="fw-bolder text-dark">
+          Start date time :
+          <span class="voucher">
+            {{
+              detail.idVoucher?.startDateTime | date : "HH:mm a - dd/MM/yyyy"
+            }}
+          </span>
+        </h3>
+      </div>
+
+      <div>
+        <h3 class="fw-bolder text-dark">
+          End date time :
+          <span class="voucher">
+            {{ detail.idVoucher?.endDateTime | date : "HH:mm a - dd/MM/yyyy" }}
+          </span>
+        </h3>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button
+          type="button"
+          class="btn btn-secondary w-150px mr-10"
+          data-dismiss="modal"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

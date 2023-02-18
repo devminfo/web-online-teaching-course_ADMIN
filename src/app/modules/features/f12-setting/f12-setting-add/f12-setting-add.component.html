@@ -1,0 +1,440 @@
+<div class="card mb-5 mb-xl-10">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-bankName align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Setting</span>
+      <span class="text-muted mt-1 fw-bold fs-7">Add datas</span>
+    </h3>
+    <div class="card-toolbar">
+      <!-- new data -->
+      <div class="card-toolbar">
+        <a routerLink="/features/settings" class="btn btn-sm btn-light-primary">
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'"
+            class="svg-icon svg-icon-3"
+          ></span>
+          Go back
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <div id="kt_account_profile_details" class="collapse show">
+    <form [formGroup]="form" novalidate="" class="form">
+      <div class="card-body border-top p-9">
+        <!-- Logo -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Logo</span>
+          </label>
+
+          <div class="col-lg-8 fv-row">
+            <!--begin::Image input-->
+            <div class="image-input image-input-outline">
+              <!--begin::Image preview wrapper-->
+              <div
+                class="image-input-wrapper w-125px h-125px"
+                *ngIf="input.banner != undefined && input.banner != null"
+              >
+                <img
+                  class="image-input-wrapper w-125px h-125px"
+                  *ngIf="input.banner != ''"
+                  [src]="input.banner"
+                  alt="izi software"
+                  width="250"
+                  height="250"
+                />
+              </div>
+              <!--end::Image preview wrapper-->
+
+              <!--begin::Edit button-->
+              <label
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="change"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Change avatar"
+                (change)="onLogoUploadClick()"
+              >
+                <i class="bi bi-pencil-fill fs-7"></i>
+
+                <!--begin::Inputs-->
+                <input
+                  type="file"
+                  formControlName="banner"
+                  accept="image/*"
+                  #inputLogo
+                  name="banner"
+                />
+                <!--end::Inputs-->
+              </label>
+              <!--end::Edit button-->
+
+              <!--begin::Remove button-->
+              <span
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="remove"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Remove avatar"
+                (click)="onLogoDeleteClick()"
+              >
+                <i class="bi bi-x fs-2"></i>
+              </span>
+              <!--end::Remove button-->
+            </div>
+            <!--end::Image input-->
+          </div>
+        </div>
+
+        <!-- Bank Name -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Bank Name</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="bankName"
+              [(ngModel)]="input.bankName"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Bank Name"
+              name="bankName"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['bankName']!.invalid &&
+                (form.controls['bankName'].dirty ||
+                  form.controls['bankName'].touched)
+              "
+            >
+              <span *ngIf="form.controls['bankName'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- branchName -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Branch Name</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="branchName"
+              [(ngModel)]="input.branchName"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Branch Name"
+              name="branchName"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['branchName']!.invalid &&
+                (form.controls['branchName'].dirty ||
+                  form.controls['branchName'].touched)
+              "
+            >
+              <span *ngIf="form.controls['branchName'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- bankAccountNumber -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Bank Account Number</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="bankAccountNumber"
+              [(ngModel)]="input.bankAccountNumber"
+              type="number"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Bank Account Number"
+              name="bankAccountNumber"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['bankAccountNumber']!.invalid &&
+                (form.controls['bankAccountNumber'].dirty ||
+                  form.controls['bankAccountNumber'].touched)
+              "
+            >
+              <span *ngIf="form.controls['bankAccountNumber'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- bankAccountName -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Bank Account Name</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="bankAccountName"
+              [(ngModel)]="input.bankAccountName"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Bank Account Name"
+              name="bankAccountName"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['bankAccountName']!.invalid &&
+                (form.controls['bankAccountName'].dirty ||
+                  form.controls['bankAccountName'].touched)
+              "
+            >
+              <span *ngIf="form.controls['bankAccountName'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- phone -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Phone</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="phone"
+              [(ngModel)]="input.phone"
+              type="number"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Phone"
+              name="phone"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['phone']!.invalid &&
+                (form.controls['phone'].dirty || form.controls['phone'].touched)
+              "
+            >
+              <span *ngIf="form.controls['phone'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- momo -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Momo</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="momo"
+              [(ngModel)]="input.momo"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Momo"
+              name="momo"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['momo']!.invalid &&
+                (form.controls['momo'].dirty || form.controls['momo'].touched)
+              "
+            >
+              <span *ngIf="form.controls['momo'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- vnPay -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>VnPay</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="vnPay"
+              [(ngModel)]="input.vnPay"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="VnPay"
+              name="vnPay"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['vnPay']!.invalid &&
+                (form.controls['vnPay'].dirty || form.controls['vnPay'].touched)
+              "
+            >
+              <span *ngIf="form.controls['vnPay'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- quizPassPercent -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Quiz Pass Percent</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="quizPassPercent"
+              [(ngModel)]="input.quizPassPercent"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Quiz Pass Percent"
+              name="quizPassPercent"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['quizPassPercent']!.invalid &&
+                (form.controls['quizPassPercent'].dirty ||
+                  form.controls['quizPassPercent'].touched)
+              "
+            >
+              <span *ngIf="form.controls['quizPassPercent'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- shareContent -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Share Content</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="shareContent"
+              [(ngModel)]="input.shareContent"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Share Content"
+              name="shareContent"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['shareContent']!.invalid &&
+                (form.controls['shareContent'].dirty ||
+                  form.controls['shareContent'].touched)
+              "
+            >
+              <span *ngIf="form.controls['shareContent'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- policyContent -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Policy Content</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="policyContent"
+              [(ngModel)]="input.policyContent"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Policy Content"
+              name="policyContent"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['policyContent']!.invalid &&
+                (form.controls['policyContent'].dirty ||
+                  form.controls['policyContent'].touched)
+              "
+            >
+              <span *ngIf="form.controls['policyContent'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- feeAppPercent -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Fee App Percent</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="feeAppPercent"
+              [(ngModel)]="input.feeAppPercent"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Fee App Percent"
+              name="feeAppPercent"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['feeAppPercent']!.invalid &&
+                (form.controls['feeAppPercent'].dirty ||
+                  form.controls['feeAppPercent'].touched)
+              "
+            >
+              <span *ngIf="form.controls['feeAppPercent'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add New -->
+      <div class="card-footer d-flex justify-bankAccountNumber-end py-6 px-9">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="isLoading"
+          (click)="onAddNewBtnClick()"
+        >
+          <ng-container *ngIf="!isLoading">Add New</ng-container>
+          <ng-container *ngIf="isLoading">
+            <span clas="indicator-progress" [style.display]="'block'">
+              Please wait...{{ " " }}
+              <span
+                class="spinner-border spinner-border-sm align-middle ms-2"
+              ></span>
+            </span>
+          </ng-container>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

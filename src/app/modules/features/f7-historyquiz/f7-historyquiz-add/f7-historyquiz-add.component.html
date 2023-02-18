@@ -1,0 +1,179 @@
+<div class="card mb-5 mb-xl-10">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">HistoryQuiz</span>
+      <span class="text-muted mt-1 fw-bold fs-7">Add New</span>
+    </h3>
+    <div class="card-toolbar">
+      <!-- new data -->
+      <div class="card-toolbar">
+        <a routerLink="/features/historyquizzes" class="btn btn-sm btn-light-primary">
+          <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'" class="svg-icon svg-icon-3"></span>
+          Go back
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <div id="kt_account_profile_details" class="collapse show">
+    <form [formGroup]="form" novalidate="" class="form">
+      <div class="card-body border-top p-9">
+        <!-- IdUser -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">IdUser</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select class="form-control form-control-lg form-control-solid mrb-5" formControlName="idUser"
+              [(ngModel)]="input.idUser">
+              <option value="" disabled selected hidden>
+                Select IdUser
+              </option>
+              <option *ngFor="let idUser of idUserDatas" [value]="idUser._id">
+                {{ idUser.fullName }}
+              </option>
+            </select>
+
+            <span class="text-danger" *ngIf="
+                form.controls['idUser']!.invalid &&
+                (form.controls['idUser'].dirty ||
+                  form.controls['idUser'].touched)
+              ">
+              <span *ngIf="form.controls['idUser'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- IdCertificate -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>IdCertificate</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select class="form-control form-control-lg form-control-solid mrb-5" formControlName="idCertificate"
+              [(ngModel)]="input.idCertificate">
+              <option value="" disabled selected hidden>
+                Select IdCertificate
+              </option>
+              <option *ngFor="let idCertificate of idCertificateDatas" [value]="idCertificate._id">
+                {{ idCertificate.title }}
+              </option>
+            </select>
+
+            <span class="text-danger" *ngIf="
+                form.controls['idCertificate']!.invalid &&
+                (form.controls['idCertificate'].dirty ||
+                  form.controls['idCertificate'].touched)
+              ">
+              <span *ngIf="form.controls['idCertificate'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Point -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Point</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input formControlName="point" [(ngModel)]="input.point" type="number"
+              class="form-control form-control-lg form-control-solid mrb-5" placeholder="Point" name="point" />
+
+            <span class="text-danger" *ngIf="
+                form.controls['point']!.invalid &&
+                (form.controls['point'].dirty || form.controls['point'].touched)
+              ">
+              <span *ngIf="form.controls['point'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- TotalPoint -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">TotalPoint</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input formControlName="totalPoint" [(ngModel)]="input.totalPoint" type="number"
+              class="form-control form-control-lg form-control-solid mrb-5" placeholder="Total Point"
+              name="totalPoint" />
+
+            <span class="text-danger" *ngIf="
+                form.controls['totalPoint']!.invalid &&
+                (form.controls['totalPoint'].dirty ||
+                  form.controls['totalPoint'].touched)
+              ">
+              <span *ngIf="form.controls['totalPoint'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Percent -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Percent</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input formControlName="percent" [(ngModel)]="input.percent" type="number"
+              class="form-control form-control-lg form-control-solid mrb-5" placeholder="Percent" name="percent" />
+
+            <span class="text-danger" *ngIf="
+                form.controls['percent']!.invalid &&
+                (form.controls['percent'].dirty ||
+                  form.controls['percent'].touched)
+              ">
+              <span *ngIf="form.controls['percent'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- NumberTest -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">NumberTest</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input formControlName="numberTest" [(ngModel)]="input.numberTest" type="text"
+              class="form-control form-control-lg form-control-solid mrb-5" placeholder="Number Test"
+              name="numberTest" />
+
+            <span class="text-danger" *ngIf="
+                form.controls['numberTest']!.invalid &&
+                (form.controls['numberTest'].dirty ||
+                  form.controls['numberTest'].touched)
+              ">
+              <span *ngIf="form.controls['numberTest'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add New -->
+      <div class="card-footer d-flex justify-numberTest-end py-6 px-9">
+        <button type="button" class="btn btn-primary" [disabled]="isLoading" (click)="onAddNewBtnClick()">
+          <ng-container *ngIf="!isLoading">Add New</ng-container>
+          <ng-container *ngIf="isLoading">
+            <span clas="indicator-progress" [style.display]="'block'">
+              Please wait...{{ " " }}
+              <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+            </span>
+          </ng-container>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

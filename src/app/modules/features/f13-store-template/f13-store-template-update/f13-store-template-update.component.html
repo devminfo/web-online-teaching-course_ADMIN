@@ -1,0 +1,175 @@
+<div id="kt_account_profile_details" class="collapse show">
+  <form [formGroup]="form" novalidate="" class="form">
+    <div class="row">
+      <!-- thumbnail-->
+      <div
+        class="col-2 d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10"
+      >
+        <div class="card card-flush py-4">
+          <div class="card-header">
+            <div class="card-title">
+              <h2>Image</h2>
+            </div>
+          </div>
+          <div class="card-body text-center pt-0">
+            <label for="fileImage">
+              <img
+                class="img-color avatar-input-wrapper w-150px h-150px rounded"
+                [src]="update.image ? update.image : common.uploadImageDefault"
+              />
+            </label>
+            <input
+              formControlName="image"
+              class="d-none"
+              id="fileImage"
+              (change)="onThumbnailUploadClick()"
+              type="file"
+              #inputThumbnail
+              accept=".png, .jpg, .jpeg"
+            />
+            <br />
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['image']!.invalid &&
+                (form.controls['image'].dirty || form.controls['image'].touched)
+              "
+            >
+              <span *ngIf="form.controls['image'].errors!.required">
+                Please enter this field
+              </span>
+            </span>
+            <!--end::Avatar input-->
+
+            <!--begin::Description-->
+            <div class="text-muted fs-7">
+              Set the store thumbnail image. Only *.png, *.jpg and *.jpeg avatar
+              files are accepted
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col tab-pane fade show active"
+        id="kt_ecommerce_add_product_general"
+        role="tab-panel"
+      >
+        <div class="d-flex flex-column gap-7 gap-lg-10">
+          <!--begin::Add Voucher options-->
+          <div class="card card-flush py-4">
+            <div class="card-header">
+              <div class="card-title">
+                <span
+                  [inlineSVG]="
+                    './assets/media/icons/duotune/general/gen068.svg'
+                  "
+                  class="svg-icon svg-icon-3 float-right"
+                ></span>
+                <h2>Update Postcard</h2>
+              </div>
+            </div>
+
+            <!-- Title && Content-->
+
+            <!-- Title-->
+            <div class="card-body pt-0">
+              <div class="mb-2 fv-row">
+                <label class="required form-label">Title</label>
+                <input
+                  formControlName="title"
+                  [(ngModel)]="update.title"
+                  class="form-control form-control-lg form-control-solid mrb-5"
+                  name="title"
+                  placeholder="Enter name voucher"
+                />
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'Please enter this field',
+                    control: form.controls['title']
+                  }"
+                ></ng-container>
+              </div>
+            </div>
+
+            <!--Contet-->
+            <div class="card-body pt-0">
+              <div class="mb-2 fv-row">
+                <label class="required form-label">Content</label>
+                <textarea
+                  formControlName="content"
+                  [(ngModel)]="update.content"
+                  class="form-control form-control-lg form-control-solid mrb-5 h-150px"
+                  placeholder="Enter the code of content"
+                  type="text"
+                ></textarea>
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'Please enter this field',
+                    control: form.controls['content']
+                  }"
+                ></ng-container>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="card-body pt-0">
+              <div class="mb-2 fv-row">
+                <label class="form-label">Description</label>
+                <ckeditor></ckeditor>
+              </div>
+            </div>
+
+            <!-- Create and cancel -->
+            <div class="d-flex justify-content-end py-6 px-8 mr-5">
+              <a
+                type="button"
+                class="btn btn-light mr-3"
+                routerLink="/features/storetemplates"
+                >Cancel</a
+              >
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-dismiss="modal"
+                [disabled]="isLoading"
+                (click)="onUpdateBtnClick()"
+              >
+                <ng-container *ngIf="!isLoading">Save</ng-container>
+                <ng-container *ngIf="isLoading">
+                  <span clas="indicator-progress" [style.display]="'block'">
+                    Please wait...{{ " " }}
+                    <span
+                      class="spinner-border spinner-border-sm align-middle ms-2"
+                    ></span>
+                  </span>
+                </ng-container>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- check error -->
+<ng-template
+  #formError
+  let-control="control"
+  let-message="message"
+  let-validation="validation"
+>
+  <ng-container
+    *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+  >
+    <div class="fv-plugins-message-container">
+      <span role="alert " class="text-danger">
+        {{ message }}
+      </span>
+    </div>
+  </ng-container>
+</ng-template>

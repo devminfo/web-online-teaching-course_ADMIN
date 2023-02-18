@@ -1,0 +1,511 @@
+<div id="kt_account_profile_details" class="collapse show">
+  <form [formGroup]="form" novalidate="" class="form">
+    <div class="row">
+      
+      <!-- thumbnail-->
+      <div
+        class="col-2 d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10"
+      >
+        <div class="card card-flush py-4">
+          <div class="card-header">
+            <div class="card-title">
+              <h2>Image</h2>
+            </div>
+          </div>
+          <div class="card-body text-center pt-0">
+            <label for="fileImage">
+              <img
+                class="img-color avatar-input-wrapper w-150px h-150px rounded"
+                [src]="
+                  input.thumbnail ? input.thumbnail : common.uploadImageDefault
+                "
+              />
+            </label>
+            <input
+              formControlName="thumbnail"
+              class="d-none"
+              id="fileImage"
+              (change)="onThumbnailUploadClick()"
+              type="file"
+              #inputThumbnail
+              accept=".png, .jpg, .jpeg"
+            />
+            <br />
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['thumbnail']!.invalid &&
+                (form.controls['thumbnail'].dirty ||
+                  form.controls['thumbnail'].touched)
+              "
+            >
+              <span *ngIf="form.controls['thumbnail'].errors!.required">
+                Please enter this field
+              </span>
+            </span>
+            <!--end::Avatar input-->
+
+            <!--begin::Description-->
+            <div class="text-muted fs-7">
+              Set the store thumbnail image. Only *.png, *.jpg and *.jpeg avatar
+              files are accepted
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col tab-pane fade show active"
+        id="kt_ecommerce_add_product_general"
+        role="tab-panel"
+      >
+        <div class="d-flex flex-column gap-7 gap-lg-10">
+
+          <!--begin::Add Voucher options-->
+          <div class="card card-flush py-4">
+            <div class="card-header">
+              <div class="card-title">
+                <span
+                  [inlineSVG]="
+                    './assets/media/icons/duotune/general/gen068.svg'
+                  "
+                  class="svg-icon svg-icon-3 float-right"
+                ></span>
+                <h2>Add Voucher</h2>
+              </div>
+            </div>
+
+            <!-- Name && CODE-->
+            <div class="row">
+
+              <!-- Name-->
+              <div class="col-md-6 card-body pt-0">
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">Name</label>
+                  <input
+                    formControlName="title"
+                    [(ngModel)]="input.title"
+                    class="form-control form-control-lg form-control-solid mrb-5"
+                    name="title"
+                    placeholder="Enter name voucher"
+                  />
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Please enter this field',
+                      control: form.controls['title']
+                    }"
+                  ></ng-container>
+                </div>
+              </div>
+
+              <!--CODE-->
+              <div class="col-md-6 card-body pt-0">
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">Code</label>
+                  <input
+                    formControlName="code"
+                    [(ngModel)]="input.code"
+                    class="form-control form-control-lg form-control-solid mrb-5"
+                    placeholder="Enter the code of voucher"
+                    type="text"
+                  />
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Please enter this field',
+                      control: form.controls['code']
+                    }"
+                  ></ng-container>
+                </div>
+              </div>
+            </div>
+
+            <!-- Start Date && End Date-->
+            <div class="row">
+
+              <!-- Start Date-->
+              <div class="col-md-6 card-body pt-0">
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">Start day</label>
+                  <span
+                    [inlineSVG]="
+                      './assets/media/icons/duotune/general/gen014.svg'
+                    "
+                    class="svg-icon svg-icon-3 float-right"
+                  ></span>
+                  <input
+                    formControlName="startDate"
+                    class="form-control form-control-lg form-control-solid mrb-5"
+                    placeholder="Start Date"
+                    name="startDate"
+                    id="startDate_datepicker"
+                    [(ngModel)]="startDate"
+                  />
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Please enter this field',
+                      control: form.controls['startDate']
+                    }"
+                  ></ng-container>
+                </div>
+              </div>
+              <!--End Date-->
+
+              <div class="col-md-6 card-body pt-0">
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">End day</label>
+                  <span
+                    [inlineSVG]="
+                      './assets/media/icons/duotune/general/gen014.svg'
+                    "
+                    class="svg-icon svg-icon-3 float-right"
+                  ></span>
+                  <input
+                    formControlName="endDate"
+                    class="form-control form-control-lg form-control-solid mrb-5"
+                    placeholder="End Date"
+                    name="endDate"
+                    id="endDate_datepicker"
+                    [(ngModel)]="endDate"
+                  />
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Please enter this field',
+                      control: form.controls['endDate']
+                    }"
+                  ></ng-container>
+                </div>
+              </div>
+            </div>
+
+            <!-- Start Time && End Time-->
+            <div class="row">
+              <div class="col-md-6 card-body pt-0">
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">Start time</label>
+                  <input
+                    formControlName="startTime"
+                    class="form-control form-control-lg form-control-solid mrb-5"
+                    placeholder="Start time"
+                    name="startTime"
+                    id="startTime_timepicker"
+                    [(ngModel)]="startTime"
+                  />
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Please enter this field',
+                      control: form.controls['startTime']
+                    }"
+                  ></ng-container>
+                </div>
+              </div>
+              <div class="col-md-6 card-body pt-0">
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">End time</label>
+                  <input
+                    formControlName="endTime"
+                    class="form-control form-control-lg form-control-solid mrb-5"
+                    placeholder="End time"
+                    name="endTime"
+                    id="endTime_datepicker"
+                    [(ngModel)]="endTime"
+                  />
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Please enter this field',
+                      control: form.controls['endTime']
+                    }"
+                  ></ng-container>
+                </div>
+              </div>
+            </div>
+
+            <!-- Type of Discount-->
+            <div class="row">
+              <div class="col-md-6 card-body pt-0">
+                <label class="required form-label">Type of discount</label>
+                <div class="ml-4 mb-5 row">
+                  <div
+                    class="col-md-3 form-check form-check-custom form-check-solid"
+                  >
+                    <input
+                      checked="checked"
+                      class="form-check-input me-3"
+                      formControlName="unitTypeDiscount"
+                      type="radio"
+                      value="MONEY"
+                      [(ngModel)]="input.unitTypeDiscount"
+                      (click)="changeIsCheckedFalse('MONEY')"
+                    />
+                    <label class="form-check-label ml-5 fw-bolder text-warning"
+                      >Discount by money
+                    </label>
+                  </div>
+                  <div
+                    class="col-md-3 form-check form-check-custom form-check-solid"
+                  >
+                    <input
+                      formControlName="unitTypeDiscount"
+                      class="form-check-input me-3"
+                      name="unitTypeDiscount"
+                      type="radio"
+                      value="PERCENT"
+                      (click)="changeIsCheckedTrue('PERCENT')"
+                    />
+                    <label class="form-check-label ml-5 text-success fw-bolder"
+                      >Percent discount</label
+                    >
+                  </div>
+                  <div class="col-6"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Percent discount && Number of Voucher -->
+            <div class="row">
+
+              <!-- Percent discount-->
+              <div class="col-md-6 card-body pt-0">
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">Percent discount</label>
+
+                  <!-- priceDiscount-->
+                  <div *ngIf="input.unitTypeDiscount == 'MONEY'">
+                    <input
+                      formControlName="priceDiscount"
+                      [(ngModel)]="input.priceDiscount"
+                      type="number"
+                      name="priceDiscount"
+                      class="form-control form-control-lg form-control-solid mrb-5"
+                      placeholder="Enter the percent you want to reduce"
+                    />
+
+                    <ng-container
+                      [ngTemplateOutlet]="formError"
+                      [ngTemplateOutletContext]="{
+                        validation: 'required',
+                        message: 'Please enter this field',
+                        control: form.controls['priceDiscount']
+                      }"
+                    ></ng-container>
+                    <ng-container
+                      [ngTemplateOutlet]="formError"
+                      [ngTemplateOutletContext]="{
+                        validation: 'min',
+                        message: 'Please enter percent bigger 0',
+                        control: form.controls['priceDiscount']
+                      }"
+                    ></ng-container>
+                  </div>
+
+                  <!-- percentDiscount-->
+                  <div *ngIf="input.unitTypeDiscount == 'PERCENT'">
+                    <input
+                      formControlName="percentDiscount"
+                      [(ngModel)]="input.percentDiscount"
+                      type="number"
+                      name="percentDiscount"
+                      class="form-control form-control-lg form-control-solid mrb-5"
+                      placeholder="Enter the percent you want to reduce"
+                    />
+                    <ng-container
+                      [ngTemplateOutlet]="formError"
+                      [ngTemplateOutletContext]="{
+                        validation: 'required',
+                        message: 'Please enter this field',
+                        control: form.controls['percentDiscount']
+                      }"
+                    ></ng-container>
+                    <ng-container
+                      [ngTemplateOutlet]="formError"
+                      [ngTemplateOutletContext]="{
+                        validation: 'min',
+                        message: 'Please enter percent bigger 0',
+                        control: form.controls['percentDiscount']
+                      }"
+                    ></ng-container>
+                    <ng-container
+                      [ngTemplateOutlet]="formError"
+                      [ngTemplateOutletContext]="{
+                        validation: 'max',
+                        message: 'Please enter percent smaller 100',
+                        control: form.controls['percentDiscount']
+                      }"
+                    ></ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!--Number of Voucher -->
+              <div class="col-md-6 card-body pt-0">
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">Number of voucher</label>
+                  <input
+                    formControlName="originalQuantity"
+                    [(ngModel)]="input.originalQuantity"
+                    type="number"
+                    name="originalQuantity"
+                    class="form-control form-control-lg form-control-solid mrb-5"
+                    placeholder="Enter the percent you want to reduce"
+                  />
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Please enter this field',
+                      control: form.controls['originalQuantity']
+                    }"
+                  ></ng-container>
+                  <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'min',
+                    message: 'Please enter percent bigger 0',
+                    control: form.controls['originalQuantity']
+                  }"
+                ></ng-container>
+                </div>
+              </div>
+            </div>
+
+            <!-- Minium order && Maximum discount -->
+            <div class="row">
+
+              <!-- Minium order-->
+              <div class="col-md-6 card-body pt-0">
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">Minium order</label>
+                  <input
+                    formControlName="minOrder"
+                    [(ngModel)]="input.minOrder"
+                    type="number"
+                    name="minOrder"
+                    class="form-control form-control-lg form-control-solid mrb-5"
+                    placeholder="Chose minium order"
+                  />
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'min',
+                      message: 'Please enter percent bigger 0',
+                      control: form.controls['minOrder']
+                    }"
+                  ></ng-container>
+                  <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'Please enter this field',
+                    control: form.controls['minOrder']
+                  }"
+                ></ng-container>
+                </div>
+              </div>
+
+              <!--Maximum discount -->
+              <div
+                *ngIf="input.unitTypeDiscount == 'PERCENT'"
+                class="col-md-6 card-body pt-0"
+              >
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">Maximum discount</label>
+                  <input
+                    formControlName="maxDiscount"
+                    [(ngModel)]="input.maxDiscount"
+                    type="number"
+                    name="maxDiscount"
+                    class="form-control form-control-lg form-control-solid mrb-5"
+                    placeholder="Enter maximum discount"
+                  />
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Please enter this field',
+                      control: form.controls['maxDiscount']
+                    }"
+                  ></ng-container>
+                  <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'min',
+                    message: 'Please enter percent bigger 0',
+                    control: form.controls['maxDiscount']
+                  }"
+                ></ng-container>
+                </div>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="card-body pt-0">
+              <div class="mb-2 fv-row">
+                <label class="form-label">Description</label>
+                <ckeditor
+                  [(ngModel)]="input.description"
+                  formControlName="description"
+                  name="description"
+                ></ckeditor> -->
+              </div>
+            </div>
+
+            <!-- Create and cancel -->
+            <div class="d-flex justify-content-end py-6 px-8 mr-5">
+              <a
+                type="button"
+                class="btn btn-light mr-3"
+                routerLink="/features/vouchertemplatedefaults"
+                >Cancel</a
+              >
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-dismiss="modal"
+                [disabled]="isLoading"
+                (click)="onAddNewBtnClick()"
+              >
+                <ng-container *ngIf="!isLoading">Save</ng-container>
+                <ng-container *ngIf="isLoading">
+                  <span clas="indicator-progress" [style.display]="'block'">
+                    Please wait...{{ " " }}
+                    <span
+                      class="spinner-border spinner-border-sm align-middle ms-2"
+                    ></span>
+                  </span>
+                </ng-container>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- check error -->
+<ng-template
+  #formError
+  let-control="control"
+  let-message="message"
+  let-validation="validation"
+>
+  <ng-container
+    *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+  >
+    <div class="fv-plugins-message-container">
+      <span role="alert " class="text-danger">
+        {{ message }}
+      </span>
+    </div>
+  </ng-container>
+</ng-template>

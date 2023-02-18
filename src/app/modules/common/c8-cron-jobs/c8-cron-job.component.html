@@ -1,0 +1,208 @@
+<div class="card mb-5 mb-xl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Cron Job</span>
+      <span class="text-muted mt-1 fw-bold fs-7">Selected {{ getSelection().length }} records</span>
+    </h3>
+    <div class="card-toolbar">
+      <!-- begin::Menu -->
+      <button type="button" class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
+        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen024.svg'" class="svg-icon svg-icon-2"></span>
+      </button>
+      <!-- begin::Menu 1 -->
+      <c8-cron-job-filter [cronjobs]="dataSources" (applyBtnClick)="onApplyBtnClick($event)">
+      </c8-cron-job-filter>
+      <!-- end::Menu 1 -->
+      <!-- end::Menu -->
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-muted">
+            <th class="w-25px">
+              <div class="form-check form-check-sm form-check-custom form-check-solid">
+                <input [(ngModel)]="isSelectAll" (click)="onCheckAllSelected()" class="form-check-input" type="checkbox"
+                  data-kt-check="true" data-kt-check-target=".widget-13-check" />
+              </div>
+            </th>
+            <th class="min-w-150px">Id Entity</th>
+            <th class="min-w-100px">Status</th>
+            <th class="min-w-100px">Entity Type</th>
+            <th class="min-w-150px">CronJob Key</th>
+            <th class="min-w-150px">Start Date Time</th>
+            <th class="min-w-150px text-center">Actions</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr *ngFor="let data of dataSources">
+            <!-- Select -->
+            <td>
+              <div class="form-check form-check-sm form-check-custom form-check-solid mr-2">
+                <input [(ngModel)]="data.checked" (click)="onItemSelected(data._id)"
+                  class="form-check-input widget-13-check" type="checkbox" value="1" />
+              </div>
+            </td>
+
+            <!-- IdEntity -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6">
+                {{ this.getUserById(data.idEntity) }}
+              </p>
+            </td>
+
+            <!-- Status -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6">
+                {{ data.status }}
+              </p>
+            </td>
+
+            <!-- EntityType -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6">
+                {{ data.entityType }}
+              </p>
+            </td>
+
+            <!-- CronJobKey -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6">
+                {{ data.cronJobKey }}
+              </p>
+            </td>
+
+            <!-- StartDateTime -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6">
+                {{ data.startDateTime | date: 'dd/MM/YYYY hh:mm:ss' }}
+              </p>
+            </td>
+
+            <!-- restoreParam -->
+            <td class="text-center">
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6">
+                <a *ngIf="data?.restoreParam" data-toggle="modal" (click)="getDataRestoreParam(data?._id)"
+                  data-target="#modal-restoreParam" routerLink="/features/cron-jobs"
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                  <span [inlineSVG]="
+                      './assets/media/icons/duotune/general/gen004.svg'
+                    " class="svg-icon svg-icon-1 svg-icon-success" title="Restore Param"></span>
+                </a>
+              </p>
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- begin::Body -->
+</div>
+
+<div class="d-flex flex-stack flex-wrap pt-10" style="float: right" *ngIf="dataSources">
+  <div class="fs-6 fw-bold text-gray-700">Items per page:</div>
+
+  <div>
+    <select [(ngModel)]="pageSize" (change)="onChangeSize()" class="form-select form-select-solid form-select-md"
+      name="currency">
+      <option value="5">5</option>
+      <option value="20">20</option>
+      <option value="50">50</option>
+      <option value="80">80</option>
+    </select>
+  </div>
+
+  <!-- <div class="fs-6 fw-bold text-gray-700">Showing {{(pageIndex-1)*pageSize+1}} to
+        {{(pageIndex-1)*pageSize+dataSources.length}}
+        of {{pageLength}} entries</div> -->
+
+  <div class="fs-6 fw-bold text-gray-700 mr-lr-20">
+    {{ (pageIndex - 1) * pageSize + 1 }} -
+    {{ (pageIndex - 1) * pageSize + dataSources.length }}
+    of {{ pageLength }}
+  </div>
+
+  <ul class="pagination">
+    <!-- begin page -->
+    <li class="page-item previous" (click)="onBeginClick()" disabled="true">
+      <a class="page-link cursor-pointer">
+        <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr079.svg'" class="svg-icon svg-icon-3"></span>
+      </a>
+    </li>
+
+    <!-- previous page -->
+    <li class="page-item previous" (click)="onPreviousClick()">
+      <a class="page-link cursor-pointer">
+        <i class="previous"></i>
+      </a>
+    </li>
+
+    <!-- next page -->
+    <li class="page-item next" (click)="onNextClick()">
+      <a class="page-link cursor-pointer">
+        <i class="next"></i>
+      </a>
+    </li>
+
+    <!-- end page -->
+    <li class="page-item next" (click)="onEndClick()">
+      <a class="page-link cursor-pointer">
+        <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr080.svg'" class="svg-icon svg-icon-3"></span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<div class="modal fade" tabindex="-1" id="modal-restoreParam">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Restore Param</h3>
+      </div>
+
+      <div class="modal-body modal-content-custom">
+        <div *ngIf="isLoadRestoreParam" class="modal-body modal-content-custom">
+          <p>
+            <strong>Id Customer: </strong>{{ this.getUserById(restoreParam?.idCustomer) }}
+          </p>
+          <p>
+            <strong>Id Store: </strong>{{ this.getStoreById(restoreParam?.idStore) }}
+          </p>
+          <p>
+            <strong>Id Store Template: </strong>{{ this.getStoreTemplateById(restoreParam?.idStoreTemplate) }}
+          </p>
+          <p>
+            <strong>Start Date Time: </strong>{{ restoreParam?.startDateTime | date: "dd/MM/yyyy" }}
+          </p>
+          <p>
+            <strong>Type: </strong>{{ restoreParam?.type }}
+          </p>
+          <p>
+            <strong>Minutes Left: </strong>{{ restoreParam?.minutesLeft }}
+          </p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button (click)="onCloseModelRestoreParam()" type="button" class="btn btn-sm btn-secondary"
+          data-dismiss="modal">
+          Đóng
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

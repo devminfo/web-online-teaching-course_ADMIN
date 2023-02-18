@@ -1,0 +1,13 @@
+.mr-lr-20 {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+::ng-deep .cdk-overlay-container {
+  z-index: 2000;
+}
+
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+}

@@ -1,0 +1,229 @@
+<div class="post d-flex flex-column-fluid" id="kt_post">
+  <div id="kt_content_container" class="container-xxl">
+    <form id="kt_ecommerce_add_product_form" [formGroup]="form" novalidate=""
+      class="form d-flex flex-column flex-lg-row">
+      <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
+        <!--begin::Thumbnail settings-->
+        <div class="card card-flush py-4">
+          <!--begin::Card header-->
+          <div class="card-header required">
+            <!--begin::Card title-->
+            <div class="card-title">
+              <h2>Thumbnail</h2>
+            </div>
+            <!--end::Card title-->
+          </div>
+          <!--end::Card header-->
+          <!--begin::Card body-->
+          <div class="card-body text-center pt-0">
+            <label for="fileThumbnail">
+              <img class="img-color image-input-wrapper w-150px h-150px" [src]="
+                  input.thumbnail ? input.thumbnail : common.uploadImageDefault
+                " />
+            </label>
+            <input formControlName="thumbnail" class="d-none" id="fileThumbnail" (change)="onThumbnaiUploadImageClick()"
+              type="file" #inputImageThumbnail accept=".png, .jpg, .jpeg" />
+
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'required',
+                message: 'Vui lòng chọn trường này',
+                control: form.controls['thumbnail']
+              }"></ng-container>
+            <!--end::Image input-->
+            <!--begin::Description-->
+            <div class="text-muted fs-7">
+              Set the product thumbnail image. Only *.png, *.jpg and *.jpeg
+              image files are accepted
+            </div>
+            <!--end::Description-->
+          </div>
+          <!--end::Card body-->
+        </div>
+        <!--end::Thumbnail settings-->
+      </div>
+
+      <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+        <ul
+          class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-n2 justify-content-between">
+          <li class="nav-item">
+            <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab">Notification Add New
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a routerLink="/features/notifications" class="btn me-5 btn-light-primary">
+              <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'" class="svg-icon svg-icon-3"></span>
+              Go back
+            </a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="kt_ecommerce_add_product_general" role="tab-panel">
+            <div class="d-flex flex-column gap-7 gap-lg-10">
+              <div class="card card-flush py-4">
+                <div class="card-header">
+                  <div class="card-title">
+                    <h2>Notification Add New</h2>
+                  </div>
+                </div>
+                <div class="card card-flush py-4">
+                  <div class="card-body pt-0">
+                    <div class="d-flex flex-wrap gap-5">
+                      <!--  SendingRange -->
+                      <div class="fv-row w-100 flex-md-root">
+                        <label class="required form-label">Sending Range</label>
+                        <select class="form-control form-control-lg form-control-solid mb-2"
+                          [(ngModel)]="input.sendingRange" formControlName="sendingRange" placeholder="Sending Range">
+                          <option *ngFor="let sendingRange of sendingRangeDatas" [value]="sendingRange.value">
+                            {{ sendingRange.viewValue }}
+                          </option>
+                        </select>
+
+                        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                            validation: 'required',
+                            message: 'Vui lòng nhập trường này',
+                            control: form.controls['sendingRange']
+                          }"></ng-container>
+                      </div>
+
+                      <!-- TypeNotification -->
+                      <div class="fv-row w-100">
+                        <label class="required form-label">Type Notification</label>
+                        <select class="form-control form-control-lg form-control-solid mrb-5"
+                          [(ngModel)]="input.typeNotification" formControlName="typeNotification">
+                          <option value="" disabled selected hidden>
+                            Type Notification
+                          </option>
+                          <option *ngFor="
+                              let typeNotification of typeNotificationDatas
+                            " [value]="typeNotification.value">
+                            {{ typeNotification.viewValue }}
+                          </option>
+                        </select>
+
+                        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                            validation: 'required',
+                            message: 'Vui lòng nhập trường này',
+                            control: form.controls['typeNotification']
+                          }"></ng-container>
+                      </div>
+
+                      <!-- idEntity -->
+                      <div class="fv-row w-100 flex-md-root">
+                        <label class="required form-label">idEntity</label>
+                        <select class="form-control form-control-lg form-control-solid mb-2" formControlName="idEntity"
+                          [(ngModel)]="input.idEntity" placeholder="IdEntity">
+                          <option value="" disabled selected hidden>
+                            idEntity
+                          </option>
+                          <option *ngFor="let idEntity of idEntityDatas" [value]="idEntity._id">
+                            {{ idEntity.content }}
+                          </option>
+                        </select>
+
+                        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                            validation: 'required',
+                            message: 'Vui lòng nhập trường này',
+                            control: form.controls['summary']
+                          }"></ng-container>
+                      </div>
+
+                      <!-- Summary -->
+                      <div class="fv-row w-100 flex-md-root">
+                        <label class="required form-label">Summary</label>
+                        <input formControlName="summary" [(ngModel)]="input.summary" type="text"
+                          class="form-control form-control-lg form-control-solid mrb-5" placeholder="Summary"
+                          name="summary" />
+
+                        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                            validation: 'required',
+                            message: 'Vui lòng nhập trường này',
+                            control: form.controls['summary']
+                          }"></ng-container>
+                      </div>
+
+                      <!-- Title -->
+                      <div class="fv-row w-100">
+                        <label class="required form-label">Title</label>
+                        <textarea style="height: 100px" formControlName="title" [(ngModel)]="input.title" type="text"
+                          class="form-control form-control-lg form-control-solid mrb-5" placeholder="Title"
+                          name="title"></textarea>
+
+                        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                            validation: 'required',
+                            message: 'Vui lòng nhập trường này',
+                            control: form.controls['title']
+                          }"></ng-container>
+                      </div>
+
+                      <!-- Content -->
+                      <div class="fv-row w-100">
+                        <label class="required form-label">Content</label>
+                        <ckeditor [(ngModel)]="input.content" formControlName="content">
+                        </ckeditor>
+
+                        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                            validation: 'required',
+                            message: 'Vui lòng nhập trường này',
+                            control: form.controls['content']
+                          }"></ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <a id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5"
+            routerLink="/features/notifications">Cancel</a>
+          <button type="submit" id="kt_ecommerce_add_product_submit" class="btn btn-primary" [disabled]="isLoading"
+            (click)="onAddNewBtnClick()">
+            <span class="indicator-label" *ngIf="!isLoading">Add New</span>
+            <span class="indicator-progress" *ngIf="isLoading">Please wait...
+              <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Avatar Delete -->
+<div class="modal fade" id="thumbnail_delete" tabindex="-1" role="dialog" aria-labelledby="thumbnail_deleteLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="thumbnail_deleteLabel">
+          <b>Thumbnail Delete</b>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">Bạn xác nhận muốn xóa hình</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="onThumbnailDeleteClick()">
+          Accept
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #formError let-control="control" let-message="message" let-validation="validation">
+  <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
+    <div class="fv-plugins-message-container">
+      <span role="alert " class="text-danger">
+        {{ message }}
+      </span>
+    </div>
+  </ng-container>
+</ng-template>

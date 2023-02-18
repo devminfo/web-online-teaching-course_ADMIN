@@ -1,0 +1,178 @@
+<div id="kt_account_profile_details" class="collapse show">
+  <div class="row">
+    <!-- thumbnail-->
+    <div
+      class="col-2 d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10"
+    >
+      <div class="card card-flush py-4">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Image</h2>
+          </div>
+        </div>
+        <div class="card-body text-center pt-0">
+          <label for="fileImage">
+            <img
+              *ngIf="detail.transactionMethod == 'TRANSFER'"
+              class="img-color avatar-input-wrapper w-150px h-150px rounded"
+              [src]="detail.transactionImage"
+            />
+            <img
+              *ngIf="detail.transactionMethod == 'PAYPAL'"
+              class="img-color avatar-input-wrapper w-150px h-150px rounded"
+              [src]="common.uploadImageDefault"
+            />
+          </label>
+          <br />
+          <!--end::Avatar input-->
+
+          <!--begin::Description-->
+          <div class="text-muted fs-7">
+            Set the store thumbnail image. Only *.png, *.jpg and *.jpeg avatar
+            files are accepted
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="col tab-pane fade show active"
+      id="kt_ecommerce_add_product_general"
+      role="tab-panel"
+    >
+      <div class="d-flex flex-column gap-7 gap-lg-10">
+        <!--begin::Add Voucher options-->
+        <div class="card card-flush py-4">
+          <div class="card-header">
+            <div class="card-title">
+              <span
+                [inlineSVG]="'./assets/media/icons/duotune/general/gen068.svg'"
+                class="svg-icon svg-icon-3 float-right"
+              ></span>
+              <h2 class="fw-bolder ml-2">Detail Transaction</h2>
+            </div>
+            <div class="card-toolbar">
+              <a
+                type="button"
+                class="btn btn-light-primary mr-3"
+                routerLink="/features/storepackagetransactions"
+              >
+                <span
+                  [inlineSVG]="'./assets/media/icons/duotune/arrows/arr098.svg'"
+                  class="svg-icon svg-icon-3"
+                ></span>
+                Back</a
+              >
+            </div>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Asset Package :</h3>
+            <p class="mr-5 float-right">
+              {{ getBackAccountByIdAssetPackage(detail.idAssetPackage) }}
+            </p>
+
+            <p></p>
+          </div>
+
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Store :</h3>
+            <p class="mr-5 float-right">
+              {{ getBackAccountByIdStore(detail.idStore) }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Quantity :</h3>
+            <p class="mr-5 float-right">
+              {{ common.formatPriceDots(detail.quantity) }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Type :</h3>
+            <p class="mr-5 float-right">
+              {{ detail.type }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Unit Type :</h3>
+            <p class="mr-5 float-right">
+              {{ detail.unitType == "sms" ? "Message" : "Voice" }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Price :</h3>
+            <p class="mr-5 float-right">
+              {{ common.formatPriceDots(detail.price) }}$
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">
+              Original Price :
+            </h3>
+            <p class="mr-5 float-right">
+              {{ common.formatPriceDots(detail.originalPrice) }}$
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">
+              Transaction Status :
+            </h3>
+            <p class="mr-5 float-right">
+              {{ detail.transactionStatus }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">
+              Transaction Method :
+            </h3>
+            <p class="mr-5 float-right">
+              {{ detail.transactionMethod }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Account Name :</h3>
+            <p class="mr-5 float-right">
+              {{ detail.accountName ? detail.accountName : "NaN" }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">
+              Account Number :
+            </h3>
+            <p class="mr-5 float-right">
+              {{ detail.accountNumber ? detail.accountNumber : "NaN" }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Bank Name :</h3>
+            <p class="mr-5 float-right">
+              {{ detail.bankName ? detail.bankName : "NaN" }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">Bank Branch :</h3>
+            <p class="mr-5 float-right">
+              {{ detail.bankBranch ? detail.bankBranch : "NaN" }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">
+              Transaction Content :
+            </h3>
+            <p class="mr-5 float-right">
+              {{
+                detail.transactionContent ? detail.transactionContent : "NaN"
+              }}
+            </p>
+          </div>
+          <div>
+            <h3 class="ml-4 float-left fw-bolder text-dark">
+              Transaction Money :
+            </h3>
+            <p class="mr-5 float-right">
+              {{ common.formatPriceDots(detail.transactionMoney) }}$
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

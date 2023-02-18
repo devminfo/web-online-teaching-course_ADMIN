@@ -1,0 +1,1037 @@
+<div class="card mb-5 mb-xl-10">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Users</span>
+      <span class="text-muted mt-1 fw-bold fs-7"
+        >User: <b class="text-primary">{{ inputUserInfo.fullName }}</b></span
+      >
+      <ul class="nav nav-tabs nav-line-tabs nav-stretch fs-6 border-0">
+        <!-- Tab name -->
+        <li class="nav-item">
+          <span
+            (click)="onChangeTab(tabEnum.name)"
+            [class.active]="tabSelected === tabEnum.name"
+            class="nav-link cursor-pointer"
+            >User info</span
+          >
+        </li>
+
+        <!-- Tab Groups-->
+        <li class="nav-item" *ngIf="isManager">
+          <span
+            (click)="onChangeTab(tabEnum.groups)"
+            [class.active]="tabSelected === tabEnum.groups"
+            class="nav-link cursor-pointer"
+            >Groups</span
+          >
+        </li>
+
+        <!-- Tab Group Details -->
+        <li class="nav-item" *ngIf="isManager">
+          <span
+            (click)="onChangeTab(tabEnum.groupDetails)"
+            [class.active]="tabSelected === tabEnum.groupDetails"
+            class="nav-link cursor-pointer"
+            >Group Details</span
+          >
+        </li>
+
+        <!-- Tab Group API accesses -->
+        <li class="nav-item" *ngIf="isManager">
+          <span
+            (click)="onChangeTab(tabEnum.groupApiAccesses)"
+            [class.active]="tabSelected === tabEnum.groupApiAccesses"
+            class="nav-link cursor-pointer"
+            >API Accesses</span
+          >
+        </li>
+
+        <!-- Tab Group API denies -->
+        <li class="nav-item" *ngIf="isManager">
+          <span
+            (click)="onChangeTab(tabEnum.groupApiDenies)"
+            [class.active]="tabSelected === tabEnum.groupApiDenies"
+            class="nav-link cursor-pointer"
+            >API Denies</span
+          >
+        </li>
+      </ul>
+    </h3>
+    <div class="card-toolbar">
+      <!-- Go back -->
+      <a routerLink="/features/users" class="btn btn-sm btn-light-primary">
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'"
+          class="svg-icon svg-icon-3"
+        ></span>
+        Go back
+      </a>
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <div class="collapse show">
+    <div class="card-body border-top p-9">
+      <div class="tab-content">
+        <!-- Tab Name -->
+        <div
+          class="tab-pane fade"
+          [class.show]="tabSelected === tabEnum.name"
+          [class.active]="tabSelected === tabEnum.name"
+          role="tabpanel"
+        >
+          <div class="collapse show">
+            <form [formGroup]="formUserInfo" novalidate="" class="form">
+              <div class="card-body p-9">
+                <!-- Role -->
+                <div class="row mb-6">
+                  <label class="col-lg-4 col-form-label required fw-bold fs-6"
+                    >Role</label
+                  >
+                  <div class="col-lg-8 fv-row">
+                    <div
+                      class="d-flex justify-content-start"
+                      style="margin-left: 10px; margin-top: 10px"
+                    >
+                      <div
+                        class="form-check form-check-custom form-check-success form-check-solid"
+                        (click)="onShowSelectGroups(false)"
+                      >
+                        <input
+                          [ngModelOptions]="{ standalone: true }"
+                          class="form-check-input"
+                          type="radio"
+                          name="role"
+                          id="customer"
+                          value="{{ roleEnum.customer }}"
+                          [(ngModel)]="inputUserInfo.role"
+                        />
+                        <label
+                          class="form-check-label"
+                          style="margin-left: 30px"
+                          for="customer"
+                        >
+                          Customer
+                        </label>
+                      </div>
+
+                      <div
+                        class="form-check form-check-custom form-check-success form-check-solid"
+                        style="margin-left: 50px"
+                        (click)="onShowSelectGroups(true)"
+                      >
+                        <input
+                          [ngModelOptions]="{ standalone: true }"
+                          class="form-check-input"
+                          type="radio"
+                          value="{{ roleEnum.manager }}"
+                          name="role"
+                          id="manager"
+                          [(ngModel)]="inputUserInfo.role"
+                        />
+                        <label
+                          style="margin-left: 30px"
+                          class="form-check-label"
+                          for="manager"
+                        >
+                          Manager
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Full name -->
+                <div class="row mb-6">
+                  <label class="col-lg-4 col-form-label required fw-bold fs-6"
+                    >Full Name</label
+                  >
+                  <div class="col-lg-8 fv-row">
+                    <input
+                      formControlName="fullName"
+                      [(ngModel)]="inputUserInfo.fullName"
+                      type="text"
+                      class="form-control form-control-lg form-control-solid mrb-5"
+                      placeholder="Enter full name"
+                      name="fullName"
+                    />
+
+                    <span
+                      class="text-danger"
+                      *ngIf="
+                        formUserInfo.controls['fullName']!.invalid &&
+                        (formUserInfo.controls['fullName'].dirty ||
+                          formUserInfo.controls['fullName'].touched)
+                      "
+                    >
+                      <span
+                        *ngIf="
+                          formUserInfo.controls['fullName'].errors!.required
+                        "
+                      >
+                        Vui lòng nhập trường này
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Email -->
+                <div class="row mb-6">
+                  <label class="col-lg-4 required col-form-label fw-bold fs-6"
+                    >Email</label
+                  >
+                  <div class="col-lg-8 fv-row">
+                    <input
+                      formControlName="email"
+                      [(ngModel)]="inputUserInfo.email"
+                      type="email"
+                      class="form-control form-control-lg form-control-solid mrb-5"
+                      placeholder="Enter email"
+                      name="email"
+                    />
+
+                    <span
+                      class="text-danger"
+                      *ngIf="
+                        formUserInfo.controls['email']!.invalid &&
+                        (formUserInfo.controls['email'].dirty ||
+                          formUserInfo.controls['email'].touched)
+                      "
+                    >
+                      <span
+                        *ngIf="formUserInfo.controls['email'].errors!.required"
+                      >
+                        Vui lòng nhập trường này
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="row mb-6">
+                  <label class="col-lg-4 col-form-label fw-bold fs-6"
+                    >Phone</label
+                  >
+                  <div class="col-lg-8 fv-row">
+                    <input
+                      formControlName="phone"
+                      [(ngModel)]="inputUserInfo.phone"
+                      type="text"
+                      class="form-control form-control-lg form-control-solid mrb-5"
+                      placeholder="Enter phone"
+                      name="phone"
+                    />
+
+                    <span
+                      class="text-danger"
+                      *ngIf="
+                        formUserInfo.controls['phone']!.invalid &&
+                        (formUserInfo.controls['phone'].dirty ||
+                          formUserInfo.controls['phone'].touched)
+                      "
+                    >
+                      <span
+                        *ngIf="formUserInfo.controls['phone'].errors!.required"
+                      >
+                        Vui lòng nhập trường này
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card footer -->
+              <div class="card-footer d-flex justify-content-end py-6 px-9">
+                <!-- Next -->
+                <button
+                  type="button"
+                  class="btn btn-light-primary"
+                  style="margin-right: 20px"
+                  [disabled]="isLoading"
+                  *ngIf="isManager"
+                  (click)="onChangeTab(tabEnum.groupDetails)"
+                >
+                  <ng-container *ngIf="!isLoading">Next</ng-container>
+                  <ng-container *ngIf="isLoading">
+                    <span clas="indicator-progress" [style.display]="'block'">
+                      Please wait...{{ " " }}
+                      <span
+                        class="spinner-border spinner-border-sm align-middle ms-2"
+                      ></span>
+                    </span>
+                  </ng-container>
+                </button>
+
+                <!-- Save Change-->
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  [disabled]="isLoading"
+                  (click)="onUpdateBtnClick()"
+                >
+                  <ng-container *ngIf="!isLoading">Save Change</ng-container>
+                  <ng-container *ngIf="isLoading">
+                    <span clas="indicator-progress" [style.display]="'block'">
+                      Please wait...{{ " " }}
+                      <span
+                        class="spinner-border spinner-border-sm align-middle ms-2"
+                      ></span>
+                    </span>
+                  </ng-container>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Tab Groups -->
+        <div
+          class="tab-pane fade"
+          [class.show]="tabSelected === tabEnum.groups"
+          [class.active]="tabSelected === tabEnum.groups"
+          role="tabpanel"
+        >
+          <app-b2-tab-users-group [userId]="this.id"></app-b2-tab-users-group>
+        </div>
+
+        <!-- Tab GroupDetails -->
+        <div
+          class="tab-pane fade"
+          [class.show]="tabSelected === tabEnum.groupDetails"
+          [class.active]="tabSelected === tabEnum.groupDetails"
+          role="tabpanel"
+        >
+          <div class="collapse show">
+            <div class="card mb-5 mb-xl-8">
+              <!-- Card header-->
+              <div class="card-header border-0">
+                <h3 class="card-title align-items-start flex-column">
+                  <span class="card-label fw-bolder fs-4 mb-1"
+                    >Groups Details</span
+                  >
+                  <span class="text-muted mt-1 fw-bold fs-7"
+                    >List {{ groupDetailPageLength }} records</span
+                  >
+                </h3>
+                <div class="card-toolbar">
+                  <!-- input search -->
+                  <div class="card-toolbar">
+                    <b2-users-search
+                      (searchChange)="onSearchChange('groupDetails', $event)"
+                    ></b2-users-search>
+                  </div>
+
+                  <!-- Save Change-->
+                  <div class="card-toolbar">
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-sm mr-l-15"
+                      [disabled]="isLoading"
+                      (click)="onUpdateBtnClick()"
+                    >
+                      <ng-container *ngIf="!isLoading"
+                        >Save Change!</ng-container
+                      >
+                      <ng-container *ngIf="isLoading">
+                        <span
+                          clas="indicator-progress"
+                          [style.display]="'block'"
+                        >
+                          Please wait...{{ " " }}
+                          <span
+                            class="spinner-border spinner-border-sm align-middle ms-2"
+                          ></span>
+                        </span>
+                      </ng-container>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card body -->
+              <div class="card-body py-3">
+                <!-- table -->
+                <div class="table-responsive">
+                  <table
+                    class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+                  >
+                    <!-- head -->
+                    <thead>
+                      <tr class="fw-bolder text-muted">
+                        <th class="w-25px">
+                          <div
+                            class="form-check form-check-sm form-check-custom form-check-solid"
+                          >
+                            <input
+                              [(ngModel)]="isGroupDetailSelectedAll"
+                              (click)="onCheckAllGroupDetailSelected()"
+                              class="form-check-input"
+                              type="checkbox"
+                              data-kt-check="true"
+                              data-kt-check-target=".widget-13-check"
+                            />
+                          </div>
+                        </th>
+                        <th class="min-w-150px">ID</th>
+                        <th class="min-w-140px">Collection Name</th>
+                        <th class="min-w-140px">Link</th>
+                        <th class="min-w-120px text-end">
+                          Select Access Methods
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <!--body -->
+                    <tbody>
+                      <tr *ngFor="let data of groupDetails">
+                        <!-- Select -->
+                        <td>
+                          <div
+                            class="form-check form-check-sm form-check-custom form-check-solid"
+                          >
+                            <input
+                              [(ngModel)]="data.checked"
+                              (click)="onGroupDetailSelected(data._id)"
+                              class="form-check-input widget-13-check"
+                              type="checkbox"
+                              value="1"
+                            />
+                          </div>
+                        </td>
+
+                        <!-- ID -->
+                        <td>
+                          <p
+                            class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+                          >
+                            {{ data._id }}
+                          </p>
+                        </td>
+
+                        <!-- Icon and menu -->
+                        <td>
+                          <!-- Main menu -->
+                          <div *ngIf="data.isChild != true" class="menu-item">
+                            <a
+                              routerLink="/features/groupdetails/update/{{
+                                data._id
+                              }}"
+                            >
+                              <p
+                                class="menu-link without-sub text-dark fw-bolder text-hover-primary fs-7"
+                              >
+                                <span class="menu-icon">
+                                  <span
+                                    *ngIf="data.isGroup == true"
+                                    [inlineSVG]="data.icon"
+                                    class="svg-icon svg-icon-2 svg-icon-danger"
+                                  ></span>
+                                  <span
+                                    *ngIf="data.isGroup == false"
+                                    [inlineSVG]="data.icon"
+                                    class="svg-icon svg-icon-2"
+                                  ></span>
+                                </span>
+                                <a
+                                  routerLink="/features/groupdetails/update/{{
+                                    data._id
+                                  }}"
+                                >
+                                  <span class="menu-title">{{
+                                    data.name
+                                  }}</span>
+                                </a>
+                              </p>
+                            </a>
+                          </div>
+
+                          <!-- Is child -->
+                          <div
+                            *ngIf="data.isChild == true"
+                            class="menu-item mr-l-30"
+                          >
+                            <a
+                              routerLink="/features/groupdetails/update/{{
+                                data._id
+                              }}"
+                            >
+                              <p
+                                class="menu-link without-sub text-dark fw-bolder text-hover-primary fs-7"
+                              >
+                                <span class="menu-icon">
+                                  <span
+                                    *ngIf="data.isGroup == true"
+                                    [inlineSVG]="data.icon"
+                                    class="svg-icon svg-icon-2 svg-icon-danger"
+                                  ></span>
+                                  <span
+                                    *ngIf="data.isGroup == false"
+                                    [inlineSVG]="data.icon"
+                                    class="svg-icon svg-icon-2"
+                                  ></span>
+                                </span>
+                                <a
+                                  routerLink="/features/groupdetails/update/{{
+                                    data._id
+                                  }}"
+                                >
+                                  <span class="menu-title">{{
+                                    data.name
+                                  }}</span>
+                                </a>
+                              </p>
+                            </a>
+                          </div>
+                        </td>
+
+                        <!-- Collection name and link -->
+                        <td>
+                          <p
+                            class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+                          >
+                            {{ data.collectionName }}
+                          </p>
+                          <span
+                            class="text-muted fw-bold text-muted d-block fs-7"
+                            >{{ data.link }}</span
+                          >
+                        </td>
+
+                        <!-- Access method -->
+                        <td
+                          [class.ml-r-30]="data.isChild != true"
+                          class="d-flex justify-content-end"
+                        >
+                          <div class="d-flex align-items-center mt-3">
+                            <!-- GET -->
+                            <label
+                              class="form-check form-check-inline form-check-solid me-5"
+                            >
+                              <input
+                                [checked]="data.accessMethods.includes('GET')"
+                                (change)="
+                                  onChangeGroupDetailAccessMethod(
+                                    data._id,
+                                    'GET',
+                                    $event
+                                  )
+                                "
+                                class="form-check-input h-20px w-20px"
+                                type="checkbox"
+                              />
+                              <span
+                                class="fw-bold ps-2 fs-7 badge badge-light-success"
+                                >GET</span
+                              >
+                            </label>
+
+                            <!-- POST -->
+                            <label
+                              class="form-check form-check-inline form-check-solid"
+                            >
+                              <input
+                                [checked]="data.accessMethods.includes('POST')"
+                                (change)="
+                                  onChangeGroupDetailAccessMethod(
+                                    data._id,
+                                    'POST',
+                                    $event
+                                  )
+                                "
+                                class="form-check-input h-20px w-20px"
+                                type="checkbox"
+                              />
+                              <span
+                                class="fw-bold ps-2 fs-7 badge badge-light-info"
+                                >POST</span
+                              >
+                            </label>
+
+                            <!-- PUT -->
+                            <label
+                              class="form-check form-check-inline form-check-solid"
+                            >
+                              <input
+                                [checked]="data.accessMethods.includes('PUT')"
+                                (change)="
+                                  onChangeGroupDetailAccessMethod(
+                                    data._id,
+                                    'PUT',
+                                    $event
+                                  )
+                                "
+                                class="form-check-input h-20px w-20px"
+                                type="checkbox"
+                              />
+                              <span
+                                class="fw-bold ps-2 fs-7 badge badge-light-primary"
+                                >PUT</span
+                              >
+                            </label>
+
+                            <!-- DELETE -->
+                            <label
+                              class="form-check form-check-inline form-check-solid"
+                            >
+                              <input
+                                [checked]="
+                                  data.accessMethods.includes('DELETE')
+                                "
+                                (change)="
+                                  onChangeGroupDetailAccessMethod(
+                                    data._id,
+                                    'DELETE',
+                                    $event
+                                  )
+                                "
+                                class="form-check-input h-20px w-20px"
+                                type="checkbox"
+                              />
+                              <span
+                                class="fw-bold ps-2 fs-7 badge badge-light-danger"
+                                >DELETE</span
+                              >
+                            </label>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Next tab -->
+              <div class="card-footer d-flex justify-content-end py-6 px-9">
+                <!-- Next -->
+                <button
+                  type="button"
+                  class="btn btn-light-primary"
+                  style="margin-right: 20px"
+                  [disabled]="isLoading"
+                  *ngIf="isManager"
+                  (click)="onChangeTab(tabEnum.groupApiAccesses)"
+                >
+                  <ng-container *ngIf="!isLoading">Next</ng-container>
+                  <ng-container *ngIf="isLoading">
+                    <span clas="indicator-progress" [style.display]="'block'">
+                      Please wait...{{ " " }}
+                      <span
+                        class="spinner-border spinner-border-sm align-middle ms-2"
+                      ></span>
+                    </span>
+                  </ng-container>
+                </button>
+
+                <!-- Save -->
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm mr-l-15"
+                  [disabled]="isLoading"
+                  (click)="onUpdateBtnClick()"
+                >
+                  <ng-container *ngIf="!isLoading">Save Change!</ng-container>
+                  <ng-container *ngIf="isLoading">
+                    <span clas="indicator-progress" [style.display]="'block'">
+                      Please wait...{{ " " }}
+                      <span
+                        class="spinner-border spinner-border-sm align-middle ms-2"
+                      ></span>
+                    </span>
+                  </ng-container>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab GroupApiAccesses -->
+        <div
+          class="tab-pane fade"
+          [class.show]="tabSelected === tabEnum.groupApiAccesses"
+          [class.active]="tabSelected === tabEnum.groupApiAccesses"
+          role="tabpanel"
+        >
+          <div class="collapse show">
+            <div class="card mb-5 mb-xl-8">
+              <!-- Header -->
+              <div class="card-header border-0">
+                <h3 class="card-title align-items-start flex-column">
+                  <span class="card-label fw-bolder fs-4 mb-1">Groups API</span>
+                  <span class="text-muted mt-1 fw-bold fs-7"
+                    >List {{ groupApiPageLength }} records</span
+                  >
+                </h3>
+                <div class="card-toolbar">
+                  <!-- input search -->
+                  <div class="card-toolbar">
+                    <b2-users-search
+                      (searchChange)="
+                        onSearchChange('groupAPIAccesses', $event)
+                      "
+                    ></b2-users-search>
+                  </div>
+
+                  <!-- Save change -->
+                  <div class="card-toolbar">
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-sm mr-l-15"
+                      [disabled]="isLoading"
+                      (click)="onUpdateBtnClick()"
+                    >
+                      <ng-container *ngIf="!isLoading"
+                        >Save Change!</ng-container
+                      >
+                      <ng-container *ngIf="isLoading">
+                        <span
+                          clas="indicator-progress"
+                          [style.display]="'block'"
+                        >
+                          Please wait...{{ " " }}
+                          <span
+                            class="spinner-border spinner-border-sm align-middle ms-2"
+                          ></span>
+                        </span>
+                      </ng-container>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Body -->
+              <div class="card-body py-3">
+                <!-- begin::Table container -->
+                <div class="table-responsive">
+                  <!-- begin::Table -->
+                  <table
+                    class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+                  >
+                    <!-- begin::Table head -->
+                    <thead>
+                      <tr class="fw-bolder text-muted">
+                        <th class="w-25px">
+                          <div
+                            class="form-check form-check-sm form-check-custom form-check-solid"
+                          >
+                            <input
+                              [(ngModel)]="isApiAccessesSelectedAll"
+                              (click)="onCheckAllGroupApiSelected()"
+                              class="form-check-input"
+                              type="checkbox"
+                              data-kt-check="true"
+                              data-kt-check-target=".widget-13-check"
+                            />
+                          </div>
+                        </th>
+                        <th class="min-w-150px">ID</th>
+                        <th class="min-w-140px">Collection Name</th>
+                        <th class="min-w-120px text-end">Access Methods</th>
+                      </tr>
+                    </thead>
+                    <!-- end::Table head -->
+                    <!-- begin::Table body -->
+                    <tbody>
+                      <tr *ngFor="let data of groupApis">
+                        <!-- Select -->
+                        <td>
+                          <div
+                            class="form-check form-check-sm form-check-custom form-check-solid"
+                          >
+                            <input
+                              [(ngModel)]="data.checked"
+                              (click)="onGroupApiSelected(data._id)"
+                              class="form-check-input widget-13-check"
+                              type="checkbox"
+                              value="1"
+                            />
+                          </div>
+                        </td>
+
+                        <!-- ID -->
+                        <td>
+                          <p
+                            class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+                          >
+                            {{ data._id }}
+                          </p>
+                        </td>
+
+                        <!-- Collection name and url -->
+                        <td>
+                          <p
+                            class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+                          >
+                            {{ data.collectionName }}
+                          </p>
+                          <span
+                            class="text-muted fw-bold text-muted d-block fs-7"
+                            >{{ data.url }}</span
+                          >
+                        </td>
+
+                        <!-- Access method -->
+                        <td class="d-flex justify-content-end">
+                          <span *ngFor="let item of data.accessMethods">
+                            <span
+                              *ngIf="item == 'GET'"
+                              class="badge badge-light-success"
+                              >{{ item }}</span
+                            >
+                            <span
+                              *ngIf="item == 'POST'"
+                              class="badge badge-light-info"
+                              >{{ item }}</span
+                            >
+                            <span
+                              *ngIf="item == 'PUT'"
+                              class="badge badge-light-primary"
+                              >{{ item }}</span
+                            >
+                            <span
+                              *ngIf="item == 'DELETE'"
+                              class="badge badge-light-danger"
+                              >{{ item }}</span
+                            >
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <!-- end::Table body -->
+                  </table>
+                  <!-- end::Table -->
+
+                  <!-- test -->
+                </div>
+                <!-- end::Table container -->
+              </div>
+
+              <!-- Next tab -->
+              <div class="card-footer d-flex justify-content-end py-6 px-9">
+                <!-- Next -->
+                <button
+                  type="button"
+                  class="btn btn-light-primary"
+                  style="margin-right: 20px"
+                  [disabled]="isLoading"
+                  *ngIf="isManager"
+                  (click)="onChangeTab(tabEnum.groupApiDenies)"
+                >
+                  <ng-container *ngIf="!isLoading">Next</ng-container>
+                  <ng-container *ngIf="isLoading">
+                    <span clas="indicator-progress" [style.display]="'block'">
+                      Please wait...{{ " " }}
+                      <span
+                        class="spinner-border spinner-border-sm align-middle ms-2"
+                      ></span>
+                    </span>
+                  </ng-container>
+                </button>
+
+                <!-- Save Change-->
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm mr-l-15"
+                  [disabled]="isLoading"
+                  (click)="onUpdateBtnClick()"
+                >
+                  <ng-container *ngIf="!isLoading">Save Change!</ng-container>
+                  <ng-container *ngIf="isLoading">
+                    <span clas="indicator-progress" [style.display]="'block'">
+                      Please wait...{{ " " }}
+                      <span
+                        class="spinner-border spinner-border-sm align-middle ms-2"
+                      ></span>
+                    </span>
+                  </ng-container>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab GroupApiDenies -->
+        <div
+          class="tab-pane fade"
+          [class.show]="tabSelected === tabEnum.groupApiDenies"
+          [class.active]="tabSelected === tabEnum.groupApiDenies"
+          role="tabpanel"
+        >
+          <div class="collapse show">
+            <div class="card mb-5 mb-xl-8">
+              <!-- Header -->
+              <div class="card-header border-0">
+                <h3 class="card-title align-items-start flex-column">
+                  <span class="card-label fw-bolder fs-4 mb-1">Groups API</span>
+                  <span class="text-muted mt-1 fw-bold fs-7"
+                    >List {{ apiDeniesPageLength }} records</span
+                  >
+                </h3>
+                <div class="card-toolbar">
+                  <!-- input search -->
+                  <div class="card-toolbar">
+                    <b2-users-search
+                      (searchChange)="onSearchChange('groupAPIDenines', $event)"
+                    ></b2-users-search>
+                  </div>
+
+                  <!-- Save change -->
+                  <div class="card-toolbar">
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-sm mr-l-15"
+                      [disabled]="isLoading"
+                      (click)="onUpdateBtnClick()"
+                    >
+                      <ng-container *ngIf="!isLoading"
+                        >Save Change!</ng-container
+                      >
+                      <ng-container *ngIf="isLoading">
+                        <span
+                          clas="indicator-progress"
+                          [style.display]="'block'"
+                        >
+                          Please wait...{{ " " }}
+                          <span
+                            class="spinner-border spinner-border-sm align-middle ms-2"
+                          ></span>
+                        </span>
+                      </ng-container>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Body -->
+              <div class="card-body py-3">
+                <!-- begin::Table container -->
+                <div class="table-responsive">
+                  <!-- begin::Table -->
+                  <table
+                    class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+                  >
+                    <!-- begin::Table head -->
+                    <thead>
+                      <tr class="fw-bolder text-muted">
+                        <th class="w-25px">
+                          <div
+                            class="form-check form-check-sm form-check-custom form-check-solid"
+                          >
+                            <input
+                              [(ngModel)]="isApiDeniesSelectAll"
+                              (click)="onCheckAllApiDeniesSelected()"
+                              class="form-check-input"
+                              type="checkbox"
+                              data-kt-check="true"
+                              data-kt-check-target=".widget-13-check"
+                            />
+                          </div>
+                        </th>
+                        <th class="min-w-150px">ID</th>
+                        <th class="min-w-140px">Collection Name</th>
+                        <th class="min-w-120px text-end">Access Methods</th>
+                      </tr>
+                    </thead>
+                    <!-- end::Table head -->
+                    <!-- begin::Table body -->
+                    <tbody>
+                      <tr *ngFor="let data of apiDenies">
+                        <!-- Select -->
+                        <td>
+                          <div
+                            class="form-check form-check-sm form-check-custom form-check-solid"
+                          >
+                            <input
+                              [(ngModel)]="data.checked"
+                              (click)="onApiDeniesSelected(data._id)"
+                              class="form-check-input widget-13-check"
+                              type="checkbox"
+                              value="1"
+                            />
+                          </div>
+                        </td>
+
+                        <!-- ID -->
+                        <td>
+                          <p
+                            class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+                          >
+                            {{ data._id }}
+                          </p>
+                        </td>
+
+                        <!-- Collection name and url -->
+                        <td>
+                          <p
+                            class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+                          >
+                            {{ data.collectionName }}
+                          </p>
+                          <span
+                            class="text-muted fw-bold text-muted d-block fs-7"
+                            >{{ data.url }}</span
+                          >
+                        </td>
+
+                        <!-- Access method -->
+                        <td class="d-flex justify-content-end">
+                          <span *ngFor="let item of data.accessMethods">
+                            <span
+                              *ngIf="item == 'GET'"
+                              class="badge badge-light-success"
+                              >{{ item }}</span
+                            >
+                            <span
+                              *ngIf="item == 'POST'"
+                              class="badge badge-light-info"
+                              >{{ item }}</span
+                            >
+                            <span
+                              *ngIf="item == 'PUT'"
+                              class="badge badge-light-primary"
+                              >{{ item }}</span
+                            >
+                            <span
+                              *ngIf="item == 'DELETE'"
+                              class="badge badge-light-danger"
+                              >{{ item }}</span
+                            >
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <!-- end::Table body -->
+                  </table>
+                  <!-- end::Table -->
+
+                  <!-- test -->
+                </div>
+                <!-- end::Table container -->
+              </div>
+
+              <!-- Save change -->
+              <div class="card-footer d-flex justify-content-end py-6 px-9">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm mr-l-15"
+                  [disabled]="isLoading"
+                  (click)="onUpdateBtnClick()"
+                >
+                  <ng-container *ngIf="!isLoading">Save Change!</ng-container>
+                  <ng-container *ngIf="isLoading">
+                    <span clas="indicator-progress" [style.display]="'block'">
+                      Please wait...{{ " " }}
+                      <span
+                        class="spinner-border spinner-border-sm align-middle ms-2"
+                      ></span>
+                    </span>
+                  </ng-container>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

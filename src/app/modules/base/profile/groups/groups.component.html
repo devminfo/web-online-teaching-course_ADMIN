@@ -1,0 +1,159 @@
+<div class="card mb-5 mb-xl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Groups</span>
+      <span class="text-muted mt-1 fw-bold fs-7"
+        >List {{ pageLength }} records</span
+      >
+    </h3>
+    <div class="card-toolbar"></div>
+  </div>
+  <!-- end::Header -->
+
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table
+        class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+      >
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-muted">
+            <th class="w-25px">
+              <div
+                class="form-check form-check-sm form-check-custom form-check-solid"
+              >
+                <input
+                  [(ngModel)]="isSelectAll"
+                  (click)="onCheckAllSelected()"
+                  class="form-check-input"
+                  type="checkbox"
+                  data-kt-check="true"
+                  data-kt-check-target=".widget-13-check"
+                />
+              </div>
+            </th>
+            <th class="min-w-150px">ID</th>
+            <th class="min-w-140px">Name</th>
+            <th class="min-w-120px">Created At</th>
+            <th class="min-w-100px text-end">Actions</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr *ngFor="let data of dataSources">
+            <!-- Select -->
+            <td>
+              <div
+                class="form-check form-check-sm form-check-custom form-check-solid"
+              >
+                <input
+                  [(ngModel)]="data.checked"
+                  (click)="onItemSelected(data._id)"
+                  class="form-check-input widget-13-check"
+                  type="checkbox"
+                  value="1"
+                />
+              </div>
+            </td>
+
+            <!-- ID -->
+            <td>
+              <p
+                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+              >
+                {{ data._id }}
+              </p>
+            </td>
+
+            <!-- Collection name and url -->
+            <td>
+              <p
+                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+              >
+                {{ data.name }}
+              </p>
+            </td>
+
+            <!-- createdAt -->
+            <td>
+              <p
+                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+              >
+                {{ data.createdAt | date: "hh:mm:ss dd/MM/yyyy" }}
+              </p>
+            </td>
+
+            <!-- Acction -->
+            <td class="text-end">
+              <!-- delete -->
+              <a
+                (click)="onLeaveGroupId(data._id)"
+                data-toggle="modal"
+                data-target="#leaveGroupModal"
+                routerLink="/profile/groups"
+                class="btn btn-sm text-green-400 text-hover-primary"
+              >
+                <img src="../assets/media/icons/duotune/arrows/arr092.svg" />
+              </a>
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+
+      <!-- test -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- begin::Body -->
+</div>
+
+<!-- Delete Modal -->
+<div
+  class="modal fade"
+  id="leaveGroupModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="leaveGroupLabelModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="leaveGroupLabelModal">
+          <b>LEAVE THIS GROUP</b>
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Do you really want to leave this group? This process cannot be undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-info"
+          data-dismiss="modal"
+          (click)="onLeaveGroupBtnClick()"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

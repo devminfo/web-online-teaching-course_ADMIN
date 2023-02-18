@@ -1,0 +1,326 @@
+<div class="card mb-5 mb-xl-10">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Quiz</span>
+      <span class="text-muted mt-1 fw-bold fs-7">Add New</span>
+    </h3>
+    <div class="card-toolbar">
+      <!-- new data -->
+      <div class="card-toolbar">
+        <a routerLink="/features/quizzes" class="btn btn-sm btn-light-primary">
+          <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'" class="svg-icon svg-icon-3"></span>
+          Go back
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <div class="card">
+    <div class="card-header card-header-stretch">
+      <div class="card-toolbar">
+        <ul class="nav nav-tabs nav-line-tabs nav-stretch fs-6 border-0">
+          <li class="nav-item">
+            <span (click)="onChangeTab(true)" [class.active]="isTabQuestion"
+              class="nav-link cursor-pointer">Question</span>
+          </li>
+          <li class="nav-item">
+            <span (click)="onNextAnswerTabBtnClick()" [class.active]="!isTabQuestion"
+              class="nav-link cursor-pointer">Answer</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="tab-content">
+        <div class="tab-pane fade" [class.show]="isTabQuestion" [class.active]="isTabQuestion" role="tabpanel">
+          <div id="kt_account_profile_details" class="collapse show">
+            <form [formGroup]="form" novalidate="" class="form">
+              <div class="card-body p-9 pt-0">
+                <!-- Id SubSpecialize -->
+                <div class="row mb-6">
+                  <label class="col-lg-4 col-form-label fw-bold fs-6">
+                    <span class="required">Certificate</span>
+                  </label>
+                  <div class="col-lg-8 fv-row">
+                    <select class="form-control form-control-lg form-control-solid mrb-5"
+                      formControlName="idCertificate" [(ngModel)]="input.idCertificate">
+                      <option value="" disabled selected hidden>
+                        Select Certificate
+                      </option>
+                      <option *ngFor="let item of certificates" [value]="item._id">
+                        {{ item.title }}
+                      </option>
+                    </select>
+                    <span class="text-danger" *ngIf="
+                        form.controls['idCertificate']!.invalid &&
+                        (form.controls['idCertificate'].dirty ||
+                          form.controls['idCertificate'].touched)
+                      ">
+                      <span *ngIf="form.controls['idCertificate'].errors!.required">
+                        Vui lòng nhập trường này
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Type Question -->
+                <div class="row mb-6">
+                  <label class="col-lg-4 col-form-label fw-bold fs-6">
+                    <span class="required">Type Question</span>
+                  </label>
+                  <div class="col-lg-8 fv-row">
+                    <select class="form-control form-control-lg form-control-solid mrb-5" formControlName="typeQuestion"
+                      [(ngModel)]="input.typeQuestion">
+                      <option value="" disabled selected hidden>
+                        Select type question
+                      </option>
+                      <option *ngFor="let item of typeQuestions" [value]="item.key">
+                        {{ item.value }}
+                      </option>
+                    </select>
+                    <span class="text-danger" *ngIf="
+                        form.controls['typeQuestion']!.invalid &&
+                        (form.controls['typeQuestion'].dirty ||
+                          form.controls['typeQuestion'].touched)
+                      ">
+                      <span *ngIf="form.controls['typeQuestion'].errors!.required">
+                        Vui lòng nhập trường này
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Text Question -->
+                <div class="row mb-6" *ngIf="input.typeQuestion === 'text'">
+                  <label class="col-lg-4 col-form-label fw-bold fs-6">
+                    <span class="required">Text Question</span>
+                  </label>
+
+                  <div class="col-lg-8 fv-row">
+                    <textarea style="height: 100px" formControlName="textQuestion" [(ngModel)]="input.textQuestion"
+                      type="text" class="form-control form-control-lg form-control-solid mrb-5" placeholder="Enter text"
+                      name="textQuestion"></textarea>
+                    <span class="text-danger" *ngIf="
+                        form.controls['textQuestion']!.invalid &&
+                        (form.controls['textQuestion'].dirty ||
+                          form.controls['textQuestion'].touched)
+                      ">
+                      <span *ngIf="form.controls['textQuestion'].errors!.required">
+                        Vui lòng nhập trường này
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Image Question -->
+                <div class="row mb-6" *ngIf="input.typeQuestion === 'image'">
+                  <label class="col-lg-4 col-form-label fw-bold fs-6">
+                    <span class="required">Image Question</span>
+                  </label>
+                  <div class="col-lg-8 fv-row">
+                    <div class="image-input image-input-outline">
+                      <!--begin::Image preview wrapper-->
+                      <div class="image-input-wrapper w-125px h-125px" *ngIf="
+                          input.imageQuestion != undefined &&
+                          input.imageQuestion != null
+                        ">
+                        <img class="image-input-wrapper w-125px h-125px" *ngIf="input.imageQuestion != ''"
+                          [src]="input.imageQuestion" alt="izi software" width="250" height="250" />
+                      </div>
+                      <!--end::Image preview wrapper-->
+
+                      <!--begin::Edit button-->
+                      <label
+                        class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                        data-kt-image-input-action="change" data-bs-toggle="tooltip" data-bs-dismiss="click"
+                        title="Change avatar" (change)="onImageQuestionUploadImageClick()">
+                        <i class="bi bi-pencil-fill fs-7"></i>
+
+                        <!--begin::Inputs-->
+                        <input type="file" formControlName="imageQuestion" accept="image/*" #inputImageQuestion />
+                        <input type="hidden" name="avatar_remove" />
+                        <!--end::Inputs-->
+                      </label>
+                      <!--end::Edit button-->
+
+                      <!--begin::Remove button-->
+                      <span
+                        class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                        data-kt-image-input-action="remove" data-bs-toggle="tooltip" data-bs-dismiss="click"
+                        title="Remove avatar" (click)="onImageQuestionUploadImageDeleteClick()">
+                        <i class="bi bi-x fs-2"></i>
+                      </span>
+                      <!--end::Remove button-->
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Video Question -->
+                <div class="row mb-6" *ngIf="input.typeQuestion === 'video'">
+                  <label class="col-lg-4 col-form-label fw-bold fs-6">
+                    <span class="required">Video Question</span>
+                  </label>
+
+                  <div class="col-lg-8 fv-row">
+                    <input formControlName="videoQuestion" [(ngModel)]="input.videoQuestion" type="text"
+                      class="form-control form-control-lg form-control-solid mrb-5" name="videoQuestion"
+                      placeholder="Enter video link" />
+
+                    <span class="text-danger" *ngIf="
+                        form.controls['videoQuestion']!.invalid &&
+                        (form.controls['videoQuestion'].dirty ||
+                          form.controls['videoQuestion'].touched)
+                      ">
+                      <span *ngIf="form.controls['videoQuestion'].errors!.required">
+                        Vui lòng nhập trường này
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Audio Question -->
+                <div class="row mb-6" *ngIf="input.typeQuestion === 'audio'">
+                  <label class="col-lg-4 col-form-label fw-bold fs-6">
+                    <span class="required">Audio Question</span>
+                  </label>
+
+                  <div class="col-lg-8 fv-row">
+                    <input formControlName="audioQuestion" [(ngModel)]="input.audioQuestion" type="text"
+                      class="form-control form-control-lg form-control-solid mrb-5" name="audioQuestion"
+                      placeholder="Enter audio link" />
+
+                    <span class="text-danger" *ngIf="
+                        form.controls['audioQuestion']!.invalid &&
+                        (form.controls['audioQuestion'].dirty ||
+                          form.controls['audioQuestion'].touched)
+                      ">
+                      <span *ngIf="form.controls['audioQuestion'].errors!.required">
+                        Vui lòng nhập trường này
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Next -->
+              <div class="card-footer d-flex justify-content-end py-6 px-9">
+                <button type="button" class="btn btn-primary" [disabled]="isLoading"
+                  (click)="onNextAnswerTabBtnClick()">
+                  <ng-container *ngIf="!isLoading">Next</ng-container>
+                  <ng-container *ngIf="isLoading">
+                    <span clas="indicator-progress" [style.display]="'block'">
+                      Please wait...{{ " " }}
+                      <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                  </ng-container>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="tab-pane fade show" [class.show]="!isTabQuestion" [class.active]="!isTabQuestion" role="tabpanel">
+          <div id="kt_account_profile_details" class="collapse show">
+            <div class="card-body p-9 pt-0">
+              <div class="table-responsive">
+                <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-4">
+                  <!-- header -->
+                  <thead>
+                    <tr class="fw-bold fs-6 text-gray-800">
+                      <th class="w-40px">STT</th>
+                      <th class="w-100px">Type Answer</th>
+                      <th class="w-500px">Content</th>
+                      <th class="w-20px">Is True</th>
+                      <th class="w-20px text-end">Actions</th>
+                    </tr>
+                  </thead>
+
+                  <!-- body -->
+                  <tbody>
+                    <tr *ngFor="
+                        let answerInput of answerInputs;
+                        let index = index
+                      ">
+                      <td class="w-40px fs-3 fw-bold">{{ index + 1 }}</td>
+                      <td>
+                        <select class="form-control form-control-lg form-control-solid mrb-5"
+                          [value]="answerInput.typeAnswer" (change)="onChangeTypeAnswer(index, $event)"
+                          placeholder="Select type question">
+                          <option *ngFor="let item of typeAnswers" [value]="item.key">
+                            {{ item.value }}
+                          </option>
+                        </select>
+                      </td>
+                      <td>
+                        <!-- Text Question -->
+                        <div *ngIf="answerInput.typeAnswer === 'text'">
+                          <textarea (input)="onInputTextAnswer(index, $event)" style="height: 40px" type="text"
+                            class="form-control form-control-lg form-control-solid mrb-5" placeholder="Enter text">
+                          </textarea>
+                        </div>
+
+                        <!-- Image Question -->
+                        <div *ngIf="answerInput.typeAnswer === 'image'">
+                          <input (change)="onImageAnswerUploadImageClick(index)" #inputImageAnswer accept="image/*"
+                            type="file" class="form-control form-control-lg form-control-solid mrb-5" />
+                        </div>
+                      </td>
+
+                      <!-- Is True -->
+                      <td>
+                        <div class="form-check form-check-custom form-check-success form-check-solid">
+                          <input class="form-check-input" type="checkbox" [checked]="answerInput.isTrue"
+                            (change)="onChangeIsTrue(index, $event)" />
+                        </div>
+                      </td>
+                      <!-- Icons delete -->
+                      <td class="text-end">
+                        <span (click)="removeItemAnswer(index)" [inlineSVG]="
+                            '../../assets/media/icons/duotune/general/gen027.svg'
+                          " class="cursor-pointer svg-icon svg-icon-3">
+                        </span>
+                        <!--end::Svg Icon-->
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="4" class="text-center">
+                        <!--begin::Svg Icon | path: /var/www/preview.keenthemes.com/kt-products/docs/metronic/html/releases/2022-08-29-071832/core/html/src/media/icons/duotune/arrows/arr013.svg-->
+                        <span (click)="addOneMoreAnswer()" class="cursor-pointer svg-icon svg-icon-muted svg-icon-2hx"
+                          style="color: #1bceb8"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.3"
+                              d="M11 13H7C6.4 13 6 12.6 6 12C6 11.4 6.4 11 7 11H11V13ZM17 11H13V13H17C17.6 13 18 12.6 18 12C18 11.4 17.6 11 17 11Z"
+                              fill="currentColor" />
+                            <path
+                              d="M22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2C17.5 2 22 6.5 22 12ZM17 11H13V7C13 6.4 12.6 6 12 6C11.4 6 11 6.4 11 7V11H7C6.4 11 6 11.4 6 12C6 12.6 6.4 13 7 13H11V17C11 17.6 11.4 18 12 18C12.6 18 13 17.6 13 17V13H17C17.6 13 18 12.6 18 12C18 11.4 17.6 11 17 11Z"
+                              fill="currentColor" />
+                          </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Add New -->
+            <div class="card-footer d-flex justify-content-end py-6 px-9">
+              <button type="button" class="btn btn-primary" [disabled]="isLoading" (click)="onAddNewBtnClick()">
+                <ng-container *ngIf="!isLoading">Add New</ng-container>
+                <ng-container *ngIf="isLoading">
+                  <span clas="indicator-progress" [style.display]="'block'">
+                    Please wait...{{ " " }}
+                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                  </span>
+                </ng-container>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

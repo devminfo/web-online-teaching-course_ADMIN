@@ -1,0 +1,279 @@
+<div class="card mb-5 mb-xl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Backup</span>
+      <span class="text-muted mt-1 fw-bold fs-7"
+        >Selected {{ getSelection().length }} records</span
+      >
+    </h3>
+
+    <div class="card-toolbar">
+      <!-- new data -->
+      <div  class="card-toolbar">
+        <button
+          data-toggle="modal"
+          data-target="#backupModal"
+          routerLink="/features/backupdatas"
+          class="btn btn-sm btn-light-primary mr-1"
+          [disabled]="isLoading"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/files/fil019.svg'"
+            class="svg-icon svg-icon-3"
+          ></span>
+          <ng-container *ngIf="!isLoading">Backup New</ng-container>
+
+          <ng-container *ngIf="isLoading">
+          <span clas="indicator-progress" [style.display]="'block'">
+            Please wait...{{ " " }}
+            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+          </span>
+        </ng-container>
+          
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table
+        class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+      >
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-muted">
+            <th class="min-w-150px">ID</th>
+            <th class="min-w-150px">File</th>
+            <th class="min-w-150px">Created At</th>
+            <th class="min-w-150px text-end">Actions</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr *ngFor="let data of dataSources">
+            <!-- ID -->
+            <td>
+              <a
+                routerLink="/features/Backups/update/{{ data._id }}"
+                class="text-dark fw-bolder text-hover-primary fs-6"
+              >
+                <p
+                  class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+                >
+                  {{ data._id }}
+                </p>
+              </a>
+            </td>
+
+            <!-- File -->
+            <td>
+              <a href="{{ data.path }}" download class="btn btn-bg-success"
+                >Download File</a
+              >
+            </td>
+
+            <!-- Created At -->
+            <td>
+              <p
+                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+              >
+                {{ data.createdAt | date: "hh:mm:ss dd/MM/yyyy" }}
+              </p>
+            </td>
+
+            <!-- Action -->
+            <td class="text-end">
+              <!-- Restore -->
+              <button
+                (click)="updateRestoreId(data._id)"
+                data-toggle="modal"
+                data-target="#restoreModal"
+                routerLink="/features/backupdatas"
+                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+                [disabled]="isLoading"
+              >
+                <span
+                  [inlineSVG]="'./assets/media/icons/duotune/arrows/arr029.svg'"
+                  class="svg-icon svg-icon-2x svg-icon-danger"
+                >
+                </span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+
+      <!-- test -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- begin::Body -->
+</div>
+
+<div
+  class="d-flex flex-stack flex-wrap pt-10"
+  style="float: right"
+  *ngIf="dataSources"
+>
+  <div class="fs-6 fw-bold text-gray-700">Items per page:</div>
+
+  <div>
+    <select
+      [(ngModel)]="pageSize"
+      (change)="onChangeSize()"
+      class="form-select form-select-solid form-select-md"
+      name="currency"
+    >
+      <option value="5">5</option>
+      <option value="20">20</option>
+      <option value="50">50</option>
+      <option value="80">80</option>
+    </select>
+  </div>
+
+  <!-- <div class="fs-6 fw-bold text-gray-700">Showing {{(pageIndex-1)*pageSize+1}} to
+        {{(pageIndex-1)*pageSize+dataSources.length}}
+        of {{pageLength}} entries</div> -->
+
+  <div class="fs-6 fw-bold text-gray-700 mr-lr-20">
+    {{ (pageIndex - 1) * pageSize + 1 }} -
+    {{ (pageIndex - 1) * pageSize + dataSources.length }}
+    of {{ pageLength }}
+  </div>
+
+  <ul class="pagination">
+    <!-- begin page -->
+    <li class="page-item previous" (click)="onBeginClick()" disabled="true">
+      <a class="page-link cursor-pointer">
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/arrows/arr079.svg'"
+          class="svg-icon svg-icon-3"
+        ></span>
+      </a>
+    </li>
+
+    <!-- previous page -->
+    <li class="page-item previous" (click)="onPreviousClick()">
+      <a class="page-link cursor-pointer">
+        <i class="previous"></i>
+      </a>
+    </li>
+
+    <!-- next page -->
+    <li class="page-item next" (click)="onNextClick()">
+      <a class="page-link cursor-pointer">
+        <i class="next"></i>
+      </a>
+    </li>
+
+    <!-- end page -->
+    <li class="page-item next" (click)="onEndClick()">
+      <a class="page-link cursor-pointer">
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/arrows/arr080.svg'"
+          class="svg-icon svg-icon-3"
+        ></span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- Restore Modal -->
+<div
+  class="modal fade"
+  id="restoreModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="restoreModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="restoreModalLabel">
+          <b>Restore this File</b>
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">Do you really want to restore this record?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-dismiss="modal"
+          (click)="onRestoreBtnClick()"
+        >
+          Accept
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Backup Modal -->
+<div
+  class="modal fade"
+  id="backupModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="backupModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="backupModalLabel">
+          <b>Backup this File</b>
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">Do you really want to backup new records ?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-dismiss="modal"
+          (click)="onBackupBtnClick()"
+        >
+        <ng-container *ngIf="!isLoading">Accept</ng-container>
+        <ng-container *ngIf="isLoading">
+          <span clas="indicator-progress" [style.display]="'block'">
+            Please wait...{{ " " }}
+            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+          </span>
+        </ng-container>
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>

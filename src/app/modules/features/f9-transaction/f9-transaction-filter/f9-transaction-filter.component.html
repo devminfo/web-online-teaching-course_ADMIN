@@ -1,0 +1,59 @@
+<div class="px-7 py-5">
+  <div class="fs-5 text-dark fw-bolder">Filter Options</div>
+</div>
+
+<div class="separator border-gray-200"></div>
+
+<div class="px-7 py-5">
+  <!-- Method -->
+  <div class="mb-10">
+    <label class="form-label fw-bold">Method:</label>
+    <div>
+      <select [(ngModel)]="methodSelect" class="form-select form-select-solid" data-kt-select2="true"
+        data-placeholder="Select option" data-allow-clear="true">
+        <option value="0">Tất cả</option>
+        <option *ngFor="let item of methodTransaction" value="{{ item.value }}">
+          {{ item.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Status -->
+  <div class="mb-10">
+    <label class="form-label fw-bold">Status:</label>
+    <div>
+      <select [(ngModel)]="statusSelect" class="form-select form-select-solid" data-kt-select2="true"
+        data-placeholder="Select option" data-allow-clear="true">
+        <option value="0">Tất cả</option>
+        <option *ngFor="let item of statusTransaction" value="{{ item.value }}">
+          {{ item.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Type -->
+  <div class="mb-10">
+    <label class="form-label fw-bold">Type:</label>
+    <div>
+      <select [(ngModel)]="typeSelect" class="form-select form-select-solid" data-kt-select2="true"
+        data-placeholder="Select option" data-allow-clear="true">
+        <option value="0">Tất cả</option>
+        <option *ngFor="let item of typeTransaction" value="{{ item.value }}">
+          {{ item.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Button -->
+  <div class="d-flex justify-content-end">
+    <button type="reset" class="btn btn-sm btn-white btn-active-light-primary me-2" data-kt-menu-dismiss="true">
+      Reset
+    </button>
+    <button (click)="onApplyBtnClick()" type="submit" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true">
+      Apply
+    </button>
+  </div>
+</div>

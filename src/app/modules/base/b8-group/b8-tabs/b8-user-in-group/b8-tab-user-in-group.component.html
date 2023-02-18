@@ -1,0 +1,334 @@
+<div class="collapse show">
+  <div class="card mb-5 mb-xl-8">
+    <!-- Header -->
+    <div class="card-header border-0">
+      <h3 class="card-title align-items-start flex-column">
+        <span class="card-label fw-bolder fs-4 mb-1">Users in this group</span>
+        <span class="text-muted mt-1 fw-bold fs-7"
+          >List {{ usersPageLength }} records</span
+        >
+      </h3>
+      <div class="card-toolbar">
+        <!-- input search -->
+        <b8-group-search
+          (searchChange)="onSearchChange($event)"
+        ></b8-group-search>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="card-body py-3">
+      <!-- begin::Table container -->
+      <div class="table-responsive">
+        <!-- begin::Table -->
+        <table
+          class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+        >
+          <!-- begin::Table head -->
+          <thead>
+            <tr class="fw-bolder text-muted">
+              <th class="w-25px">
+                <div
+                  class="form-check form-check-sm form-check-custom form-check-solid"
+                >
+                  <input
+                    [(ngModel)]="isUsersSelectedAll"
+                    (click)="onCheckAllUsersSelected()"
+                    class="form-check-input"
+                    type="checkbox"
+                    data-kt-check="true"
+                    data-kt-check-target=".widget-13-check"
+                  />
+                </div>
+              </th>
+              <th class="min-w-150px">ID</th>
+              <th class="min-w-140px">Avatar</th>
+              <th class="min-w-140px">FullName</th>
+              <th class="min-w-140px">Gener</th>
+              <th class="min-w-140px">Date of Birth</th>
+              <th class="min-w-120px text-end">Actions</th>
+            </tr>
+          </thead>
+          <!-- end::Table head -->
+          <!-- begin::Table body -->
+          <tbody>
+            <tr *ngFor="let data of usersInGroup">
+              <!-- Select -->
+              <td>
+                <div
+                  class="form-check form-check-sm form-check-custom form-check-solid"
+                >
+                  <input
+                    [(ngModel)]="data.checked"
+                    (click)="onUsersSelected(data.id)"
+                    class="form-check-input widget-13-check"
+                    type="checkbox"
+                    value="1"
+                  />
+                </div>
+              </td>
+
+              <!-- ID -->
+              <td>
+                <p
+                  class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+                >
+                  {{ data.id }}
+                </p>
+              </td>
+
+              <!-- Avatar -->
+              <p
+                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+              >
+                <img
+                  *ngIf="data.avatar != ''"
+                  [src]="data.avatar"
+                  style="
+                    object-fit: cover;
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 50%;
+                  "
+                />
+              </p>
+
+              <!-- FullName -->
+              <td>
+                <p
+                  class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+                >
+                  {{ data.fullName }}
+                </p>
+              </td>
+
+              <!-- Gener -->
+              <td>
+                <p
+                  class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+                >
+                  {{ data.gender }}
+                </p>
+              </td>
+
+              <!-- Date of Birth -->
+              <td>
+                <p
+                  class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+                >
+                  {{ data.born | date: "dd/MM/yyyy" }}
+                </p>
+              </td>
+
+              <!-- Acction -->
+              <td class="text-end">
+                <!-- delete -->
+                <a
+                  (click)="removeUserFromGroup(data.id)"
+                  data-toggle="modal"
+                  data-target="#removeOneUserFromGroup"
+                  routerLink="/features/groups/update/{{ groupId }}"
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+                >
+                  <span
+                    [inlineSVG]="
+                      './assets/media/icons/duotune/general/gen027.svg'
+                    "
+                    class="svg-icon svg-icon-3"
+                  >
+                  </span>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+
+          <!-- end::Table body -->
+        </table>
+        <!-- end::Table -->
+
+        <!-- test -->
+      </div>
+      <!-- end::Table container -->
+    </div>
+
+    <!-- Paginate -->
+    <div class="pb-5">
+      <div
+        class="d-flex flex-stack flex-wrap pt-10"
+        style="float: right"
+        *ngIf="usersInGroup"
+      >
+        <div class="fs-6 fw-bold text-gray-700">Items per page:</div>
+
+        <div>
+          <select
+            [(ngModel)]="usersPageSize"
+            (change)="onUsersChangeSize()"
+            class="form-select form-select-solid form-select-md"
+            name="currency"
+          >
+            <option value="5">5</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="80">80</option>
+          </select>
+        </div>
+
+        <div class="fs-6 fw-bold text-gray-700 mr-lr-20">
+          {{ (usersPageIndex - 1) * usersPageSize + 1 }} -
+          {{ (usersPageIndex - 1) * usersPageSize + usersInGroup.length }}
+          of {{ usersPageLength }}
+        </div>
+
+        <ul class="pagination">
+          <!-- begin page -->
+          <li
+            class="page-item previous"
+            (click)="onUsersBeginClick()"
+            disabled="true"
+          >
+            <a class="page-link cursor-pointer">
+              <span
+                [inlineSVG]="'./assets/media/icons/duotune/arrows/arr079.svg'"
+                class="svg-icon svg-icon-3"
+              ></span>
+            </a>
+          </li>
+
+          <!-- previous page -->
+          <li class="page-item previous" (click)="onUsersPreviousClick()">
+            <a class="page-link cursor-pointer">
+              <i class="previous"></i>
+            </a>
+          </li>
+
+          <!-- next page -->
+          <li class="page-item next" (click)="onUsersNextClick()">
+            <a class="page-link cursor-pointer">
+              <i class="next"></i>
+            </a>
+          </li>
+
+          <!-- end page -->
+          <li class="page-item next" (click)="onUsersEndClick()">
+            <a class="page-link cursor-pointer">
+              <span
+                [inlineSVG]="'./assets/media/icons/duotune/arrows/arr080.svg'"
+                class="svg-icon svg-icon-3"
+              ></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Remove user from group -->
+    <div
+      *ngIf="getUsersSelection().length > 0"
+      class="card-footer d-flex justify-content-end py-6 px-9"
+    >
+      <a
+        routerLink="/features/groups/update/{{ groupId }}"
+        data-toggle="modal"
+        data-target="#deleteManyUsersFromModal"
+        class="btn btn btn-danger mr-1"
+      >
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
+          class="svg-icon svg-icon-3"
+        ></span>
+        Delete
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Delete many Modal -->
+<div
+  class="modal fade"
+  id="deleteManyUsersFromModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="deleteManyUsersFromModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteManyUsersFromModalLabel">
+          <b>CONFIRM REMOVE DATA</b>
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Do you really want to delete {{ getUsersSelection().length }} select
+        records? This process cannot be undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-dismiss="modal"
+          (click)="onDeleteManyUsersFromGroupBtnClick()"
+        >
+          Accept
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div
+  class="modal fade"
+  id="removeOneUserFromGroup"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="removeOneUserFromGroupLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="removeOneUserFromGroupLabel">
+          <b>CONFIRM REMOVE DATA</b>
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Do you really want to delete these records? This process cannot be
+        undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-dismiss="modal"
+          (click)="onRemoveOneUserFromGroupClick()"
+        >
+          Accept
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

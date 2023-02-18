@@ -1,0 +1,106 @@
+<!-- Dashboard -->
+<!-- <div class="menu-item">
+  <a
+    class="menu-link without-sub"
+    routerLink="/dashboard"
+    routerLinkActive="active"
+    ><span class="menu-icon">
+      <span
+        [inlineSVG]="'./assets/media/icons/duotune/art/art002.svg'"
+        class="svg-icon svg-icon-2"
+      ></span>
+    </span>
+    <span class="menu-title" translate="MENU.DASHBOARD"></span
+  ></a>
+</div> -->
+
+<!-- Separator -->
+<!-- <div class="menu-item">
+  <div class="menu-content pt-8 pb-2">
+    <span class="menu-section text-muted text-uppercase fs-8 ls-1"
+      >Features</span
+    >
+  </div>
+</div> -->
+
+<!-- Begin Generate menu -->
+<!-- ****************************************************************************** -->
+<div *ngFor="let item of dataSources">
+  <!-- Is Main Menu -->
+  <div *ngIf="item.isGroup == false" class="menu-item">
+    <a
+      class="menu-link without-sub"
+      routerLink="{{ item.link }}"
+      routerLinkActive="active"
+      ><span class="menu-icon">
+        <span [inlineSVG]="item.icon" class="svg-icon svg-icon-2"></span> </span
+      ><span class="menu-title">{{ item.name }}</span></a
+    >
+  </div>
+
+  <!-- Is Group -->
+  <div
+    *ngIf="item.isGroup == true"
+    class="menu-item menu-accordion"
+    data-kt-menu-trigger="click"
+    routerLinkActive="here show"
+  >
+    <span class="menu-link"
+      ><span class="menu-icon"
+        ><span class="svg-icon svg-icon-2" [inlineSVG]="item.icon"></span></span
+      ><span class="menu-title" data-link="item.link">{{ item.name }}</span
+      ><span class="menu-arrow"></span
+    ></span>
+    <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+      <!-- Is Childs menu -->
+      <div class="menu-item" *ngFor="let subItem of item.childs">
+        <a
+          class="menu-link without-sub"
+          routerLinkActive="active"
+          routerLink="{{ subItem.link }}"
+          (click)="remoIsCheckStoreService(subItem.link)"
+          ><span class="menu-bullet"
+            ><span class="bullet bullet-dot"></span></span
+          ><span class="menu-title">{{ subItem.name }}</span></a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ****************************************************************************** -->
+<!-- End Generation menu -->
+
+<!-- Separator -->
+<div class="menu-item">
+  <div class="menu-content">
+    <div class="separator mx-1 my-4"></div>
+  </div>
+</div>
+
+<!-- Layout builder -->
+<div class="menu-item">
+  <a
+    class="menu-link without-sub"
+    routerLink="/builder"
+    routerLinkActive="active"
+    ><span class="menu-icon">
+      <span
+        [inlineSVG]="'./assets/media/icons/duotune/general/gen019.svg'"
+        class="svg-icon svg-icon-2"
+      ></span> </span
+    ><span class="menu-title">Layout Builder</span></a
+  >
+</div>
+
+<!-- Changelog  -->
+<div class="menu-item">
+  <a target="_blank" class="menu-link" [href]="appPreviewChangelogUrl">
+    <span class="menu-icon">
+      <span
+        class="svg-icon svg-icon-2"
+        [inlineSVG]="'./assets/media/icons/duotune/general/gen005.svg'"
+      ></span>
+    </span>
+    <span class="menu-title">Changelog {{ appAngularVersion }}</span>
+  </a>
+</div>

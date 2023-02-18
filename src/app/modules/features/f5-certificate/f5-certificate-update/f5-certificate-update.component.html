@@ -1,0 +1,190 @@
+<div class="card mb-5 mb-xl-10">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Certificate</span>
+      <span class="text-muted mt-1 fw-bold fs-7">Update datas</span>
+    </h3>
+    <div class="card-toolbar">
+      <!-- new data -->
+      <div class="card-toolbar">ư
+        <a routerLink="/features/certificates" class="btn btn-sm btn-light-primary">
+          <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'" class="svg-icon svg-icon-3"></span>
+          Go back
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <div id="kt_account_profile_details" class="collapse show">
+    <form [formGroup]="form" novalidate="" class="form">
+      <div class="card-body border-top p-9">
+        <!-- Id SubSpecialize -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">SubSpecialize</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select [(value)]="input.idSubSpecialize" class="form-control form-control-lg form-control-solid mb-2"
+              formControlName="idSubSpecialize" [(ngModel)]="input.idSubSpecialize"
+              placeholder="Select sub subSpecialize">
+              <option *ngFor="let item of subSpecializes" [value]="item._id">
+                {{ item.name }}
+              </option>
+            </select>
+            <span class="text-danger" *ngIf="
+                form.controls['idSubSpecialize']!.invalid &&
+                (form.controls['idSubSpecialize'].dirty ||
+                  form.controls['idSubSpecialize'].touched)
+              ">
+              <span *ngIf="form.controls['idSubSpecialize'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Title -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Title</span>
+          </label>
+
+          <div class="col-lg-8 fv-row">
+            <input formControlName="title" [(ngModel)]="input.title" type="text"
+              class="form-control form-control-lg form-control-solid mrb-5" placeholder="Title" name="title" />
+
+            <span class="text-danger" *ngIf="
+                form.controls['title']!.invalid &&
+                (form.controls['title'].dirty || form.controls['title'].touched)
+              ">
+              <span *ngIf="form.controls['title'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Thumbnail -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Thumbnail</span>
+          </label>
+
+          <div class="col-lg-8 fv-row">
+            <!--begin::Image input-->
+            <div class="image-input image-input-outline">
+              <!--begin::Image preview wrapper-->
+              <div class="image-input-wrapper w-125px h-125px"
+                *ngIf="input.thumbnail != undefined && input.thumbnail != null">
+                <img class="image-input-wrapper w-125px h-125px" *ngIf="input.thumbnail != ''" [src]="input.thumbnail"
+                  alt="izi software" width="250" height="250" />
+              </div>
+              <!--end::Image preview wrapper-->
+
+              <!--begin::Edit button-->
+              <label
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="change" data-bs-toggle="tooltip" data-bs-dismiss="click"
+                title="Change avatar" (change)="onThumbnailUploadClick()">
+                <i class="bi bi-pencil-fill fs-7"></i>
+
+                <!--begin::Inputs-->
+                <input type="file" formControlName="thumbnail" accept="image/*" #inputThunail name="thumbnail" />
+                <!--end::Inputs-->
+              </label>
+              <!--end::Edit button-->
+
+              <!--begin::Remove button-->
+              <span
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="remove" data-bs-toggle="tooltip" data-bs-dismiss="click"
+                title="Remove avatar" (click)="onThumbnailDeleteClick()">
+                <i class="bi bi-x fs-2"></i>
+              </span>
+              <!--end::Remove button-->
+            </div>
+            <!--end::Image input-->
+          </div>
+        </div>
+
+        <!-- Banner -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Banner</span>
+          </label>
+
+          <div class="col-lg-8 fv-row">
+            <!--begin::Image input-->
+            <div class="image-input image-input-outline">
+              <!--begin::Image preview wrapper-->
+              <div class="image-input-wrapper w-125px h-125px"
+                *ngIf="input.banner != undefined && input.banner != null">
+                <img class="image-input-wrapper w-125px h-125px" *ngIf="input.banner != ''" [src]="input.banner"
+                  alt="izi software" width="250" height="250" />
+              </div>
+              <!--end::Image preview wrapper-->
+
+              <!--begin::Edit button-->
+              <label
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="change" data-bs-toggle="tooltip" data-bs-dismiss="click"
+                title="Change avatar" (change)="onBannerUploadClick()">
+                <i class="bi bi-pencil-fill fs-7"></i>
+
+                <!--begin::Inputs-->
+                <input type="file" formControlName="banner" accept="image/*" #inputBanner name="banner" />
+                <!--end::Inputs-->
+              </label>
+              <!--end::Edit button-->
+
+              <!--begin::Remove button-->
+              <span
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="remove" data-bs-toggle="tooltip" data-bs-dismiss="click"
+                title="Remove avatar" (click)="onBannerDeleteClick()">
+                <i class="bi bi-x fs-2"></i>
+              </span>
+              <!--end::Remove button-->
+            </div>
+            <!--end::Image input-->
+          </div>
+        </div>
+
+        <!-- Level -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Level</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input formControlName="level" [(ngModel)]="input.level" type="text"
+              class="form-control form-control-lg form-control-solid mrb-5" placeholder="Level" name="level" />
+
+            <span class="text-danger" *ngIf="
+                form.controls['level']!.invalid &&
+                (form.controls['level'].dirty || form.controls['level'].touched)
+              ">
+              <span *ngIf="form.controls['level'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add New -->
+      <div class="card-footer d-flex justify-content-end py-6 px-9">
+        <button type="button" class="btn btn-primary" [disabled]="isLoading" (click)="onUpdateBtnClick()">
+          <ng-container *ngIf="!isLoading">Save Changes</ng-container>
+          <ng-container *ngIf="isLoading">
+            <span clas="indicator-progress" [style.display]="'block'">
+              Please wait...{{ " " }}
+              <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+            </span>
+          </ng-container>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

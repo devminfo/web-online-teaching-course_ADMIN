@@ -1,0 +1,293 @@
+<div class="card mb-5 mb-xl-10">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Groups Detail</span>
+      <span class="text-muted mt-1 fw-bold fs-7">Add New</span>
+    </h3>
+    <div class="card-toolbar">
+      <!-- new data -->
+      <div class="card-toolbar">
+        <a
+          routerLink="/features/groupdetails"
+          class="btn btn-sm btn-light-primary"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'"
+            class="svg-icon svg-icon-3"
+          ></span>
+          Go back
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <div id="kt_account_profile_details" class="collapse show">
+    <form [formGroup]="form" novalidate="" class="form">
+      <div class="card-body border-top p-9">
+        <!-- Collection Name -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Collection Name</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="collectionName"
+              [(ngModel)]="input.collectionName"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Collection Name"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['collectionName']!.invalid &&
+                (form.controls['collectionName'].dirty ||
+                  form.controls['collectionName'].touched)
+              "
+            >
+              <span *ngIf="form.controls['collectionName'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Name -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Menu Name</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="name"
+              [(ngModel)]="input.name"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Menu Name"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['name']!.invalid &&
+                (form.controls['name'].dirty || form.controls['name'].touched)
+              "
+            >
+              <span *ngIf="form.controls['name'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Icon -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Icon</span>
+          </label>
+          <div
+            class="col-lg-3 fv-row mrt-8"
+            data-toggle="modal"
+            data-target="#exampleModal"
+          >
+            <span [inlineSVG]="input.icon" class="svg-icon svg-icon-3x"></span>
+          </div>
+        </div>
+
+        <!-- Position -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Position</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="position"
+              [(ngModel)]="input.position"
+              type="number"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Position"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['position']!.invalid &&
+                (form.controls['position'].dirty ||
+                  form.controls['position'].touched)
+              "
+            >
+              <span *ngIf="form.controls['position'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Link -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Group Link</span>
+          </label>
+          <div class="col-lg-3 fv-row">
+            <!-- Is Group -->
+            <label class="form-check form-check-inline form-check-solid mrt-13">
+              <input
+                [(ngModel)]="this.input.isGroup"
+                (change)="onIsGroupChange()"
+                [ngModelOptions]="{ standalone: true }"
+                class="form-check-input"
+                type="checkbox"
+              />
+              <span class="fw-bold ps-2 fs-6 badge badge-light-primary"
+                >Is Group Menu</span
+              >
+            </label>
+          </div>
+
+          <div class="col-lg-5 fv-row">
+            <!-- Link -->
+            <input
+              *ngIf="input.isGroup == false"
+              formControlName="link"
+              [(ngModel)]="input.link"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="link"
+              name="link"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['link']!.invalid &&
+                (form.controls['link'].dirty || form.controls['link'].touched)
+              "
+            >
+              <span *ngIf="form.controls['link'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Parent Menu -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Parent Menu</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <!-- Parent -->
+            <select
+              formControlName="newIdParent"
+              [(ngModel)]="newIdParent"
+              class="form-select form-select-solid"
+              data-kt-select2="true"
+              data-placeholder="Select option"
+              data-allow-clear="true"
+            >
+              <option value="0">Main Menu</option>
+              <option
+                *ngFor="let item of dataSourcesParent"
+                value="{{ item._id }}"
+              >
+                {{ item.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Horizontal Menu -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Horizontal Menu</span>
+          </label>
+          <div class="col-lg-3 fv-row">
+            <!-- Is Horizontal Menu-->
+            <label class="form-check form-check-inline form-check-solid mrt-13">
+              <input
+                [(ngModel)]="this.input.isHorizontalMenu"
+                [ngModelOptions]="{ standalone: true }"
+                class="form-check-input"
+                type="checkbox"
+              />
+              <span class="fw-bold ps-2 fs-6 badge badge-light-primary"
+                >Is Horizontal Menu</span
+              >
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Update -->
+      <div class="card-footer d-flex justify-content-end py-6 px-9">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="isLoading"
+          (click)="onUpdateBtnClick()"
+        >
+          <ng-container *ngIf="!isLoading">Update</ng-container>
+          <ng-container *ngIf="isLoading">
+            <span clas="indicator-progress" [style.display]="'block'">
+              Please wait...{{ " " }}
+              <span
+                class="spinner-border spinner-border-sm align-middle ms-2"
+              ></span>
+            </span>
+          </ng-container>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Select ICON Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document" style="max-width: 700px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><b>SELECT ICON</b></h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Icon -->
+        <div class="row mb-12">
+          <div class="col-lg-12 fv-row">
+            <span
+              *ngFor="let icon of icons"
+              (click)="onIconClick(icon.value)"
+              class="mrl-5"
+              ><span
+                [inlineSVG]="icon.value"
+                class="svg-icon svg-icon-2x"
+                data-dismiss="modal"
+              ></span
+            ></span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

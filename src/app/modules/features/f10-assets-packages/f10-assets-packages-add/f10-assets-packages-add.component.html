@@ -1,0 +1,265 @@
+<div id="kt_account_profile_details" class="collapse show">
+    <form [formGroup]="form" novalidate="" class="form">
+      <div class="row">
+        <div
+          class="col tab-pane fade show active"
+          id="kt_ecommerce_add_product_general"
+          role="tab-panel"
+        >
+          <div class="d-flex flex-column gap-7 gap-lg-10">
+            
+            <!--begin::Add Assets package-->
+            <div class="card card-flush py-4">
+              <div class="card-header">
+                <div class="card-title">
+                  <span
+                    [inlineSVG]="
+                      './assets/media/icons/duotune/general/gen068.svg'
+                    "
+                    class="svg-icon svg-icon-3 float-right"
+                  ></span>
+                  <h2>Add asset package</h2>
+                </div>
+              </div>
+
+              <!-- Name && Quantity-->
+              <div class="pr-2 pl-2 pt-4">
+              <div class="row ">
+
+                <!-- Name-->
+                <div class="col-md-6 card-body pt-0">
+                  <div class="mb-2 fv-row">
+                    <label class="required form-label">Name</label>
+                    <input
+                      formControlName="title"
+                      [(ngModel)]="input.title"
+                      class="form-control form-control-lg form-control-solid mrb-5"
+                      name="title"
+                      placeholder="Enter name voucher"
+                    />
+                    <ng-container
+                      [ngTemplateOutlet]="formError"
+                      [ngTemplateOutletContext]="{
+                        validation: 'required',
+                        message: 'Please enter this field',
+                        control: form.controls['title']
+                      }"
+                    ></ng-container>
+                  </div>
+                </div>
+
+                <!--Quantity-->
+                <div class="col-md-6 card-body pt-0">
+                  <div class="mb-2 fv-row">
+                    <label class="required form-label">Quantity</label>
+                    <input
+                      formControlName="quantity"
+                      [(ngModel)]="input.quantity"
+                      class="form-control form-control-lg form-control-solid mrb-5"
+                      placeholder="Enter the quantity"
+                      type="number"
+                    />
+                    <ng-container
+                      [ngTemplateOutlet]="formError"
+                      [ngTemplateOutletContext]="{
+                        validation: 'required',
+                        message: 'Please enter this field',
+                        control: form.controls['quantity']
+                      }"
+                    ></ng-container>
+                    <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'min',
+                      message: 'Please enter percent bigger 0',
+                      control: form.controls['quantity']
+                    }"
+                  ></ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Original price && price-->
+              <div class="row">
+
+                <!-- Original-->
+                <div class="col-md-6 card-body pt-0">
+                  <div class="mb-2 fv-row">
+                    <label class="required form-label">Original price</label>
+                    <input
+                      formControlName="originalPrice"
+                      [(ngModel)]="input.originalPrice"
+                      class="form-control form-control-lg form-control-solid mrb-5"
+                      name="originalPrice"
+                      type="number"
+                      placeholder="Enter original price"
+                    />
+                    <ng-container
+                      [ngTemplateOutlet]="formError"
+                      [ngTemplateOutletContext]="{
+                        validation: 'required',
+                        message: 'Please enter this field',
+                        control: form.controls['originalPrice']
+                      }"
+                    ></ng-container>
+                    <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'min',
+                      message: 'Please enter percent bigger 0',
+                      control: form.controls['originalPrice']
+                    }"
+                  ></ng-container>
+                  </div>
+                </div>
+
+                <!--price-->
+                <div class="col-md-6 card-body pt-0">
+                  <div class="mb-2 fv-row">
+                    <label class="required form-label">Price</label>
+                    <input
+                      formControlName="price"
+                      [(ngModel)]="input.price"
+                      class="form-control form-control-lg form-control-solid mrb-5"
+                      placeholder="Enter the price"
+                      type="number"
+                    />
+                    <ng-container
+                      [ngTemplateOutlet]="formError"
+                      [ngTemplateOutletContext]="{
+                        validation: 'required',
+                        message: 'Please enter this field',
+                        control: form.controls['price']
+                      }"
+                    ></ng-container>
+                    <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'min',
+                      message: 'Please enter percent bigger 0',
+                      control: form.controls['price']
+                    }"
+                  ></ng-container>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Type -->
+              <div class="row">
+                <div class="col-md-1 card-body pt-0">
+                  <label class="required form-label">Type</label>
+                 </div>
+                    <div
+                      class="col-md-2 form-check form-check-custom form-check-solid"
+                    >
+                      <input
+                        checked="checked"
+                        class="form-check-input me-3"
+                        formControlName="type"
+                        type="radio"
+                        value="SMS"
+                        [(ngModel)]="input.type"
+                        (click)="changeIsCheckedSMS('SMS')"
+                        
+                      />
+                      <label class="form-check-label ml-5 fw-bolder " id="sms"
+                        >SMS
+                      </label>
+                    </div>
+                    <div
+                      class="col-md-2 form-check form-check-custom form-check-solid"
+                    >
+                      <input
+                        formControlName="type"
+                        class="form-check-input me-3"
+                        name="type"
+                        type="radio"
+                        value="VOICE"
+                        (click)="changeIsCheckedVoice('VOICE')"
+                      />
+                      <label class="form-check-label ml-5 fw-bolder"id='voice'
+                        >VOICE</label
+                      >
+                    </div>
+                    <div
+                    class="col-md-2 form-check form-check-custom form-check-solid"
+                  >
+                    <input
+                      formControlName="type"
+                      class="form-check-input me-3"
+                      name="type"
+                      type="radio"
+                      value="MMS"
+                      (click)="changeIsCheckedMMS('MMS')"
+                    />
+                    <label class="form-check-label ml-5 fw-bolder"id='mms'
+                      >MMS</label
+                    >                 
+                  </div>
+                  <div class="col-md-5"></div>
+              </div>
+
+              <!-- Uni Type-->
+              <div class="row">
+                <div *ngIf="input.type=='SMS' ">
+                  <p class="SMS" > Unit type: Message</p>                
+              </div>
+              <div *ngIf="input.type=='VOICE' ">
+                <p class="VOICE" > Unit type: Minutes</p>                
+            </div>
+            <div *ngIf="input.type=='MMS' ">
+              <p class="MMS"> Unit type: Message</p>                
+          </div>
+                </div>
+              </div>
+              <!-- Create and cancel -->
+              <div class="d-flex justify-content-end py-6 px-8 mr-5">
+                <a
+                  type="button"
+                  class="btn btn-light mr-3"
+                  routerLink="/features/assetspackages"
+                  >Cancel</a
+                >
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-dismiss="modal"
+                  [disabled]="isLoading"
+                  (click)="onAddNewBtnClick()"
+                >
+                  <ng-container *ngIf="!isLoading">Save</ng-container>
+                  <ng-container *ngIf="isLoading">
+                    <span clas="indicator-progress" [style.display]="'block'">
+                      Please wait...{{ " " }}
+                      <span
+                        class="spinner-border spinner-border-sm align-middle ms-2"
+                      ></span>
+                    </span>
+                  </ng-container>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+  <!-- check error -->
+  <ng-template
+    #formError
+    let-control="control"
+    let-message="message"
+    let-validation="validation"
+  >
+    <ng-container
+      *ngIf="control?.hasError(validation) && (control.dirty || control.touched)"
+    >
+      <div class="fv-plugins-message-container">
+        <span role="alert " class="text-danger">
+          {{ message }}
+        </span>
+      </div>
+    </ng-container>
+  </ng-template>
+  

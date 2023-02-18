@@ -1,0 +1,118 @@
+<h3 class="card-title align-items-start flex-column">
+  <!-- <span class="card-label fw-bolder fs-3 mb-1">StaffServices </span> -->
+</h3>
+<div class="card mb-5 mb-xl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <div class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">StaffServices</span>
+      <a>
+        <span class="text-muted mt-1 fw-bold fs-7">Selected {{ getSelection().length }}/{{ pageLength }} Staff
+          Services</span>
+      </a>
+    </div>
+    <div class="card-toolbar">
+      <div class="card-toolbar mr-2">
+        <a routerLink="/features/customers" class="btn btn-sm btn-secondary">
+          Cancel
+        </a>
+      </div>
+
+      <!-- new data -->
+      <div class="card-toolbar">
+        <a (click)="onAddNewBtnClick()" type="submit" class="btn btn-sm btn-primary">
+          Authorize
+        </a>
+      </div>
+
+      <!-- begin::Menu -->
+      <button type="button" class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
+        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen024.svg'" class="svg-icon svg-icon-2"></span>
+      </button>
+
+      <!-- begin::Menu 1 -->
+      <choose-staff-service-filter [stores]="stores" [storeServices]="storeServices"
+        (applyBtnClick)="onApplyBtnClick($event)">
+      </choose-staff-service-filter>
+      <!-- end::Menu 1 -->
+    </div>
+  </div>
+  <div class="card-header border-0 pt-5">
+    <div class="card-title align-items-start flex-column">
+      <choose-staff-service-search (searchChange)="onSearchChange($event)"></choose-staff-service-search>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-muted">
+            <th class="w-25px">
+              <div class="form-check form-check-sm form-check-custom form-check-solid">
+                <input [(ngModel)]="isSelectAll" (click)="onCheckAllSelected()" class="form-check-input" type="checkbox"
+                  data-kt-check="true" data-kt-check-target=".widget-13-check" />
+              </div>
+            </th>
+            <th class="min-w-130px">ID</th>
+            <th class="min-w-130px">Thumbnail</th>
+            <th class="min-w-130px">Group Service</th>
+            <th class="min-w-130px">Service Name</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr *ngFor="let data of dataSources">
+            <!-- Select -->
+            <td>
+              <div class="form-check form-check-sm form-check-custom form-check-solid mt-5">
+                <input [(ngModel)]="data.checked" (click)="onItemSelected(data._id)"
+                  class="form-check-input widget-13-check" type="checkbox" value="1" />
+              </div>
+            </td>
+
+            <!-- ID -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6 mt-5">
+                {{ data._id }}
+              </p>
+            </td>
+
+            <!-- thumbnail -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6 symbol symbol-50px">
+                <img *ngIf="data?.thumbnail != ''" [src]="data?.thumbnail" />
+              </p>
+            </td>
+
+            <!-- idGroupService -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6 mt-5">
+                {{ data.idGroupService?.title }}
+              </p>
+            </td>
+
+            <!-- title -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6 mt-5">
+                {{ data.title }}
+              </p>
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+
+      <!-- test -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- begin::Body -->
+</div>

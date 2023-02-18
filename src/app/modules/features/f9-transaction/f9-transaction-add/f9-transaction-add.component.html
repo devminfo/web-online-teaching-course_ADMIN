@@ -1,0 +1,286 @@
+<div class="card mb-5 mb-xl-10">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Transaction</span>
+      <span class="text-muted mt-1 fw-bold fs-7">Add New</span>
+    </h3>
+    <div class="card-toolbar">
+      <!-- new data -->
+      <div class="card-toolbar">
+        <a
+          routerLink="/features/transactions"
+          class="btn btn-sm btn-light-primary"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'"
+            class="svg-icon svg-icon-3"
+          ></span>
+          Go back
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <div id="kt_account_profile_details" class="collapse show">
+    <form [formGroup]="form" novalidate="" class="form">
+      <div class="card-body border-top p-9">
+        <!-- IdUser -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">IdUser</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select
+              class="form-control form-control-lg form-control-solid mrb-5"
+              formControlName="idUser"
+              [(ngModel)]="input.idUser"
+              placeholder="IdUser"
+            >
+              <option *ngFor="let idUser of userDatas" [value]="idUser._id">
+                {{ idUser.fullName }}
+              </option>
+            </select>
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['idUser']!.invalid &&
+                (form.controls['idUser'].dirty ||
+                  form.controls['idUser'].touched)
+              "
+            >
+              <span *ngIf="form.controls['idUser'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- MethodTransaction -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">MethodTransaction</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select
+              class="form-control form-control-lg form-control-solid mrb-5"
+              formControlName="methodTransaction"
+              [(ngModel)]="input.methodTransaction"
+              placeholder="Method Transaction"
+            >
+              <option
+                *ngFor="let methodTransaction of methodTransactions"
+                [value]="methodTransaction.value"
+              >
+                {{ methodTransaction.viewValue }}
+              </option>
+            </select>
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['methodTransaction']!.invalid &&
+                (form.controls['methodTransaction'].dirty ||
+                  form.controls['methodTransaction'].touched)
+              "
+            >
+              <span *ngIf="form.controls['methodTransaction'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- StatusTransaction -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">StatusTransaction</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select
+              class="form-control form-control-lg form-control-solid mrb-5"
+              formControlName="statusTransaction"
+              [(ngModel)]="input.statusTransaction"
+              placeholder="Status Transaction"
+            >
+              <option
+                *ngFor="let statusTransaction of statusTransactions"
+                [value]="statusTransaction.value"
+              >
+                {{ statusTransaction.viewValue }}
+              </option>
+            </select>
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['statusTransaction']!.invalid &&
+                (form.controls['statusTransaction'].dirty ||
+                  form.controls['statusTransaction'].touched)
+              "
+            >
+              <span *ngIf="form.controls['statusTransaction'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- TypeTransaction -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">TypeTransaction</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select
+              class="form-control form-control-lg form-control-solid mrb-5"
+              formControlName="typeTransaction"
+              [(ngModel)]="input.typeTransaction"
+              placeholder="Type Transaction"
+            >
+              <option
+                *ngFor="let typeTransaction of typeTransactions"
+                [value]="typeTransaction.value"
+              >
+                {{ typeTransaction.viewValue }}
+              </option>
+            </select>
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['typeTransaction']!.invalid &&
+                (form.controls['typeTransaction'].dirty ||
+                  form.controls['typeTransaction'].touched)
+              "
+            >
+              <span *ngIf="form.controls['typeTransaction'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Title -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Title</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="title"
+              [(ngModel)]="input.title"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Title"
+              name="title"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['title']!.invalid &&
+                (form.controls['title'].dirty || form.controls['title'].touched)
+              "
+            >
+              <span *ngIf="form.controls['title'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Money -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Money</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="money"
+              [(ngModel)]="input.money"
+              type="number"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Money"
+              name="money"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['money']!.invalid &&
+                (form.controls['money'].dirty || form.controls['money'].touched)
+              "
+            >
+              <span *ngIf="form.controls['money'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Content</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="content"
+              [(ngModel)]="input.content"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Content"
+              name="content"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['content']!.invalid &&
+                (form.controls['content'].dirty ||
+                  form.controls['content'].touched)
+              "
+            >
+              <span *ngIf="form.controls['content'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- TransactionImage -->
+        <img
+          class="custom-preview-file"
+          *ngIf="input.transactionImage != ''"
+          [src]="input.transactionImage"
+          alt="izi software"
+          width="200"
+          height="200"
+        />
+      </div>
+
+      <!-- Add New -->
+      <div class="card-footer d-flex justify-content-end py-6 px-9">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="isLoading"
+          (click)="onAddNewBtnClick()"
+        >
+          <ng-container *ngIf="!isLoading">Add New</ng-container>
+          <ng-container *ngIf="isLoading">
+            <span clas="indicator-progress" [style.display]="'block'">
+              Please wait...{{ " " }}
+              <span
+                class="spinner-border spinner-border-sm align-middle ms-2"
+              ></span>
+            </span>
+          </ng-container>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

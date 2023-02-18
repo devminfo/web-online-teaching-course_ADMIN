@@ -1,0 +1,133 @@
+<div class="card mb-5 mb-xl-10">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">User Specialize</span>
+      <span class="text-muted mt-1 fw-bold fs-7">Add New</span>
+    </h3>
+    <div class="card-toolbar">
+      <!-- new data -->
+      <div class="card-toolbar">
+        <a routerLink="/features/userspecializes" class="btn btn-sm btn-light-primary">
+          <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'" class="svg-icon svg-icon-3"></span>
+          Go back
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <div id="kt_account_profile_details" class="collapse show">
+    <form [formGroup]="form" novalidate="" class="form">
+      <div class="card-body border-top p-9">
+        <!-- Id User -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">User</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select class="form-control form-control-lg form-control-solid mrb-5" formControlName="idUser"
+              [(ngModel)]="input.idUser">
+              <option value="" disabled selected hidden>
+                Select User
+              </option>
+              <option *ngFor="let item of users" [value]="item._id">
+                {{ item.fullName }}
+              </option>
+            </select>
+            <span class="text-danger" *ngIf="
+                form.controls['idUser']!.invalid &&
+                (form.controls['idUser'].dirty ||
+                  form.controls['idUser'].touched)
+              ">
+              <span *ngIf="form.controls['idUser'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Id SubSpecializes -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Sub Specializes</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select multiple class="form-control form-control-lg form-control-solid mrb-5 js-example-basic-single"
+              formControlName="idSubSpecializes" [(ngModel)]="input.idSubSpecializes"
+              placeholder="Select sub specialize">
+              <option *ngFor="let item of subSpecializes" [value]="item._id">
+                {{ item.name }}
+              </option>
+            </select>
+            <span class="text-danger" *ngIf="
+                form.controls['idSubSpecializes']!.invalid &&
+                (form.controls['idSubSpecializes'].dirty ||
+                  form.controls['idSubSpecializes'].touched)
+              ">
+              <span *ngIf="form.controls['idSubSpecializes'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Help You -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Help You</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input formControlName="helpYou" [(ngModel)]="input.helpYou" type="text"
+              class="form-control form-control-lg form-control-solid mrb-5" placeholder="Help you" name="helpYou" />
+
+            <span class="text-danger" *ngIf="
+                form.controls['helpYou']!.invalid &&
+                (form.controls['helpYou'].dirty ||
+                  form.controls['helpYou'].touched)
+              ">
+              <span *ngIf="form.controls['helpYou'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Suggested Topic -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Suggested Topic</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input formControlName="suggestedTopic" [(ngModel)]="input.suggestedTopic" type="text"
+              class="form-control form-control-lg form-control-solid mrb-5" placeholder="Suggested topic"
+              name="suggestedTopic" />
+
+            <span class="text-danger" *ngIf="
+                form.controls['suggestedTopic']!.invalid &&
+                (form.controls['suggestedTopic'].dirty ||
+                  form.controls['suggestedTopic'].touched)
+              ">
+              <span *ngIf="form.controls['suggestedTopic'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Add New -->
+        <div class="card-footer d-flex justify-content-end py-6 px-9">
+          <button type="button" class="btn btn-primary" [disabled]="isLoading" (click)="onAddNewBtnClick()">
+            <ng-container *ngIf="!isLoading">Add New</ng-container>
+            <ng-container *ngIf="isLoading">
+              <span clas="indicator-progress" [style.display]="'block'">
+                Please wait...{{ " " }}
+                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+              </span>
+            </ng-container>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

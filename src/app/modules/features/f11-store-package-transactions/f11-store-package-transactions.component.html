@@ -1,0 +1,383 @@
+<h3 class="card-title align-items-start flex-column">
+  <span class="card-label fw-bolder fs-3 mb-1">Store package transaction </span>
+</h3>
+<div class="card mb-5 mb-xl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <div class="card-title align-items-start flex-column">
+      <!-- search-->
+      <app-f11-store-package-transactions-search
+        (searchChange)="onSearchChange($event)"
+      >
+      </app-f11-store-package-transactions-search>
+    </div>
+    <div class="card-toolbar">
+      <!-- action approve and cancel -->
+      <div class="card-toolbar" *ngIf="getSelection().length > 0">
+        <a
+          routerLink="/features/storepackagetransactions"
+          data-toggle="modal"
+          data-target="#successManyModal"
+          class="btn btn-sm btn-light-success mr-2"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/general/gen0069.svg'"
+            class="svg-icon svg-icon-3"
+          ></span>
+          Approve
+        </a>
+
+        <a
+          routerLink="/features/storepackagetransactions"
+          data-toggle="modal"
+          data-target="#failureManyModal"
+          class="btn btn-sm btn-light-danger mr-2"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/general/gen070.svg'"
+            class="svg-icon svg-icon-3"
+          ></span>
+          Cancel
+        </a>
+      </div>
+
+      <!-- new data -->
+      <div class="card-toolbar"></div>
+
+      <!-- begin::filter -->
+      <button
+        class="btn btn-icon btn-active-color-primary btn-sm me-1"
+        type="button"
+        data-kt-menu-trigger="click"
+        data-kt-menu-placement="bottom-end"
+        data-kt-menu-flip="top-end"
+      >
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/general/gen0061.svg'"
+          class="svg-icon svg-icon-3"
+        >
+        </span>
+      </button>
+      <app-f11-store-package-transactions-filter
+        [dataStore]="dataStore"
+        [dataAssetPackage]="dataAssetPackage"
+        [dataMethod]="dataMethod"
+        [dataStatus]="dataStatus"
+        (applyBtnClick)="onApplyBtnClick($event)"
+      >
+      </app-f11-store-package-transactions-filter>
+      <!-- end::filter 1 -->
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table
+        class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+      >
+        <!--begin::Table head-->
+        <thead>
+          <!--begin::Table row-->
+          <tr
+            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0"
+          >
+            <th class="w-10px pe-2">
+              <div
+                class="form-check form-check-sm form-check-custom form-check-solid"
+              >
+                <input
+                  [(ngModel)]="isSelectAll"
+                  (click)="onCheckAllSelected()"
+                  class="form-check-input"
+                  type="checkbox"
+                  data-kt-check="true"
+                  data-kt-check-target=".widget-13-check"
+                />
+              </div>
+            </th>
+            <th class="text-center min-w-100px">ID</th>
+            <th class="text-start min-w-140px">Asset Package</th>
+            <th class="text-center min-w-140px">Store</th>
+            <th class="text-center min-w-100px">Quantity</th>
+            <th class="text-center min-w-120px">Price</th>
+            <th class="text-center min-w-100px">Type</th>
+            <th class="text-center min-w-100px">Status</th>
+            <th class="text-center min-w-100px">Method</th>
+            <th class="text-center min-w-100px">Thumbnail</th>
+          </tr>
+
+          <!--end::Table row-->
+        </thead>
+
+        <!--end::Table head-->
+
+        <!--begin::Table body-->
+        <tbody class="fw-bold text-gray-600">
+          <!--begin::Table row-->
+          <tr *ngFor="let data of dataSources">
+            <!--begin::Checkbox-->
+            <td>
+              <div
+                class="form-check form-check-sm form-check-custom form-check-solid"
+              >
+                <input
+                  [(ngModel)]="data.checked"
+                  (click)="onItemSelected(data.id)"
+                  class="form-check-input widget-13-check mr-4"
+                  type="checkbox"
+                  value="1"
+                />
+              </div>
+            </td>
+            <!--end::Checkbox-->
+
+            <!--begin::ID=-->
+            <td>
+              <div class="d-flex align-items-center ml-3">
+                <a
+                  routerLink="/features/storepackagetransactions/detail/{{
+                    data.id
+                  }}"
+                  class="text-dark fw-bolder text-hover-primary fs-6"
+                >
+                  <p
+                    class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6 text-center"
+                  >
+                    {{ data.id }}
+                  </p>
+                </a>
+              </div>
+            </td>
+            <!--end::ID=-->
+
+            <!--begin::NameidAssetPackage=-->
+            <td class="text-start pe-0">
+              {{ data.idAssetPackage?.title }}
+            </td>
+            <!--end::idAssetPackage=-->
+
+            <!--begin::idStore=-->
+            <td class="text-start pe-0">
+              <span class="fw-bolder ms-3">{{ data.idStore?.name }}</span>
+            </td>
+            <!--end::idStore=-->
+
+            <!--begin::quantity=-->
+            <td class="text-center pe-0">
+              <span class="fw-bolder text-dark">{{
+                commonService.formatPriceDots(data?.quantity)
+              }}</span>
+            </td>
+            <!--end::quantity=-->
+
+            <!--begin::price-->
+            <td class="text-center pe-0">
+              <span class="fw-bolder text-dark">
+                {{ commonService.formatPriceDots(data?.price) }}$
+              </span>
+            </td>
+            <!--end::price-->
+
+            <!--begin::type=-->
+            <td class="text-center pe-0">
+              <span class="fw-bolder text-dark">
+                {{ data.type }}
+              </span>
+            </td>
+
+            <!--begin::transactionStatus=-->
+            <td class="text-center pe-0">
+              <span class="fw-bolder text-dark">
+                {{ data.transactionStatus }}
+              </span>
+            </td>
+            <td class="text-center pe-0">
+              <span class="fw-bolder text-dark">
+                {{
+                  data.transactionMethod == "TRANSFER"
+                    ? "Bank Transfer"
+                    : "Paypal"
+                }}
+              </span>
+            </td>
+            <td class="text-center pe-0">
+              <div *ngIf="data.transactionMethod == 'TRANSFER'">
+                <img
+                  class="image-input-wrapper w-60px h-60px rounded"
+                  src="{{ data.transactionImage }}"
+                />
+              </div>
+
+              <div *ngIf="data.transactionMethod == 'PAYPAL'">
+                <img
+                  class="image-input-wrapper w-60px h-60px rounded"
+                  [src]="commonService.imageDefault"
+                />
+              </div>
+            </td>
+          </tr>
+          <!--end::Table row-->
+        </tbody>
+
+        <!--end::Table body-->
+      </table>
+      <!-- end::Table -->
+      <!-- test -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- begin::Body -->
+</div>
+<div
+  class="d-flex flex-stack flex-wrap"
+  style="float: right"
+  *ngIf="dataSources"
+>
+  <div class="fs-6 fw-bold text-gray-700">Items per page:</div>
+  <div>
+    <select
+      [(ngModel)]="pageSize"
+      (change)="onChangeSize()"
+      class="form-select form-select-solid form-select-md"
+      name="currency"
+    >
+      <option value="5">5</option>
+      <option value="20">20</option>
+      <option value="50">50</option>
+      <option value="80">80</option>
+    </select>
+  </div>
+  <div class="fs-6 fw-bold text-gray-700 mr-lr-20">
+    {{ (pageIndex - 1) * pageSize + 1 }} -
+    {{ (pageIndex - 1) * pageSize + dataSources.length }}
+    of {{ pageLength }}
+  </div>
+  <ul class="pagination">
+    <!-- begin page -->
+    <li class="page-item previous" (click)="onBeginClick()" disabled="true">
+      <a class="page-link cursor-pointer">
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/arrows/arr079.svg'"
+          class="svg-icon svg-icon-3"
+        ></span>
+      </a>
+    </li>
+    <!-- previous page -->
+    <li class="page-item previous" (click)="onPreviousClick()">
+      <a class="page-link cursor-pointer">
+        <i class="previous"></i>
+      </a>
+    </li>
+    <!-- next page -->
+    <li class="page-item next" (click)="onNextClick()">
+      <a class="page-link cursor-pointer">
+        <i class="next"></i>
+      </a>
+    </li>
+    <!-- end page -->
+    <li class="page-item next" (click)="onEndClick()">
+      <a class="page-link cursor-pointer">
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/arrows/arr080.svg'"
+          class="svg-icon svg-icon-3"
+        ></span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<div
+  class="modal fade"
+  id="successManyModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="successManyModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <h5 class="modal-title" id="successManyModalLabel">
+        <div
+          class="d-flex justify-content-center flex-colum align-items-center"
+        >
+          <span
+            [inlineSVG]="'./assets/media/svg/files/success.svg'"
+            class="mt-10"
+          ></span>
+        </div>
+      </h5>
+      <h5 class="text-center">
+        Do you really want to Success {{ getSelection().length }} select
+        Transaction ?
+        <br />
+        This process cannot be undone.
+      </h5>
+      <div class="modal-footer justify-content-center">
+        <button
+          type="button"
+          class="btn btn-secondary w-150px mr-10"
+          data-dismiss="modal"
+        >
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-success w-150px"
+          data-dismiss="modal"
+          (click)="onChangeStatusSuccessBtnClick()"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="failureManyModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="failureManyModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <h5 class="modal-title" id="failureManyModalLabel">
+        <div
+          class="d-flex justify-content-center flex-colum align-items-center"
+        >
+          <span
+            [inlineSVG]="'./assets/media/svg/files/faillure.svg'"
+            class="mt-10"
+          ></span>
+        </div>
+      </h5>
+      <h5 class="text-center">
+        Do you really want to Failure {{ getSelection().length }} select
+        Transaction ?
+        <br />
+        This process cannot be undone.
+      </h5>
+      <div class="modal-footer justify-content-center">
+        <button
+          type="button"
+          class="btn btn-secondary w-150px mr-10"
+          data-dismiss="modal"
+        >
+          No
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger w-150px"
+          data-dismiss="modal"
+          (click)="onChangeStatusFailureBtnClick()"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>

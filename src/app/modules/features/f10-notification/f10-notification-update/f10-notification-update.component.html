@@ -1,0 +1,234 @@
+<div class="card mb-5 mb-xl-10">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Notification</span>
+      <span class="text-muted mt-1 fw-bold fs-7">Update datas</span>
+    </h3>
+    <div class="card-toolbar">
+      <!-- new data -->
+      <div class="card-toolbar">
+        <a routerLink="/features/notifications" class="btn btn-sm btn-light-primary">
+          <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'" class="svg-icon svg-icon-3"></span>
+          Go back
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <div id="kt_account_profile_details" class="collapse show">
+    <form [formGroup]="form" novalidate="" class="form">
+      <div class="card-body border-top p-9">
+        <!-- SendingRange -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">SendingRange</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select class="form-control form-control-lg form-control-solid mrb-5" formControlName="sendingRange"
+              [(ngModel)]="input.sendingRange" placeholder="SendingRange">
+              <option *ngFor="let sendingrange of sendingRange" [value]="sendingrange.value">
+                {{ sendingrange.viewValue }}
+              </option>
+            </select>
+
+            <span class="text-danger" *ngIf="
+                form.controls['sendingRange']!.invalid &&
+                (form.controls['sendingRange'].dirty ||
+                  form.controls['sendingRange'].touched)
+              ">
+              <span *ngIf="form.controls['sendingRange'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- IdUsers -->
+        <div class="row mb-6" *ngIf="input.sendingRange == 'channel'">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">IdUsers</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select class="form-control form-control-lg form-control-solid mrb-5" formControlName="idUsers"
+              [(ngModel)]="input.idUsers" multiple="multiple" placeholder="IdUsers">
+              <option *ngFor="let idUsers of userDatas" [value]="idUsers._id">
+                {{ idUsers.fullName }}
+              </option>
+            </select>
+
+            <span class="text-danger" *ngIf="
+                form.controls['idUsers']!.invalid &&
+                (form.controls['idUsers'].dirty ||
+                  form.controls['idUsers'].touched)
+              ">
+              <span *ngIf="form.controls['idUsers'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- TypeNotification -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">TypeNotification</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select class="form-control form-control-lg form-control-solid mrb-5" formControlName="typeNotification"
+              [(ngModel)]="input.typeNotification" placeholder="Type Notification">
+              <option *ngFor="let typeNotification of typeNotifications" [value]="typeNotification.value">
+                {{ typeNotification.viewValue }}
+              </option>
+            </select>
+
+            <span class="text-danger" *ngIf="
+                form.controls['typeNotification']!.invalid &&
+                (form.controls['typeNotification'].dirty ||
+                  form.controls['typeNotification'].touched)
+              ">
+              <span *ngIf="form.controls['typeNotification'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- idEntity -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">idEntity</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select class="form-control form-control-lg form-control-solid mrb-5" formControlName="idEntity"
+              [(ngModel)]="input.idEntity" placeholder="IdEntity">
+              <option *ngFor="let idEntity of idEntityDatas" [value]="idEntity._id">
+                {{ idEntity.content }}
+              </option>
+            </select>
+
+            <span class="text-danger" *ngIf="
+                form.controls['idEntity']!.invalid &&
+                (form.controls['idEntity'].dirty ||
+                  form.controls['idEntity'].touched)
+              ">
+              <span *ngIf="form.controls['idEntity'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Title -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Title</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input formControlName="title" [(ngModel)]="input.title" type="text"
+              class="form-control form-control-lg form-control-solid mrb-5" placeholder="Title" name="title" />
+
+            <span class="text-danger" *ngIf="
+                form.controls['title']!.invalid &&
+                (form.controls['title'].dirty || form.controls['title'].touched)
+              ">
+              <span *ngIf="form.controls['title'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Summary</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input formControlName="summary" [(ngModel)]="input.summary" type="text"
+              class="form-control form-control-lg form-control-solid mrb-5" placeholder="Summary" name="summary" />
+
+            <span class="text-danger" *ngIf="
+                form.controls['summary']!.invalid &&
+                (form.controls['summary'].dirty ||
+                  form.controls['summary'].touched)
+              ">
+              <span *ngIf="form.controls['summary'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Content</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input formControlName="content" [(ngModel)]="input.content" type="text"
+              class="form-control form-control-lg form-control-solid mrb-5" placeholder="Content" name="content" />
+
+            <span class="text-danger" *ngIf="
+                form.controls['content']!.invalid &&
+                (form.controls['content'].dirty ||
+                  form.controls['content'].touched)
+              ">
+              <span *ngIf="form.controls['content'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Thumbnail -->
+        <!--begin::Image input-->
+        <div class="image-input image-input-outline">
+          <!--begin::Image preview wrapper-->
+          <div class="image-input-wrapper w-125px h-125px"
+            *ngIf="input.thumbnail != undefined && input.thumbnail != null">
+            <img id="demo" class="image-input-wrapper w-125px h-125px" *ngIf="input.thumbnail != ''"
+              [src]="input.thumbnail" alt="izi software" width="250" height="250" />
+          </div>
+          <!--end::Image preview wrapper-->
+
+          <!--begin::Edit button-->
+          <label class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+            data-kt-image-input-action="change" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Change avatar"
+            (change)="onThumbnaiUploadImageClick()">
+            <i class="bi bi-pencil-fill fs-7"></i>
+
+            <!--begin::Inputs-->
+            <input type="file" formControlName="thumbnail" accept="image/*" #inputImageThumbnail />
+            <input type="hidden" name="avatar_remove" />
+            <!--end::Inputs-->
+          </label>
+          <!--end::Edit button-->
+
+          <!--begin::Remove button-->
+          <span class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+            data-kt-image-input-action="remove" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Remove avatar"
+            (click)="onThumbnailDeleteClick()">
+            <i class="bi bi-x fs-2"></i>
+          </span>
+          <!--end::Remove button-->
+        </div>
+        <!--end::Image input-->
+      </div>
+
+      <!-- Add New -->
+      <div class="card-footer d-flex justify-content-end py-6 px-9">
+        <button type="button" class="btn btn-primary" [disabled]="isLoading" (click)="onUpdateBtnClick()">
+          <ng-container *ngIf="!isLoading">Save Changes</ng-container>
+          <ng-container *ngIf="isLoading">
+            <span clas="indicator-progress" [style.display]="'block'">
+              Please wait...{{ " " }}
+              <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+            </span>
+          </ng-container>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

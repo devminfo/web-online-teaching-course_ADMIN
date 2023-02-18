@@ -1,0 +1,29 @@
+<div class="px-7 py-5">
+  <div class="fs-5 text-dark fw-bolder">Filter Options</div>
+</div>
+
+<div class="separator border-gray-200"></div>
+
+<div class="px-7 py-5">
+  <!-- Select Specialize -->
+  <div class="mb-10">
+    <label class="form-label fw-bold">Specialize:</label>
+    <div>
+      <select [(ngModel)]="subSpecializeSelect" class="form-select form-select-solid" data-kt-select2="true"
+        data-placeholder="Select option" data-allow-clear="true">
+        <option value="0">Tất cả</option>
+        <option *ngFor="let item of subSpecializes" value="{{item._id}}">{{item.name}}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Button -->
+  <div class="d-flex justify-content-end">
+    <button type="reset" class="btn btn-sm btn-white btn-active-light-primary me-2" data-kt-menu-dismiss="true">
+      Reset
+    </button>
+    <button (click)="onApplyBtnClick()" type="submit" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true">
+      Apply
+    </button>
+  </div>
+</div>

@@ -1,0 +1,338 @@
+<!--begin::Post-->
+<div class="post d-flex flex-column-fluid" id="kt_post">
+  <!--begin::Container-->
+  <div id="kt_content_container" class="container-xxl">
+    <form
+      [formGroup]="form"
+      class="form d-flex flex-column flex-lg-row"
+      data-kt-redirect="../../demo1/dist/apps/ecommerce/catalog/categories.html"
+    >
+      <!--begin::Aside column-->
+      <div
+        class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10"
+      >
+        <!--begin::Thumbnail settings-->
+        <div class="card card-flush py-4">
+          <div class="card-header">
+            <div class="card-title">
+              <h2>Image</h2>
+            </div>
+          </div>
+          <div class="card-body text-center pt-0">
+            <label for="fileImage">
+              <img
+                class="img-color avatar-input-wrapper w-150px h-150px rounded"
+                [src]="
+                  input.thumbnail ? input.thumbnail : common.uploadImageDefault
+                "
+              />
+            </label>
+            <input
+              formControlName="thumbnail"
+              class="d-none"
+              id="fileImage"
+              (change)="onUploadImageClick()"
+              type="file"
+              #inputImage
+              accept=".png, .jpg, .jpeg"
+            />
+            <br />
+            <ng-container
+              [ngTemplateOutlet]="formError"
+              [ngTemplateOutletContext]="{
+                validation: 'required',
+                message: 'Please is not blank',
+                control: form.controls['thumbnail']
+              }"
+            >
+            </ng-container>
+            <!--end::Avatar input-->
+            <!--begin::Description-->
+            <div class="text-muted fs-7">
+              Set the store thumbnail image. Only *.png, *.jpg and *.jpeg avatar
+              files are accepted
+            </div>
+            <!--end::Description-->
+          </div>
+        </div>
+        <!--end::Thumbnail settings-->
+      </div>
+      <!--end::Aside column-->
+
+      <!--begin::Main column-->
+      <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+        <!--begin::General options-->
+        <div class="card card-flush py-4">
+          <div class="card-header">
+            <div class="card-title">
+              <span
+                [inlineSVG]="'./assets/media/icons/duotune/general/gen062.svg'"
+                class="svg-icon svg-icon-3 mr-2"
+              ></span>
+              <h2>Add Store</h2>
+            </div>
+          </div>
+
+          <!--begin::Card body-->
+          <div class="card-body pt-0">
+            <div class="mb-4 d-flex flex-wrap gap-5">
+              <!--Store Name-->
+              <div class="fv-row w-100 flex-md-root">
+                <label class="required form-label">Store Name</label>
+                <input
+                  type="text"
+                  [(ngModel)]="input.name"
+                  formControlName="name"
+                  class="form-control form-control-solid mb-2"
+                  placeholder="Enter service name"
+                />
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'Please is not blank',
+                    control: form.controls['name']
+                  }"
+                >
+                </ng-container>
+              </div>
+
+              <!--Representative Name-->
+              <div class="fv-row w-100 flex-md-root">
+                <label class="required form-label">Representative Name</label>
+                <input
+                  type="text"
+                  [(ngModel)]="input.representativeName"
+                  formControlName="representativeName"
+                  class="form-control form-control-solid mb-2"
+                  placeholder="Enter your representative name"
+                />
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'Please is not blank',
+                    control: form.controls['representativeName']
+                  }"
+                >
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="mb-4 d-flex flex-wrap gap-5">
+              <!--Store code-->
+              <div class="fv-row w-100 flex-md-root">
+                <label class="required form-label">Store code</label>
+                <input
+                  type="number"
+                  [(ngModel)]="input.code"
+                  formControlName="code"
+                  class="form-control form-control-solid mb-2"
+                  placeholder="Enter service name"
+                />
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'Please is not blank',
+                    control: form.controls['code']
+                  }"
+                >
+                </ng-container>
+              </div>
+
+              <!--Time zone code-->
+              <div class="fv-row w-100 flex-md-root">
+                <label class="required form-label">Time zone code</label>
+                <select
+                  class="form-control form-control-lg form-control-solid mrb-5 form-select form-select-solid"
+                  formControlName="timezoneApp"
+                  [(ngModel)]="input.timezoneApp"
+                >
+                  <option value="" disabled selected hidden>
+                    Choose time zone
+                  </option>
+                  <option *ngFor="let item of timeZoneData" [value]="item">
+                    {{ item }}
+                  </option>
+                </select>
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'Please is not blank',
+                    control: form.controls['timezoneApp']
+                  }"
+                >
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="mb-4 d-flex flex-wrap gap-5">
+              <!--Business phone-->
+              <div class="fv-row w-100 flex-md-root">
+                <label class="required form-label">Business phone</label>
+                <input
+                  type="text"
+                  [(ngModel)]="input.businessPhone"
+                  formControlName="businessPhone"
+                  class="form-control form-control-solid mb-2"
+                  placeholder="Enter business phone"
+                />
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'Please is not blank',
+                    control: form.controls['businessPhone']
+                  }"
+                >
+                </ng-container>
+              </div>
+
+              <!--Mobile phone-->
+              <div class="fv-row w-100 flex-md-root">
+                <label class="required form-label">Mobile phone</label>
+                <input
+                  type="text"
+                  [(ngModel)]="input.mobilePhone"
+                  formControlName="mobilePhone"
+                  class="form-control form-control-solid mb-2"
+                  placeholder="Enter your mobile phone"
+                />
+                <ng-container
+                  [ngTemplateOutlet]="formError"
+                  [ngTemplateOutletContext]="{
+                    validation: 'required',
+                    message: 'Please is not blank',
+                    control: form.controls['mobilePhone']
+                  }"
+                >
+                </ng-container>
+              </div>
+            </div>
+
+            <!--Email-->
+            <div class="mb-4 fv-row">
+              <label class="required form-label">Email</label>
+              <input
+                type="text"
+                [(ngModel)]="input.email"
+                formControlName="email"
+                class="form-control form-control-solid mb-2"
+                placeholder="Enter your email"
+              />
+              <ng-container
+                [ngTemplateOutlet]="formError"
+                [ngTemplateOutletContext]="{
+                  validation: 'required',
+                  message: 'Please is not blank',
+                  control: form.controls['email']
+                }"
+              >
+              </ng-container>
+            </div>
+            <span class="mb-2 fv-row">
+              <p class="text-dark fw-bolder">Addrses</p>
+            </span>
+
+            <div class="mb-4 d-flex flex-wrap gap-5">
+              <!--City-->
+              <div class="fv-row w-100 flex-md-root">
+                <label class="form-label">City</label>
+                <input
+                  type="text"
+                  [(ngModel)]="input.city"
+                  formControlName="city"
+                  class="form-control form-control-solid mb-2"
+                  placeholder="Enter yor city"
+                />
+              </div>
+
+              <!--State-->
+              <div class="fv-row w-100 flex-md-root">
+                <label class="form-label">State</label>
+                <input
+                  type="text"
+                  [(ngModel)]="input.state"
+                  formControlName="state"
+                  class="form-control form-control-solid mb-2"
+                  placeholder="Enter your state"
+                />
+              </div>
+            </div>
+
+            <div class="mb-4 d-flex flex-wrap gap-5">
+              <!--Country-->
+              <div class="fv-row w-100 flex-md-root">
+                <label class="form-label">Country</label>
+                <input
+                  type="text"
+                  [(ngModel)]="input.country"
+                  formControlName="country"
+                  class="form-control form-control-solid mb-2"
+                  placeholder="Enter your country"
+                />
+              </div>
+
+              <!--Area code-->
+              <div class="fv-row w-100 flex-md-root">
+                <label class="form-label">Area code</label>
+                <input
+                  type="text"
+                  [(ngModel)]="input.areaCode"
+                  formControlName="areaCode"
+                  class="form-control form-control-solid mb-2"
+                  placeholder="Enter your area code"
+                />
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end">
+              <button
+                routerLink="/features/stores"
+                class="btn btn-secondary mr-4"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                style="min-width: 84px"
+                [disabled]="isLoading"
+                (click)="onAddNewBtnClick()"
+              >
+                <ng-container *ngIf="!isLoading">Save</ng-container>
+                <ng-container *ngIf="isLoading">
+                  <span clas="indicator-progress" [style.display]="'block'">
+                    Please wait...{{ " " }}
+                    <span
+                      class="spinner-border spinner-border-sm align-middle ms-2"
+                    ></span>
+                  </span>
+                </ng-container>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ng-template
+  #formError
+  let-control="control"
+  let-message="message"
+  let-validation="validation"
+>
+  <ng-container
+    *ngIf="control.hasError(validation) && (control.dirty || control.touched)"
+  >
+    <div class="fv-plugins-message-container">
+      <span role="alert " class="text-danger">
+        {{ message }}
+      </span>
+    </div>
+  </ng-container>
+</ng-template>

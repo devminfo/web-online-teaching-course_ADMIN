@@ -1,0 +1,18 @@
+image: node:14-alpine3.12
+
+before_script:
+  - npm i -g firebase-tools
+
+cache:
+  paths:
+    - node_modules/
+      
+deploy-to-firebase:
+  stage: deploy
+  script: 
+    - npm install
+    - npm run build --prod
+    - firebase deploy --token 1//0ehgVvJpE748zCgYIARAAGA4SNwF-L9IrXMCLIR14lZ_OzmOuDsFjjF4kA-4CXqE5GjzOf1zLejA45sAUI5TR-CubQcClArcd5fs
+  only:
+    refs:
+      - develop

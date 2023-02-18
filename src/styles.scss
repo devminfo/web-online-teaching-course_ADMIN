@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+@import "./assets/sass/style";
+
+// Replace above style with this SCSS file to enable dark mode styles
+@import "./assets/sass/style.dark";
+
+@import "./assets/sass/style.angular.scss";
+
+// regular style toast
+@import '~ngx-toastr/toastr';
+
+@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

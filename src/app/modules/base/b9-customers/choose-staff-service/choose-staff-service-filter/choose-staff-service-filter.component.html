@@ -1,0 +1,45 @@
+<div class="px-7 py-5">
+  <div class="fs-5 text-dark fw-bolder">Filter</div>
+</div>
+
+<div class="separator border-gray-200"></div>
+<div class="px-7 py-5">
+  <!-- Select Store -->
+  <div class="mb-10">
+    <label class="form-label fw-bold">Store:</label>
+    <div>
+      <select [(ngModel)]="storeSelect" class="form-select form-select-solid" data-kt-select2="true"
+        data-placeholder="Select option" data-allow-clear="true">
+        <option value="0">Tất cả</option>
+        <option *ngFor="let store of stores" value="{{ store._id }}">
+          {{ store.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Select GroupService -->
+  <div class="mb-10">
+    <label class="form-label fw-bold">GroupService:</label>
+    <div>
+      <select [(ngModel)]="groupServiceSelect" class="form-select form-select-solid" data-kt-select2="true"
+        data-placeholder="Select option" data-allow-clear="true">
+        <option value="0">Tất cả</option>
+        <option *ngFor="let groupService of storeServices" value="{{ groupService.idGroupService }}">
+          {{ getStatusDisplayTitle(groupService.idGroupService) }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Button -->
+  <div class="d-flex justify-content-end">
+    <button (click)="onResetFilterClick()" type="reset" class="btn btn-sm btn-white btn-active-light-primary me-2"
+      data-kt-menu-dismiss="true">
+      Reset
+    </button>
+    <button (click)="onApplyBtnClick()" type="submit" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true">
+      Confirm
+    </button>
+  </div>
+</div>

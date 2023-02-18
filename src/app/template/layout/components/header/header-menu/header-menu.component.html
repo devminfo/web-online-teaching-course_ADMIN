@@ -1,0 +1,65 @@
+<!-- Dashboard -->
+<div class="menu-item me-lg-1">
+  <a class="menu-link py-3" routerLinkActive="active" routerLink="/dashboard"
+    ><span class="menu-title" translate="MENU.DASHBOARD"></span
+  ></a>
+</div>
+
+<div *ngFor="let item of dataSources" style="margin-top: 12px">
+  <!-- Is Main Menu -->
+  <div *ngIf="item.isGroup == false" class="menu-item me-lg-1">
+    <a
+      class="menu-link py-3"
+      routerLinkActive="active"
+      routerLink="{{ item.link }}"
+    >
+      <span class="menu-title">{{ item.name }}</span>
+    </a>
+  </div>
+
+  <!-- Is Group -->
+  <div
+    *ngIf="item.isGroup == true"
+    class="menu-item menu-lg-down-accordion me-lg-1"
+    data-kt-menu-trigger="click"
+    data-kt-menu-placement="bottom-start"
+  >
+    <span
+      class="menu-link py-3"
+      [ngClass]="calculateMenuItemCssClass('/features')"
+    >
+      <span class="menu-title">{{ item.name }}</span>
+      <span class="menu-arrow d-lg-none"></span>
+    </span>
+    <div
+      class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px"
+      data-kt-menu-dismiss="true"
+    >
+      <div
+        class="menu-item menu-lg-down-accordion me-lg-1"
+        data-kt-menu-trigger="{default:'click', lg: 'hover'}"
+        data-kt-menu-placement="right-start"
+      >
+        <!-- Is Child Menu -->
+        <span
+          *ngFor="let subItem of item.childs"
+          class="menu-link py-3"
+          [ngClass]="calculateMenuItemCssClass(subItem.link)"
+        >
+          <span class="menu-icon">
+            <span class="svg-icon svg-icon-2" [inlineSVG]="subItem.icon">
+            </span>
+          </span>
+          <span
+            class="menu-title"
+            data-link="subItem.link"
+            routerLinkActive="active"
+            routerLink="{{ subItem.link }}"
+            >{{ subItem.name }}</span
+          >
+          <!-- <span class="menu-arrow"></span> -->
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

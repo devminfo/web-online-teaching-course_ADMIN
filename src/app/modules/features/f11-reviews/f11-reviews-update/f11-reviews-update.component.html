@@ -1,0 +1,261 @@
+<div class="post d-flex flex-column-fluid" id="kt_post">
+  <div id="kt_content_container" class="container-xxl">
+    <form id="kt_ecommerce_add_product_form" [formGroup]="form" novalidate=""
+      class="form d-flex flex-column flex-lg-row">
+      <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+        <ul
+          class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-n2 justify-content-between">
+          <li class="nav-item">
+            <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab">Review Update
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a routerLink="/features/reviews" class="btn me-5 btn-light-primary">
+              <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'" class="svg-icon svg-icon-3"></span>
+              Go back
+            </a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="kt_ecommerce_add_product_general" role="tab-panel">
+            <div class="d-flex flex-column gap-7 gap-lg-10">
+              <div class="card card-flush py-4">
+                <div class="card-header">
+                  <div class="card-title">
+                    <h2>Review Update</h2>
+                  </div>
+                </div>
+                <div class="card card-flush py-4">
+                  <div class="card-body pt-0">
+                    <div class="d-flex flex-wrap gap-5">
+                      <!-- IdQuestion -->
+                      <div class="fv-row w-100 flex-md-root">
+                        <label class="required form-label">IdQuestion</label>
+                        <select class="form-select mb-2" data-control="select2" data-placeholder="IdBranch"
+                          data-allow-clear="true" formControlName="idQuestion" [(ngModel)]="input.idQuestion"
+                          placeholder="IdQuestion">
+                          <option *ngFor="let idQuestion of idQuestionDatas" [value]="idQuestion._id">
+                            {{ idQuestion.content }}
+                          </option>
+                        </select>
+
+                        <span class="text-danger" *ngIf="
+                            form.controls['idQuestion']!.invalid &&
+                            (form.controls['idQuestion'].dirty ||
+                              form.controls['idQuestion'].touched)
+                          ">
+                          <span *ngIf="form.controls['idQuestion'].errors!.required">
+                            Vui lòng nhập trường này
+                          </span>
+                        </span>
+                      </div>
+
+                      <!-- idAuthor -->
+                      <div class="fv-row w-100 flex-md-root">
+                        <label class="required form-label">idAuthor</label>
+                        <select class="form-select mb-2" data-control="select2" data-placeholder="idAuthor"
+                          data-allow-clear="true" formControlName="idAuthor" [(ngModel)]="input.idAuthor"
+                          placeholder="idAuthor">
+                          <option *ngFor="let idAuthor of userDatas" [value]="idAuthor._id">
+                            {{ idAuthor.fullName }}
+                          </option>
+                        </select>
+
+                        <span class="text-danger" *ngIf="
+                            form.controls['idAuthor']!.invalid &&
+                            (form.controls['idAuthor'].dirty ||
+                              form.controls['idAuthor'].touched)
+                          ">
+                          <span *ngIf="form.controls['idAuthor'].errors!.required">
+                            Vui lòng nhập trường này
+                          </span>
+                        </span>
+                      </div>
+
+                      <!-- IdAnswerer -->
+                      <div class="fv-row w-100 flex-md-root">
+                        <label class="required form-label">IdAnswerer</label>
+                        <select class="form-select mb-2" data-control="select2" data-placeholder="idAnswerer"
+                          data-allow-clear="true" formControlName="idAnswerer" [(ngModel)]="input.idAnswerer"
+                          placeholder="idAnswerer">
+                          <option *ngFor="let idAnswerer of userDatas" [value]="idAnswerer._id">
+                            {{ idAnswerer.fullName }}
+                          </option>
+                        </select>
+
+                        <span class="text-danger" *ngIf="
+                            form.controls['idAnswerer']!.invalid &&
+                            (form.controls['idAnswerer'].dirty ||
+                              form.controls['idAnswerer'].touched)
+                          ">
+                          <span *ngIf="form.controls['idAnswerer'].errors!.required">
+                            Vui lòng nhập trường này
+                          </span>
+                        </span>
+                      </div>
+
+                      <!-- Reputation -->
+                      <div class="fv-row w-100">
+                        <label class="required form-label">Reputation</label>
+                        <input formControlName="reputation" [(ngModel)]="input.reputation" type="text"
+                          class="form-control form-control-lg form-control-solid mrb-5" placeholder="Reputation"
+                          name="reputation" />
+
+                        <span class="text-danger" *ngIf="
+                              form.controls['reputation']!.invalid &&
+                              (form.controls['reputation'].dirty ||
+                                form.controls['reputation'].touched)
+                            ">
+                          <span *ngIf="
+                                form.controls['reputation'].errors!.required
+                              ">
+                            Vui lòng nhập trường này
+                          </span>
+                          <span *ngIf="form.controls['reputation'].errors!.min">
+                            Vui lòng nhập số lớn hơn 0
+                          </span>
+                          <span *ngIf="form.controls['reputation'].errors!.max">
+                            Vui lòng nhập số nhỏ hơn hoặc bằng 10
+                          </span>
+                        </span>
+                      </div>
+
+                      <!-- isSatisfied -->
+                      <div class="fv-row w-100 flex-md-root">
+                        <label class="required form-label">IsSatisfied</label>
+                        <label class="form-check form-switch form-check-custom form-check-solid">
+                          <input class="form-check-input" type="checkbox" value="true" formControlName="isSatisfied"
+                            [(ngModel)]="input.isSatisfied" checked="checked" />
+                        </label>
+
+                        <span class="text-danger" *ngIf="
+                            form.controls['isSatisfied']!.invalid &&
+                            (form.controls['isSatisfied'].dirty ||
+                              form.controls['isSatisfied'].touched)">
+                          <span *ngIf="form.controls['isSatisfied'].errors!.required">
+                            Vui lòng nhập trường này
+                          </span>
+                        </span>
+                      </div>
+
+                      <!-- isAgreePay -->
+                      <div class="fv-row w-100 flex-md-root">
+                        <label class="required form-label">IsAgreePay</label>
+                          <label class="form-check form-switch form-check-custom form-check-solid">
+                            <input class="form-check-input" type="checkbox" value="true" formControlName="isAgreePay"
+                              [(ngModel)]="input.isAgreePay" checked="checked" />
+                          </label>
+
+                          <span class="text-danger" *ngIf="
+                            form.controls['isAgreePay']!.invalid &&
+                            (form.controls['isAgreePay'].dirty ||
+                              form.controls['isAgreePay'].touched)">
+                            <span *ngIf="form.controls['isAgreePay'].errors!.required">
+                              Vui lòng nhập trường này
+                            </span>
+                          </span>
+                        </div>
+
+                        <!-- Rating -->
+                        <div class="fv-row w-100">
+                          <label class="required form-label">Rating</label>
+                          <input formControlName="rating" [(ngModel)]="input.rating" type="text"
+                            class="form-control form-control-lg form-control-solid mrb-5" placeholder="Rating"
+                            name="rating" />
+
+                          <span class="text-danger" *ngIf="
+                            form.controls['rating']!.invalid &&
+                            (form.controls['rating'].dirty ||
+                              form.controls['rating'].touched)
+                          ">
+                            <span *ngIf="form.controls['rating'].errors!.required">
+                              Vui lòng nhập trường này
+                            </span>
+                            <span *ngIf="form.controls['rating'].errors!.min">
+                              Không được nhập số nhỏ hơn 0
+                            </span>
+                            <span *ngIf="form.controls['rating'].errors!.max">
+                              Vui lòng nhập số nhỏ hơn hoặc bằng 5
+                            </span>
+                          </span>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="fv-row w-100">
+                          <label class="required form-label">Content</label>
+                          <ckeditor [(ngModel)]="input.content" formControlName="content">
+                          </ckeditor>
+
+                          <span class="text-danger" *ngIf="
+                            form.controls['content']!.invalid &&
+                            (form.controls['content'].dirty ||
+                              form.controls['content'].touched)
+                          ">
+                            <span *ngIf="form.controls['content'].errors!.required">
+                              Vui lòng nhập trường này
+                            </span>
+                          </span>
+                        </div>
+
+                        <!-- complain -->
+                        <div class="fv-row w-100 flex-md-root">
+                          <label class="form-label">Complain</label>
+                          <input formControlName="complain" [(ngModel)]="input.complain" type="text"
+                            class="form-control form-control-lg form-control-solid mrb-5" placeholder="Complain"
+                            name="complain" />
+
+                          <span class="text-danger" *ngIf="
+                            form.controls['complain']!.invalid &&
+                            (form.controls['complain'].dirty ||
+                              form.controls['complain'].touched)
+                          ">
+                            <span *ngIf="form.controls['complain'].errors!.required">
+                              Vui lòng nhập trường này
+                            </span>
+                          </span>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="fv-row w-100 flex-md-root">
+                          <label class="form-label required">Status</label>
+                          <select class="form-control form-control-lg form-control-solid mrb-5" formControlName="status"
+                            [(ngModel)]="input.status" placeholder="Status">
+                            <option *ngFor="let statusReviews of statusReviews" [value]="statusReviews.value">
+                              {{ statusReviews.viewValue }}
+                            </option>
+                          </select>
+
+                          <span class="text-danger" *ngIf="
+                            form.controls['status']!.invalid &&
+                            (form.controls['status'].dirty ||
+                              form.controls['status'].touched)
+                          ">
+                            <span *ngIf="form.controls['status'].errors!.required">
+                              Vui lòng nhập trường này
+                            </span>
+                          </span>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <a id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5" routerLink="/features/reviews">Cancel</a>
+            <button type="submit" id="kt_ecommerce_add_product_submit" class="btn btn-primary" [disabled]="isLoading"
+              (click)="onUpdateBtnClick()" *ngIf="input.status == true || input.status == false">
+              <span class="indicator-label" *ngIf="!isLoading">Update Changes</span>
+              <span class="indicator-progress" *ngIf="isLoading">Please wait...
+                <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+            </button>
+          </div>
+        </div>
+    </form>
+  </div>
+</div>

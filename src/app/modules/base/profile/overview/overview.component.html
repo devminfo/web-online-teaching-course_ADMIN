@@ -1,0 +1,106 @@
+<div *ngIf="!!profile" class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+  <div class="card-header cursor-pointer">
+    <div class="card-title m-0">
+      <h3 class="fw-bolder m-0">Profile Details</h3>
+    </div>
+
+    <a routerLink="/profile/settings" class="btn btn-primary align-self-center">
+      Edit Profile
+    </a>
+  </div>
+
+  <div class="card-body p-9">
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">Full Name</label>
+
+      <div class="col-lg-8">
+        <span class="fw-bolder fs-6 text-dark">{{ profile.fullName }}</span>
+      </div>
+    </div>
+
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted"> Phone </label>
+
+      <div class="col-lg-8 d-flex align-items-center">
+        <span class="fw-bolder fs-6 me-2">{{ profile.phone }}</span>
+      </div>
+    </div>
+
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">Email</label>
+
+      <div class="col-lg-8 fv-row">
+        <span class="fw-bold fs-6">{{ profile.email }}</span>
+      </div>
+    </div>
+
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">Role</label>
+
+      <div class="col-lg-8">
+        <a href="#" class="fw-bold fs-6 text-dark text-hover-primary">
+          {{ profile.role.toUpperCase() }}
+        </a>
+      </div>
+    </div>
+
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted"> Address </label>
+
+      <div class="col-lg-8">
+        <span class="fw-bolder fs-6 text-dark">{{ profile.address }}</span>
+      </div>
+    </div>
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted"> Gender </label>
+
+      <div class="col-lg-8">
+        <span class="fw-bolder fs-6 text-dark">{{ profile.gender }}</span>
+      </div>
+    </div>
+
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">Communication</label>
+
+      <div class="col-lg-8">
+        <span class="fw-bolder fs-6 text-dark">Email, Phone</span>
+      </div>
+    </div>
+
+    <div class="row mb-10">
+      <label class="col-lg-4 fw-bold text-muted">Allow Changes</label>
+
+      <div class="col-lg-8">
+        <span class="fw-bold fs-6">Yes</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row gy-10 gx-xl-10 d-none">
+  <div class="col-xl-6 d-none">
+    <app-charts-widget1
+      class="card card-xxl-stretch mb-5 mb-xl-10"
+    ></app-charts-widget1>
+  </div>
+
+  <div class="col-xl-6 d-none">
+    <app-tables-widget1
+      class="card card-xxl-stretch mb-5 mb-xl-10"
+    ></app-tables-widget1>
+  </div>
+</div>
+
+<div class="row gy-10 gx-xl-10 d-none">
+  <div class="col-xl-6">
+    <app-lists-widget5
+      class="card card-xxl-stretch mb-5 mb-xl-10"
+    ></app-lists-widget5>
+  </div>
+
+  <div class="col-xl-6 d-none">
+    <app-tables-widget5
+      class="card card-xxl-stretch mb-5 mb-xl-10"
+    ></app-tables-widget5>
+  </div>
+</div>

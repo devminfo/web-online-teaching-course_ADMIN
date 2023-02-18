@@ -1,0 +1,228 @@
+<div id="kt_account_profile_details" class="collapse show">
+  <div class="row">
+    <!-- thumbnail-->
+    <div
+      class="col-2 d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10"
+    >
+      <div class="card card-flush py-4">
+        <div class="card-header">
+          <div class="card-title">
+            <h2>Image</h2>
+          </div>
+        </div>
+        <div class="card-body text-center pt-0">
+          <span *ngFor="let dataThumbnails of dataThumbnail">
+            <label for="fileImage">
+              <img
+                class="img-color avatar-input-wrapper w-150px h-150px rounded"
+                [src]="
+                  dataThumbnails ? dataThumbnails : common.uploadImageDefault
+                "
+              />
+            </label>
+          </span>
+          <br />
+          <!--end::Avatar input-->
+
+          <!--begin::Description-->
+          <div class="text-muted fs-7">
+            Set the store thumbnail image. Only *.png, *.jpg and *.jpeg avatar
+            files are accepted
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="col tab-pane fade show active"
+      id="kt_ecommerce_add_product_general"
+      role="tab-panel"
+    >
+      <div class="row">
+        <div class="col">
+          <div class="d-flex justify-content-start w-300px pt-4">
+            <span
+              [inlineSVG]="'./assets/media/icons/duotune/general/gen068.svg'"
+              class="svg-icon svg-icon-3 float-left pt-3"
+            ></span>
+            <h2 class="title">Checkout Information</h2>
+          </div>
+          <div class="d-flex justify-content-end pl-5"></div>
+        </div>
+        <div class="col text-end">
+          <a
+            type="button"
+            class="btn btn-secondary mr-3 w-100px"
+            routerLink="/features/servicesorders"
+          >
+            Cancel</a
+          >
+          <a
+            (click)="onUpdateBtnClick()"
+            type="button"
+            class="btn btn-light-success flex-row w-100px"
+          >
+            Confirm</a
+          >
+        </div>
+      </div>
+      <div class="d-flex flex-column gap-7 gap-lg-10 pt-5">
+        <!--begin::Add Voucher options-->
+        <div class="card card-flush py-4 pr-5 pl-5">
+          <div>
+            <h3 class="float-left fw-bolder text-dark">
+              Full name of player :
+            </h3>
+            <p class="float-right">{{ checkout?.idCustomer?.fullName }}</p>
+          </div>
+          <div>
+            <h3 class="float-left fw-bolder text-dark">Birthday:</h3>
+            <p class="float-right">
+              {{ checkout?.idCustomer?.dateOfBirth | date : "dd/MM/yyy" }}
+            </p>
+          </div>
+          <div>
+            <h3 class="float-left fw-bolder text-dark">Phone number :</h3>
+            <p class="float-right">{{ checkout?.idCustomer?.phone }}</p>
+          </div>
+          <div>
+            <h3 class="float-left fw-bolder text-dark">Email :</h3>
+            <p class="float-right">
+              {{
+                checkout?.idCustomer?.email
+                  ? checkout?.idCustomer?.email
+                  : "NaN"
+              }}
+            </p>
+          </div>
+          <div>
+            <h3 class="float-left fw-bolder text-dark">Sign-in time :</h3>
+            <p class="float-right">
+              {{ checkout?.dateTimeCheckIn | date : "HH:mm a dd/MM/yyy" }}
+            </p>
+          </div>
+        </div>
+        <div class="card card-flush py-4 pl-5 pr-5">
+          <table class="fs-6 gy-5">
+            <thead>
+              <tr class="text-start text-dark fw-bolder fs-3 gs-0">
+                <th></th>
+                <th class="text-start min-w-100px">Service</th>
+                <th class="text-center min-w-100px"></th>
+                <th class="text-center min-w-100px"></th>
+                <th class="text-center min-w-100px">Tip</th>
+                <th class="text-center min-w-100px">Price</th>
+              </tr>
+            </thead>
+            <tbody class="">
+              <tr *ngFor="let dataService of checkout?.selectedServices">
+                <td></td>
+
+                <td class="text-start pt-4 pb-4">
+                  <span
+                    class="service"
+                    *ngFor="
+                      let dataStaff of dataService?.idStaff?.staffServices
+                    "
+                  >
+                    {{ dataStaff?.title }}
+                  </span>
+                  <br />
+                  <span class="worker">
+                    Worker: {{ dataService?.idStaff?.fullName }}
+                  </span>
+                </td>
+
+                <td></td>
+                <td></td>
+                <td>
+                  <input
+                    [(ngModel)]="dataService.tip"
+                    (ngModelChange)="ngOnChangeTip()"
+                    class="form-control form-control-solid mrb-0 text-end w-110px float-end"
+                    name="tip"
+                    type="number"
+                    placeholder="Enter Tip"
+                  />
+                </td>
+                <td>
+                  <input
+                    [(ngModel)]="dataService.price"
+                    (ngModelChange)="onChangePrice()"
+                    class="form-control form-control-solid mrb-0 text-end w-100px float-end"
+                    name="price"
+                    type="number"
+                    placeholder="Enter Price"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div
+            class="voucher d-flex justify-content-between align-items-center py-3"
+          >
+            <h3 class="fw-bolder text-dark mb-0">Voucher</h3>
+
+            <select
+              class="form-select text-center w-auto px-20"
+              data-kt-select2="true"
+              data-allow-clear="true"
+              (change)="onSelectedVoucher($event)"
+            >
+              <option value="0">Select</option>
+              <option
+                *ngFor="let item of dataVoucher"
+                value="{{
+                  item.unitTypeDiscount == 'PERCENT'
+                    ? [item.percentDiscount, item.unitTypeDiscount, item._id]
+                    : [item.priceDiscount, item.unitTypeDiscount, item._id]
+                }}"
+              >
+                {{ item?.title }}
+              </option>
+            </select>
+          </div>
+
+          <div class="pt-3">
+            <h3 class="float-left text-dark">Service Subtotal :</h3>
+            <p class="float-right">
+              {{ common.formatPriceDots(checkout.serviceFeeTotal) }} $
+            </p>
+          </div>
+          <div>
+            <h3 class="float-left text-dark">Tip total :</h3>
+            <p class="float-right">
+              <input
+                [(ngModel)]="checkout.tipTotal"
+                (ngModelChange)="onChangeTipTotal()"
+                class="form-control form-control-solid mrb-0 text-end w-100px h-40px"
+                name="tipTotal"
+                type="number"
+                placeholder="Enter Tip total"
+              />
+            </p>
+          </div>
+          <div>
+            <h3 class="float-left text-dark">Promotion :</h3>
+            <p class="float-right">
+              {{ common.formatPriceDots(checkout.promotion) }} $
+            </p>
+          </div>
+          <div>
+            <h3 class="float-left text-dark">Voucher :</h3>
+            <p class="float-right" name="voucher">
+              {{ common.formatPriceDots(checkout.voucher) }} $
+            </p>
+          </div>
+          <div>
+            <h3 class="float-left fw-bolder text-dark" id="total">
+              Total Payment :
+            </h3>
+            <h3 class="float-right text-danger fw-bolder">
+              {{ common.formatPriceDots(checkout.totalMoney) }} $
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

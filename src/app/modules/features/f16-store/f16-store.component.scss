@@ -1,0 +1,23 @@
+#lblCartCount {
+  font-size: 12px;
+  background: #04ff00;
+  color: #fff;
+  padding: 0 7px;
+  vertical-align: top;
+  position: absolute;
+  left: -10px;
+  top: -10px;
+}
+
+.badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  -moz-border-radius:50%;
+  -webkit-border-radius: 50%;
+}
+
+.label-warning[href],
+.badge-warning[href] {
+  background-color: #C67605;
+}

@@ -1,0 +1,178 @@
+<!--begin::Post-->
+<div class="post d-flex flex-column-fluid" id="kt_post">
+    <!--begin::Container-->
+    <div id="kt_content_container" class="container-xxl">
+        <form [formGroup]="form" class="form d-flex flex-column flex-lg-row"
+            data-kt-redirect="../../demo1/dist/apps/ecommerce/catalog/categories.html">
+            <!--begin::Aside column-->
+            <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
+                <!--begin::Thumbnail settings-->
+                <div class="card card-flush py-4">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h2>Image</h2>
+                        </div>
+                    </div>
+                    <div class="card-body text-center pt-0">
+                        <label for="fileImage">
+                            <img class="img-color avatar-input-wrapper w-150px h-150px rounded"
+                                [src]="input.thumbnail ? input.thumbnail : common.uploadImageDefault" alt="" />
+                        </label>
+                        <input formControlName="thumbnail" class="d-none" id="fileImage" (change)="onUploadImageClick()"
+                            type="file" #inputImage accept=".png, .jpg, .jpeg" />
+                        <br>
+                        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                            validation: 'required',
+                            message: 'Please is not blank',
+                            control: form.controls['thumbnail']
+                          }">
+                        </ng-container>
+                        <!--end::Avatar input-->
+                        <!--begin::Description-->
+                        <div class="text-muted fs-7">
+                            Set the store thumbnail image. Only *.png, *.jpg and *.jpeg avatar
+                            files are accepted
+                        </div>
+                        <!--end::Description-->
+                    </div>
+                </div>
+                <!--end::Thumbnail settings-->
+            </div>
+            <!--end::Aside column-->
+
+            <!--begin::Main column-->
+            <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+                <!--begin::General options-->
+                <div class="card card-flush py-4">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span [inlineSVG]="'./assets/media/icons/duotune/general/gen062.svg'"
+                                class="svg-icon svg-icon-3 mr-2"></span>
+                            <h2>Edit Service</h2>
+                        </div>
+                    </div>
+                    <!--begin::Card body-->
+                    <div class="card-body pt-0">
+
+                        <!--Group Service-->
+                        <div class="mb-10 fv-row">
+                            <label class="required form-label">Group Service</label>
+                            <select
+                                class="form-control form-control-lg form-control-solid mrb-5 form-select form-select-solid"
+                                formControlName="idGroupService" [(ngModel)]="input.idGroupService">
+                                <option value="" disabled selected hidden>
+                                    Choose group service
+                                </option>
+                                <option *ngFor="let item of groupServicesData" [value]="item._id">
+                                    {{ item.title }}
+                                </option>
+                            </select>
+                            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                                validation: 'required',
+                                message: 'Please is not blank',
+                                control: form.controls['idGroupService']
+                              }">
+                            </ng-container>
+                        </div>
+
+                        <!--Name-->
+                        <div class="mb-10 fv-row">
+                            <label class="required form-label">Service Name</label>
+                            <input type="text" [(ngModel)]="input.title" formControlName="title"
+                                class="form-control form-control-solid mb-2" placeholder="Enter service name" />
+                            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                                    validation: 'required',
+                                    message: 'Please is not blank',
+                                    control: form.controls['title']
+                                  }">
+                            </ng-container>
+                        </div>
+
+                        <!--Price-->
+                        <div class="mb-10 fv-row">
+                            <label class="required form-label">Price</label>
+                            <input type="number" [(ngModel)]="input.price" formControlName="price"
+                                class="form-control form-control-solid mb-2" placeholder="Price of service" />
+                            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                                    validation: 'required',
+                                    message: 'Please is not blank',
+                                    control: form.controls['price']
+                                  }">
+                            </ng-container>
+                            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                                validation: 'min',
+                                message: 'Number is bigger 0 ',
+                                control: form.controls['price']
+                              }">
+                            </ng-container>
+                        </div>
+
+                        <!--Turn-->
+                        <div class="mb-10 fv-row">
+                            <label class="required form-label">Turn</label>
+                            <input type="number" [(ngModel)]="input.turn" formControlName="turn"
+                                class="form-control form-control-solid mb-2" placeholder="Turn of service" />
+                            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                                    validation: 'required',
+                                    message: 'Please is not blank',
+                                    control: form.controls['turn']
+                                  }">
+                            </ng-container>
+                            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                                validation: 'min',
+                                message: 'Number is bigger 0 ',
+                                control: form.controls['turn']
+                              }">
+                            </ng-container>
+                        </div>
+
+                        <!--Position-->
+                        <div class="mb-10 fv-row">
+                            <label class="required form-label">Position</label>
+                            <input type="number" [(ngModel)]="input.position" formControlName="position"
+                                class="form-control form-control-solid mb-2" placeholder="Position of service" />
+                            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                                    validation: 'required',
+                                    message: 'Please is not blank',
+                                    control: form.controls['position']
+                                  }">
+                            </ng-container>
+                            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                                validation: 'min',
+                                message: 'Number is bigger 0 ',
+                                control: form.controls['position']
+                              }">
+                            </ng-container>
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button routerLink="/features/storeservices" class="btn btn-secondary mr-4">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn btn-primary" style="min-width: 84px" [disabled]="isLoading"
+                                (click)="onAddNewBtnClick()">
+                                <ng-container *ngIf="!isLoading">Save</ng-container>
+                                <ng-container *ngIf="isLoading">
+                                    <span clas="indicator-progress" [style.display]="'block'">
+                                        Please wait...{{ " " }}
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </ng-container>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<ng-template #formError let-control="control" let-message="message" let-validation="validation">
+    <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
+        <div class="fv-plugins-message-container">
+            <span role="alert " class="text-danger">
+                {{ message }}
+            </span>
+        </div>
+    </ng-container>
+</ng-template>

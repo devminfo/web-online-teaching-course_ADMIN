@@ -1,0 +1,286 @@
+<div id="kt_account_profile_details" class="collapse show">
+  <form [formGroup]="form" novalidate="" class="form">
+    <div class="row">
+      <div
+        class="col tab-pane fade show active"
+        id="kt_ecommerce_add_product_general"
+        role="tab-panel"
+      >
+        <div class="d-flex flex-column gap-7 gap-lg-10">
+          <!--begin::Add Assets package-->
+          <div class="card card-flush py-4">
+            <div class="card-header">
+              <div class="card-title">
+                <span
+                  [inlineSVG]="
+                    './assets/media/icons/duotune/general/gen076.svg'
+                  "
+                  class="svg-icon svg-icon-3 float-right"
+                ></span>
+                <h2>Setting</h2>
+              </div>
+            </div>
+            <div
+              class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10"
+            >
+              <!--begin::Avatar settings-->
+              <div class="card card-flush py-4">
+                <!--begin::Card header-->
+                <div class="card-header">
+                  <!--begin::Card title-->
+                  <div class="required card-title">
+                    <h2>Logo</h2>
+                  </div>
+                  <!--end::Card title-->
+                </div>
+                <!--end::Card header-->
+                <!--begin::Card body-->
+                <div
+                  class="card-body text-center pt-0"
+                  style="margin-right: 7rem"
+                >
+                  <label for="fileImage">
+                    <img
+                      class="img-color avatar-input-wrapper w-150px h-150px rounded"
+                      [src]="
+                        update.logo ? update.logo : common.uploadImageDefault
+                      "
+                    />
+                  </label>
+                  <input
+                    formControlName="logo"
+                    class="d-none"
+                    id="fileImage"
+                    (change)="onThumbnailUploadClick()"
+                    type="file"
+                    #inputLogo
+                    accept=".png, .jpg, .jpeg"
+                  />
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Please enter this field',
+                      control: form.controls['logo']
+                    }"
+                  ></ng-container>
+                  <!--end::Avatar input-->
+                </div>
+                <!--end::Card body-->
+              </div>
+              <!--end::Avatar settings-->
+            </div>
+            <!-- Name && Quantity-->
+            <div class="row">
+              <!-- Name-->
+              <div class="col-md-6 card-body pt-0">
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">Timezone Server</label>
+                  <select
+                    formControlName="timeZoneServer"
+                    [(ngModel)]="update.timeZoneServer"
+                    class="form-select form-select-solid"
+                    data-kt-select2="true"
+                    data-allow-clear="true"
+                  >
+                    <option value="">Select</option>
+                    <option
+                      *ngFor="let item of dataUTC"
+                      value="{{ item }}"
+                    >
+                      {{ item }}
+                    </option>
+                  </select>
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Please enter this field',
+                      control: form.controls['timeZoneServer']
+                    }"
+                  ></ng-container>
+                </div>
+              </div>
+
+              <!--Quantity-->
+              <div class="col-md-6 card-body pt-0">
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">Timezone App</label>
+                  <select
+                    formControlName="timeZoneApp"
+                    [(ngModel)]="update.timeZoneApp"
+                    class="form-select form-select-solid"
+                    data-kt-select2="true"
+                    data-allow-clear="true"
+                  >
+                    <option value="">Select</option>
+                    <option
+                      *ngFor="let item of this.dataUTC"
+                      value="{{ item }}"
+                    >
+                      {{ item }}
+                    </option>
+                  </select>
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Please enter this field',
+                      control: form.controls['timeZoneApp']
+                    }"
+                  ></ng-container>
+                </div>
+              </div>
+            </div>
+
+            <!-- AccountName  && Account Number-->
+            <div class="row">
+              <!-- AccountName-->
+              <div class="col-md-6 card-body pt-0">
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">AccountName</label>
+                  <input
+                    formControlName="accountName"
+                    [(ngModel)]="update.accountName"
+                    class="form-control form-control-lg form-control-solid mrb-5"
+                    name="accountName"
+                    placeholder="Enter original price"
+                  />
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Please enter this field',
+                      control: form.controls['accountName']
+                    }"
+                  ></ng-container>
+                </div>
+              </div>
+
+              <!--AccountNumber-->
+              <div class="col-md-6 card-body pt-0">
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">AccountNumber</label>
+                  <input
+                    formControlName="accountNumber"
+                    [(ngModel)]="update.accountNumber"
+                    class="form-control form-control-lg form-control-solid mrb-5"
+                    placeholder="Enter the accountNumber"
+                  />
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Please enter this field',
+                      control: form.controls['accountNumber']
+                    }"
+                  ></ng-container>
+                </div>
+              </div>
+            </div>
+            <!-- BankName price && BranchName-->
+            <div class="row">
+              <!-- BankName-->
+              <div class="col-md-6 card-body pt-0">
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">BankName</label>
+                  <input
+                    formControlName="bankName"
+                    [(ngModel)]="update.bankName"
+                    class="form-control form-control-lg form-control-solid mrb-5"
+                    name="bankName"
+                    placeholder="Enter original price"
+                  />
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Please enter this field',
+                      control: form.controls['bankName']
+                    }"
+                  ></ng-container>
+                </div>
+              </div>
+
+              <!--BranchName-->
+              <div class="col-md-6 card-body pt-0">
+                <div class="mb-2 fv-row">
+                  <label class="required form-label">BranchName</label>
+                  <input
+                    formControlName="bankBranch"
+                    [(ngModel)]="update.bankBranch"
+                    class="form-control form-control-lg form-control-solid mrb-5"
+                    placeholder="Enter the bankBranch"
+                  />
+                  <ng-container
+                    [ngTemplateOutlet]="formError"
+                    [ngTemplateOutletContext]="{
+                      validation: 'required',
+                      message: 'Please enter this field',
+                      control: form.controls['bankBranch']
+                    }"
+                  ></ng-container>
+                </div>
+              </div>
+            </div>
+            <!-- Policy-->
+            <div class="card-body pt-0">
+              <div class="mb-2 fv-row">
+                <label class="form-label">Policy</label>
+                <ckeditor
+                  [(ngModel)]="update.policy"
+                  formControlName="policy"
+                  name="policy"
+                ></ckeditor>
+              </div>
+            </div>
+            <!-- save and cancel -->
+            <div class="d-flex justify-content-end py-6 px-8 mr-5">
+              <a
+                type="button"
+                class="btn btn-light mr-3"
+                routerLink="/common/settings"
+                >Cancel</a
+              >
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-dismiss="modal"
+                [disabled]="isLoading"
+                (click)="onUpdateBtnClick()"
+              >
+                <ng-container *ngIf="!isLoading">Save</ng-container>
+                <ng-container *ngIf="isLoading">
+                  <span clas="indicator-progress" [style.display]="'block'">
+                    Please wait...{{ " " }}
+                    <span
+                      class="spinner-border spinner-border-sm align-middle ms-2"
+                    ></span>
+                  </span>
+                </ng-container>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- check error -->
+<ng-template
+  #formError
+  let-control="control"
+  let-message="message"
+  let-validation="validation"
+>
+  <ng-container
+    *ngIf="control?.hasError(validation) && (control.dirty || control.touched)"
+  >
+    <div class="fv-plugins-message-container">
+      <span role="alert " class="text-danger">
+        {{ message }}
+      </span>
+    </div>
+  </ng-container>
+</ng-template>

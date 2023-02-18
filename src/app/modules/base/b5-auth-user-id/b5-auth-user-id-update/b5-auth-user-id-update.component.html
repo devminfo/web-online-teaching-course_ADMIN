@@ -1,0 +1,207 @@
+<div class="card mb-5 mb-xl-10">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Auth user id</span>
+      <span class="text-muted mt-1 fw-bold fs-7">Update datas</span>
+    </h3>
+    <div class="card-toolbar">
+      <!-- new data -->
+      <div class="card-toolbar">
+        <a
+          routerLink="/features/authuserids"
+          class="btn btn-sm btn-light-primary"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'"
+            class="svg-icon svg-icon-3"
+          ></span>
+          Go back
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <div id="kt_account_profile_details" class="collapse show">
+    <form [formGroup]="form" novalidate="" class="form">
+      <div class="card-body border-top p-9">
+        <!-- Collection Name -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Collection Name</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="collectionName"
+              [(ngModel)]="input.collectionName"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Collection Name"
+              name="collectionName"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['collectionName']!.invalid &&
+                (form.controls['collectionName'].dirty ||
+                  form.controls['collectionName'].touched)
+              "
+            >
+              <span *ngIf="form.controls['collectionName'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- URL -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Url</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="url"
+              [(ngModel)]="input.url"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Url"
+              name="url"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['url']!.invalid &&
+                (form.controls['url'].dirty || form.controls['url'].touched)
+              "
+            >
+              <span *ngIf="form.controls['url'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- ReferID -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">ReferID</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <select
+              class="form-control form-control-lg form-control-solid mrb-5"
+              [(ngModel)]="input.referId"
+              placeholder="Select referID"
+              formControlName="referId"
+            >
+              <option *ngFor="let item of listReferIds" [value]="item">
+                {{ item }}
+              </option>
+            </select>
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['referId']!.invalid &&
+                (form.controls['referId'].dirty ||
+                  form.controls['referId'].touched)
+              "
+            >
+              <span *ngIf="form.controls['referId'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+        <!-- Access method -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6 required"
+            >Access Methods</label
+          >
+          <div class="col-lg-8 fv-row">
+            <div class="d-flex align-items-center mt-3">
+              <!-- GET -->
+              <label class="form-check form-check-inline form-check-solid me-5">
+                <input
+                  [(ngModel)]="amGet"
+                  (change)="onAccessMethodChange()"
+                  [ngModelOptions]="{ standalone: true }"
+                  class="form-check-input"
+                  type="checkbox"
+                />
+                <span class="fw-bold ps-2 fs-6 badge badge-light-success"
+                  >GET</span
+                >
+              </label>
+
+              <!-- POST -->
+              <label class="form-check form-check-inline form-check-solid">
+                <input
+                  [(ngModel)]="amPost"
+                  (change)="onAccessMethodChange()"
+                  [ngModelOptions]="{ standalone: true }"
+                  class="form-check-input"
+                  type="checkbox"
+                />
+                <span class="fw-bold ps-2 fs-6 badge badge-light-info"
+                  >POST</span
+                >
+              </label>
+
+              <!-- PUT -->
+              <label class="form-check form-check-inline form-check-solid">
+                <input
+                  [(ngModel)]="amPut"
+                  (change)="onAccessMethodChange()"
+                  [ngModelOptions]="{ standalone: true }"
+                  class="form-check-input"
+                  type="checkbox"
+                />
+                <span class="fw-bold ps-2 fs-6 badge badge-light-primary"
+                  >PUT</span
+                >
+              </label>
+
+              <!-- DELETE -->
+              <label class="form-check form-check-inline form-check-solid">
+                <input
+                  [(ngModel)]="amDelete"
+                  (change)="onAccessMethodChange()"
+                  [ngModelOptions]="{ standalone: true }"
+                  class="form-check-input"
+                  type="checkbox"
+                />
+                <span class="fw-bold ps-2 fs-6 badge badge-light-danger"
+                  >DELETE</span
+                >
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add New -->
+      <div class="card-footer d-flex justify-content-end py-6 px-9">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="isLoading"
+          (click)="onUpdateBtnClick()"
+        >
+          <ng-container *ngIf="!isLoading">Save Changes</ng-container>
+          <ng-container *ngIf="isLoading">
+            <span clas="indicator-progress" [style.display]="'block'">
+              Please wait...{{ " " }}
+              <span
+                class="spinner-border spinner-border-sm align-middle ms-2"
+              ></span>
+            </span>
+          </ng-container>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

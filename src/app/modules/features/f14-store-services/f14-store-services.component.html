@@ -1,0 +1,288 @@
+<h3 class="card-title align-items-start flex-column">
+  <span class="card-label fw-bolder fs-3 mb-1">Store Services </span>
+</h3>
+<div class="card mb-5 mb-xl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <div class="card-title align-items-start flex-column">
+      <app-f14-store-services-search (searchChange)="onSearchChange($event)">
+      </app-f14-store-services-search>
+    </div>
+    <div class="card-toolbar">
+      <!-- delete -->
+      <div class="card-toolbar" *ngIf="getSelection().length > 0">
+        <a routerLink="/features/storeservices" data-toggle="modal" data-target="#deleteManyModal"  style="min-width: 102px;"
+          class="btn btn-sm btn-light-danger mr-1">
+          <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'" class="svg-icon svg-icon-3"></span>
+          Delete
+        </a>
+      </div>
+
+      <!-- Service Data -->
+      <div class="card-toolbar">
+        <a data-toggle="modal" data-target="#serviceDataModal" class="btn btn-sm btn-primary mr-1">
+          <span class="text-white">Service Data</span> 
+        </a>
+      </div>
+
+      <!-- new data -->
+      <div class="card-toolbar">
+        <a routerLink="/features/storeservices/add" class="btn btn-sm btn-primary" style="min-width: 102px;">
+          Add
+        </a>
+      </div>
+      <!-- begin::Menu -->
+      <button type="button" class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
+        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
+        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen024.svg'" class="svg-icon svg-icon-2"></span>
+      </button>
+      <!-- begin::Menu 1 -->
+      <app-f14-store-services-filter [groupServices]="groupServicesData" (applyBtnClick)="onFilterBtnClick($event)">
+      </app-f14-store-services-filter>
+      <!-- end::Menu 1 -->
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <!-- begin::Body -->
+  <div class="card-body py-3" style="min-height: 440px;">
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-muted">
+            <th class="w-25px">
+              <div class="form-check form-check-sm form-check-custom form-check-solid">
+                <input [(ngModel)]="isSelectAll" (click)="onCheckAllSelected()" class="form-check-input" type="checkbox"
+                  data-kt-check="true" data-kt-check-target=".widget-13-check" />
+              </div>
+            </th>
+            <th class="min-w-150px">ID</th>
+            <th class="min-w-130px">Thumbnail</th>
+            <th class="min-w-130px">Service Name</th>
+            <th class="min-w-130px">Group Service</th>
+            <th class="min-w-120px">Turn</th>
+            <th class="min-w-120px">Price</th>
+            <th class="min-w-70px text-end">Actions</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody *ngIf="checkData == true ">
+          <tr *ngFor="let data of dataSources">
+            <!-- Select -->
+            <td>
+              <div class="form-check form-check-sm form-check-custom form-check-solid mt-5">
+                <input [(ngModel)]="data.checked" (click)="onItemSelected(data.id)"
+                  class="form-check-input widget-13-check" type="checkbox" value="1" />
+              </div>
+            </td>
+
+            <!-- ID -->
+            <th>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6 mt-5">
+                {{ data._id }}
+              </p>
+            </th>
+
+            <!-- thumbnail -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6 symbol symbol-50px">
+                <img *ngIf="data?.thumbnail != ''" [src]="data?.thumbnail" [alt]="data?.title" />
+              </p>
+            </td>
+
+            <!-- Name Service -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6 mt-5">
+                {{ data.title}}
+              </p>
+            </td>
+
+            <!-- idGroupService -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6 mt-5">
+                {{ getGroupServiceById(data.idGroupService) }}
+              </p>
+            </td>
+
+            <!-- Turn -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6 mt-5">
+                {{ data.turn}}
+              </p>
+            </td>
+
+            <!-- Price -->
+            <td>
+              <p class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6 mt-5">
+                ${{ data.price | number }}
+              </p>
+            </td>
+
+            <!-- Acction -->
+            <td class="text-end">
+
+              <!-- update -->
+              <a routerLink="/features/storeservices/update/{{ data.id }}"
+                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                <span [inlineSVG]="'./assets/media/icons/duotune/art/art011.svg'" class="svg-icon svg-icon-3">
+                </span>
+              </a>
+
+              <!-- delete -->
+              <a (click)="updateDeleteById(data.id)" data-toggle="modal" data-target="#exampleModal"
+                routerLink="/features/storeservices"
+                class="btn btn-icon btn-active-color-primary btn-sm badge badge-light-danger">
+                <span [inlineSVG]="
+                        './assets/media/icons/duotune/general/gen060.svg'
+                      " class="svg-icon svg-icon-3">
+                </span>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+
+      <!-- test -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+  <!-- begin::Body -->
+</div>
+
+<!-- <div *ngIf="checkData == true "> -->
+  <div class="d-flex flex-stack flex-wrap pt-10" style="float: right" *ngIf="dataSources">
+    <div class="fs-6 fw-bold text-gray-700">Items per page:</div>
+
+    <div>
+      <select [(ngModel)]="pageSize" (change)="onChangeSize()" class="form-select form-select-solid form-select-md"
+        name="currency">
+        <option value="5">5</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="80">80</option>
+      </select>
+    </div>
+
+    <div class="fs-6 fw-bold text-gray-700 mr-lr-20">
+      {{ (pageIndex - 1) * pageSize + 1 }} -
+      {{ (pageIndex - 1) * pageSize + dataSources.length }}
+      of {{ pageLength }}
+    </div>
+
+    <ul class="pagination">
+      <!-- begin page -->
+      <li class="page-item previous" (click)="onBeginClick()" disabled="true">
+        <a class="page-link cursor-pointer">
+          <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr079.svg'" class="svg-icon svg-icon-3"></span>
+        </a>
+      </li>
+
+      <!-- previous page -->
+      <li class="page-item previous" (click)="onPreviousClick()">
+        <a class="page-link cursor-pointer">
+          <i class="previous"></i>
+        </a>
+      </li>
+
+      <!-- next page -->
+      <li class="page-item next" (click)="onNextClick()">
+        <a class="page-link cursor-pointer">
+          <i class="next"></i>
+        </a>
+      </li>
+
+      <!-- end page -->
+      <li class="page-item next" (click)="onEndClick()">
+        <a class="page-link cursor-pointer">
+          <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr080.svg'" class="svg-icon svg-icon-3"></span>
+        </a>
+      </li>
+    </ul>
+
+  </div>
+<!-- </div> -->
+
+<!-- Delete many Modal -->
+<div class="modal fade" id="deleteManyModal" tabindex="-1" role="dialog" aria-labelledby="deleteManyModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <h5 class="modal-title" id="deleteManyModalLabel">
+        <div class="d-flex justify-content-center flex-colum align-items-center">
+          <span [inlineSVG]="'./assets/media/icons/duotune/general/gen061.svg'" class="mt-10"></span>
+        </div>
+      </h5>
+      <h4 class="text-center">
+        Do you really want to delete {{ getSelection().length }} select store service ?
+        <br />
+        This process cannot be undone.
+      </h4>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary w-150px mr-10" data-dismiss="modal">
+          No
+        </button>
+        <button type="button" class="btn btn-danger w-150px" data-dismiss="modal" (click)="onDeleteManyBtnClick()">
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <h5 class="modal-title">
+        <div class="d-flex justify-content-center flex-colum align-items-center">
+          <span [inlineSVG]="'./assets/media/icons/duotune/general/gen061.svg'" class="mt-10"></span>
+        </div>
+      </h5>
+      <h4 class="text-center">
+        Do you really want to delete store service ?
+        <br />
+        This process cannot be undone.
+      </h4>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary w-150px mr-10" data-dismiss="modal">
+          No
+        </button>
+        <button type="button" class="btn btn-danger w-150px" data-dismiss="modal" (click)="onDeleteBtnClick()">
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Service Data Modal -->
+<div class="modal fade" id="serviceDataModal" tabindex="-1" role="dialog" aria-labelledby="serviceDataModal"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <h5 class="modal-title">
+        <div class="d-flex justify-content-center flex-colum align-items-center">
+          <span [inlineSVG]="'./assets/media/icons/duotune/general/gen098.svg'" class="mt-8"></span>
+        </div>
+      </h5>
+      <h4 class="text-center">
+        Do you want add all the system service templates ?
+      </h4>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary w-150px mr-5" data-dismiss="modal">
+          No
+        </button>
+        <button type="button" class="btn btn-primary w-150px" data-dismiss="modal" (click)="onGetServiceDataBtnClick()">
+          Yes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
