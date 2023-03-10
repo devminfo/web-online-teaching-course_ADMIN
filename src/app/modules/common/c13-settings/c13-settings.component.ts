@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Observer, Subscription } from 'rxjs';
-import { C13SettingService } from 'src/app/core/services/common/c13-setting.service';
+import { SettingService } from 'src/app/core/services/common/c13-setting.service';
 
 @Component({
   selector: 'app-c13-settings',
@@ -37,7 +37,7 @@ export class C13SettingsComponent implements OnInit, OnDestroy {
    * @param api
    * @param apiSubSpecialize
    */
-  constructor(private settingService: C13SettingService) {
+  constructor(private settingService: SettingService) {
     // xử lý bất đồng bộ
     this.observable = Observable.create((observer: any) => {
       this.observer = observer;

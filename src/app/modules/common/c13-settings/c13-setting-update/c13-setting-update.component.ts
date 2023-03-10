@@ -9,7 +9,7 @@ import {
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { C13SettingService } from 'src/app/core/services/common/c13-setting.service';
+import { SettingService } from 'src/app/core/services/common/c13-setting.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { getTimezone } from 'countries-and-timezones';
 @Component({
@@ -62,7 +62,7 @@ export class C13SettingUpdateComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
     private formBuilder: FormBuilder,
-    private settingService: C13SettingService
+    private settingService: SettingService
   ) {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
@@ -113,7 +113,7 @@ export class C13SettingUpdateComponent implements OnInit, OnDestroy {
     // show loading
     this.isLoading$.next(true);
     this.subscription.push(
-      this.settingService.find(id).subscribe((data) => {
+      this.settingService.find(id).subscribe((data: any) => {
         // load data to view input
         this.update = {
           logo: data.logo,
@@ -144,7 +144,7 @@ export class C13SettingUpdateComponent implements OnInit, OnDestroy {
    */
   getTimezone() {
     this.subscription.push(
-      this.settingService.getTimezone().subscribe((data) => {
+      this.settingService.getTimezone().subscribe((data: any) => {
         this.dataTimezone = data.data;
         for (let i = 0; i < this.dataTimezone.length; i++) {
           this.dataUTC.push(getTimezone(this.dataTimezone[i]).utcOffsetStr);

@@ -9,7 +9,6 @@ import { BehaviorSubject, Observable, Observer, Subscription } from 'rxjs';
 import { BackupService } from 'src/app/core/services/common/c1-backup.service';
 import { CommonService } from 'src/app/core/services/common.service';
 import { UserService } from 'src/app/core/services/features/user.service';
-import { QuestionService } from 'src/app/core/services/features/f8-question.service';
 
 @Component({
   selector: 'app-c1-backup',
@@ -220,13 +219,11 @@ export class C1BackupComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private commonService: CommonService,
     private api: BackupService,
-    private userService: UserService,
-    private questionService: QuestionService
+    private userService: UserService
   ) {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
     );
-
 
     // xử lý bất đồng bộ
     this.observable = Observable.create((observer: any) => {
@@ -295,9 +292,6 @@ export class C1BackupComponent implements OnInit, AfterViewInit, OnDestroy {
   loadDataReference() {
     // get list user data
     this.getListUserDatas();
-
-    // get list question data
-    this.getListQuestionDatas();
   }
 
   /**
@@ -308,18 +302,6 @@ export class C1BackupComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscription.push(
       this.userService.get().subscribe((data) => {
         this.userDatas = data;
-      })
-    );
-  }
-
-  /**
-   * get list question datas
-   */
-  getListQuestionDatas() {
-    // get data
-    this.subscription.push(
-      this.questionService.get().subscribe((data) => {
-        this.questionDatas = data;
       })
     );
   }
@@ -377,8 +359,8 @@ export class C1BackupComponent implements OnInit, AfterViewInit, OnDestroy {
    * onBackupBtnClick
    */
   onBackupBtnClick() {
-   // show loading
-   this.isLoading$.next(true);
+    // show loading
+    this.isLoading$.next(true);
 
     this.subscription.push(
       this.api.backup().subscribe(() => {
