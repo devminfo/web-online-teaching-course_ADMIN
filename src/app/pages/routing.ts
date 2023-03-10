@@ -1,4 +1,3 @@
-import { F13StoreTemplateModule } from '../modules/features/f13-store-template/f13-store-template.module';
 import { Routes } from '@angular/router';
 
 const Routing: Routes = [
@@ -58,7 +57,7 @@ const Routing: Routes = [
         (m) => m.B2UsersModule
       ),
   },
-  
+
   {
     path: 'features/groups',
     loadChildren: () =>
@@ -73,7 +72,6 @@ const Routing: Routes = [
         (m) => m.B8GroupModule
       ),
   },
-  
 
   // Common
   {
@@ -141,14 +139,6 @@ const Routing: Routes = [
       ),
   },
 
-  {
-    path: 'features/cron-jobs',
-    loadChildren: () =>
-      import('../modules/common/c8-cron-jobs/c8-cron-job.module').then(
-        (m) => m.C8CronJobModule
-      ),
-  },
-
   // Authorization
   {
     path: 'features/freeapis',
@@ -178,42 +168,6 @@ const Routing: Routes = [
         (m) => m.B6GroupAPIModule
       ),
   },
-  // features
-  {
-    path:'features/vouchertemplatedefaults',
-    loadChildren:()=>
-      import('../modules/features/f8-voucher-templalte-default/f8-voucher-template-default.module').then(
-        (m)=> m.F8VoucherTemplateDefaultModule
-      )
-  },
-  {
-    path: 'features/assetspackages',
-    loadChildren: () =>
-      import('../modules/features/f10-assets-packages/f10-assets-packages.module').then(
-        (m) => m.F10AssetsPackagesModule
-      ),
-  },
-  {
-    path: 'features/storetemplates',
-    loadChildren: () =>
-      import('../modules/features/f13-store-template/f13-store-template.module').then(
-        (m) => m.F13StoreTemplateModule
-      ),
-  },
-  {
-    path: 'features/storepackagetransactions',
-    loadChildren: () =>
-      import('../modules/features/f11-store-package-transactions/f11-store-package-transactions.module').then(
-        (m) => m.F11StorePackageTransactionsModule
-      ),
-  },
-  {
-    path: 'features/servicesorders',
-    loadChildren: () =>
-      import('../modules/features/f5-service-orders/f5-service-orders.module').then(
-        (m) => m.F5ServiceOrdersModule
-      ),
-  },
   {
     path: 'features/groupdetails',
     loadChildren: () =>
@@ -221,115 +175,121 @@ const Routing: Routes = [
         (m) => m.B7GroupDetailModule
       ),
   },
+  // ----------------------------
+  // --------- features ---------
+  // ----------------------------
   {
-    path: 'features/customers',
+    path: 'features/banners',
     loadChildren: () =>
-      import('../modules/base/b9-customers/b9-customers.module').then(
-        (m) => m.B9CustomersModule
-      ),
-  },
-
-
-  {
-    path: 'features/specializes',
-    loadChildren: () =>
-      import('../modules/features/f1-specialize/f1-specialize.module').then(
-        (m) => m.F1SpecializeModule
+      import('../modules/features/f1-banner/banner.module').then(
+        (m) => m.BannerModule
       ),
   },
   {
-    path: 'features/subspecializes',
+    path: 'features/courses',
     loadChildren: () =>
-      import(
-        '../modules/features/f2-sub-specialize/f2-sub-specialize.module'
-      ).then((m) => m.F2SubSpecializeModule),
-  },
-
-  {
-    path: 'features/userspecializes',
-    loadChildren: () =>
-      import(
-        '../modules/features/f3-user-specialize/f3-user-specialize.module'
-      ).then((m) => m.F3UserSpecializeModule),
-  },
-  {
-    path: 'features/subjects',
-    loadChildren: () =>
-      import('../modules/features/f4-subject/f4-subject.module').then(
-        (m) => m.F4SubjectModule
+      import('../modules/features/f2-course/course.module').then(
+        (m) => m.CourseModule
       ),
   },
   {
-    path: 'features/certificates',
+    path: 'features/chapters',
     loadChildren: () =>
-      import('../modules/features/f5-certificate/f5-certificate.module').then(
-        (m) => m.F5CertificateModule
+      import('../modules/features/f3-chapter/chapter.module').then(
+        (m) => m.ChapterModule
+      ),
+  },
+  {
+    path: 'features/lectures',
+    loadChildren: () =>
+      import('../modules/features/f4-lecture/lecture.module').then(
+        (m) => m.LectureModule
+      ),
+  },
+  {
+    path: 'features/learningpaths',
+    loadChildren: () =>
+      import('../modules/features/f5-learning-path/learning-path.module').then(
+        (m) => m.LearningPathModule
+      ),
+  },
+  {
+    path: 'features/categories',
+    loadChildren: () =>
+      import('../modules/features/f6-category/category.module').then(
+        (m) => m.CategoryModule
+      ),
+  },
+  {
+    path: 'features/posts',
+    loadChildren: () =>
+      import('../modules/features/f7-post/post.module').then(
+        (m) => m.PostModule
+      ),
+  },
+  {
+    path: 'features/comments',
+    loadChildren: () =>
+      import('../modules/features/f8-comment/comment.module').then(
+        (m) => m.CommentModule
+      ),
+  },
+  {
+    path: 'features/conversations',
+    loadChildren: () =>
+      import('../modules/features/f9-conversation/conversation.module').then(
+        (m) => m.ConversationModule
+      ),
+  },
+  {
+    path: 'features/messages',
+    loadChildren: () =>
+      import('../modules/features/f10-messages/message.module').then(
+        (m) => m.MessageModule
       ),
   },
   {
     path: 'features/quizzes',
     loadChildren: () =>
-      import('../modules/features/f6-quiz/f6-quiz.module').then(
-        (m) => m.F6QuizModule
+      import('../modules/features/f11-quiz/quiz.module').then(
+        (m) => m.QuizModule
       ),
   },
   {
-    path: 'features/historyquizzes',
+    path: 'features/playquizzes',
     loadChildren: () =>
-      import('../modules/features/f7-historyquiz/f7-historyquiz.module').then(
-        (m) => m.F7HistoryQuizModule
+      import('../modules/features/f12-play-quizzes/play-quiz.module').then(
+        (m) => m.PlayQuizModule
       ),
   },
   {
-    path: 'features/transactions',
+    path: 'features/classrooms',
     loadChildren: () =>
-      import('../modules/features/f9-transaction/f9-transaction.module').then(
-        (m) => m.F9TransactionModule
+      import('../modules/features/f13-class-rooms/class-room.module').then(
+        (m) => m.ClassRoomModule
       ),
   },
   {
-    path: 'features/notifications',
+    path: 'features/questions',
     loadChildren: () =>
-      import(
-        '../modules/features/f10-notification/f10-notification.module'
-      ).then((m) => m.F10NotificationModule),
-  },
-  {
-    path: 'features/reviews',
-    loadChildren: () =>
-      import('../modules/features/f11-reviews/f11-reviews.module').then(
-        (m) => m.F11ReviewsModule
+      import('../modules/features/f14-questions/question.module').then(
+        (m) => m.QuestionModule
       ),
   },
   {
-    path: 'features/settings',
+    path: 'features/testquestions',
     loadChildren: () =>
-      import('../modules/features/f12-setting/f12-setting.module').then(
-        (m) => m.F12SettingModule
+      import('../modules/features/f15-test-question/test-question.module').then(
+        (m) => m.TestQuestionModule
       ),
   },
   {
-    path: 'features/groupservices',
+    path: 'features/usertests',
     loadChildren: () =>
-      import('../modules/features/f13-group-services/f13-group-services.module').then(
-        (m) => m.F13GroupServicesModule
-      )
-  },
-  {
-    path: 'features/stores',
-    loadChildren: () =>
-      import('../modules/features/f16-store/f16-store.module').then(
-        (m) => m.F16StoreModule
+      import('../modules/features/f16-user-test/user-test.module').then(
+        (m) => m.UserTestModule
       ),
   },
-  {
-    path: 'features/storeservicestemplate',
-    loadChildren: () =>
-      import('../modules/features/f18-store-services-template/f18-store-services-template.module').then(
-        (m) => m.F18StoreServicesTemplateModule
-      ),
-  },
-
   {
     path: '',
     redirectTo: '/dashboard',

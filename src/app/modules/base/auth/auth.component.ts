@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { SettingService } from 'src/app/core/services/features/f12-setting.service';
+import { SettingService } from 'src/app/core/services/common/c13-setting.service';
 
 @Component({
   selector: '<body[root]>',
@@ -25,7 +25,13 @@ export class AuthComponent implements OnInit, OnDestroy {
     console.log('Loading settings...');
     this.subscription.push(
       this.settingService
-        .paginate({ fields: 'logo', filter: '', limit: 1, page: 0 })
+        .paginate({
+          fields: 'logo',
+          filter: '',
+          limit: 1,
+          page: 0,
+          populate: '',
+        })
         .subscribe((data) => {
           this.settings = data;
         })
