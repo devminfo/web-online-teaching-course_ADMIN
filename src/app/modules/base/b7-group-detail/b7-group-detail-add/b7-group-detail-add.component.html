@@ -26,35 +26,6 @@
   <div id="kt_account_profile_details" class="collapse show">
     <form [formGroup]="form" novalidate="" class="form">
       <div class="card-body border-top p-9">
-        <!-- Collection Name -->
-        <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">Collection Name</span>
-          </label>
-          <div class="col-lg-8 fv-row">
-            <input
-              formControlName="collectionName"
-              [(ngModel)]="input.collectionName"
-              type="text"
-              class="form-control form-control-lg form-control-solid mrb-5"
-              placeholder="Collection Name"
-            />
-
-            <span
-              class="text-danger"
-              *ngIf="
-                form.controls['collectionName']!.invalid &&
-                (form.controls['collectionName'].dirty ||
-                  form.controls['collectionName'].touched)
-              "
-            >
-              <span *ngIf="form.controls['collectionName'].errors!.required">
-                Vui lòng nhập trường này
-              </span>
-            </span>
-          </div>
-        </div>
-
         <!-- Name -->
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6">

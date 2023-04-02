@@ -1407,7 +1407,6 @@ export class B7GroupDetailAddComponent
 
   // binding data
   input = {
-    collectionName: '',
     name: '',
     icon: './assets/media/icons/duotune/general/gen019.svg',
     isGroup: true,
@@ -1441,7 +1440,6 @@ export class B7GroupDetailAddComponent
 
     // add validate for controls
     this.form = this.formBuilder.group({
-      collectionName: [null, [Validators.required]],
       name: [null, [Validators.required]],
       position: [null, [Validators.required]],
       link: [null, []],
