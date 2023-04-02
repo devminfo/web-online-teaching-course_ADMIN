@@ -21,7 +21,6 @@ export class CommonService {
   // Define API
   public BASEURL = ConstantsService.api.frontEnd;
 
-
   avatarDefault =
     'https://p23dpfood.izisoft.io/static/upload/image/1664871777744_e1006cc0e6309f6828c52f998_1b26103ef823d9bc9.png';
   public uploadImageDefault = './assets/media/svg/files/image.svg';
@@ -37,7 +36,7 @@ export class CommonService {
     public toastrService: ToastrService,
     public spinner: NgxSpinnerService,
     private http: HttpClient
-  ) { }
+  ) {}
 
   public showError(mess: string) {
     this.toastrService.error('Pinks Ways!', mess, {
@@ -52,7 +51,6 @@ export class CommonService {
       progressBar: true,
     });
   }
-
 
   public showWarning(mess: string) {
     this.toastrService.warning('Pinks Ways!', mess + '!', {
@@ -98,7 +96,9 @@ export class CommonService {
     const day = dateTemp.getDate();
     const month = dateTemp.getMonth() + 1;
     const year = dateTemp.getFullYear();
-    return `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+    return `${year}-${month < 10 ? '0' + month : month}-${
+      day < 10 ? '0' + day : day
+    }`;
   }
 
   public formatUnixTimestampToHHIISS(date: number) {
@@ -134,15 +134,16 @@ export class CommonService {
 
     const year = dateTemp.getFullYear();
 
-    return `${day < 10 ? '0' + day : day}-${month < 10 ? '0' + month : month
-      }-${year}`;
+    return `${day < 10 ? '0' + day : day}-${
+      month < 10 ? '0' + month : month
+    }-${year}`;
   }
 
   /**
    * bỏ dấu tiếng việt để search
    */
   public cleanAccents(str: string): string {
-    if (!str) return str
+    if (!str) return str;
 
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
     str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e');
@@ -298,12 +299,12 @@ export class CommonService {
   }
 
   /**
- * onSearchKeyWordReturnArray
- * @param data
- * @param texts
- * @param keyword
- * @returns
- */
+   * onSearchKeyWordReturnArray
+   * @param data
+   * @param texts
+   * @param keyword
+   * @returns
+   */
   public onSearchKeyWordReturnArray(
     data: any,
     texts: string[],
@@ -323,20 +324,18 @@ export class CommonService {
               (value: any) =>
                 this.cleanAccents(
                   value?.[textSplit[textSplit.length - 2]]?.[
-                  textSplit[textSplit.length - 1]
+                    textSplit[textSplit.length - 1]
                   ]
                 )
                   ?.toLowerCase()
                   .indexOf(this.cleanAccents(keyword?.toLowerCase())) !== -1
             );
-          }
-
-          else if (textSplit.length > 0 && textSplit.length == 3) {
+          } else if (textSplit.length > 0 && textSplit.length == 3) {
             arrayTemp = data.filter(
               (value: any) =>
                 this.cleanAccents(
                   value?.[textSplit[textSplit.length - 3]]?.[
-                  textSplit[textSplit.length - 2]
+                    textSplit[textSplit.length - 2]
                   ]?.[textSplit[textSplit.length - 1]]
                 )
                   ?.toLowerCase()
@@ -542,13 +541,6 @@ export class CommonService {
     }
 
     // log error when call api
-    console.log(
-      'ERROR: API: ',
-      error.url,
-      ' Status:',
-      error?.status,
-      error?.error?.errors[0]
-    );
 
     return throwError(error);
   }

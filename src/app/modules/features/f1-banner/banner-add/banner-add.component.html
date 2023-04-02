@@ -2,7 +2,7 @@
   <!-- begin::Header -->
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bolder fs-3 mb-1">Sub Specialize</span>
+      <span class="card-label fw-bolder fs-3 mb-1">Banner</span>
       <span class="text-muted mt-1 fw-bold fs-7">Add New</span>
     </h3>
     <div class="card-toolbar">
@@ -23,66 +23,98 @@
   <div id="kt_account_profile_details" class="collapse show">
     <form [formGroup]="form" novalidate="" class="form">
       <div class="card-body border-top p-9">
-        <!-- Id Banner -->
+        <!-- Tittle -->
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">Specialize</span>
+            <span class="required">Title</span>
           </label>
           <div class="col-lg-8 fv-row">
-            <select
-              class="form-control form-control-lg form-control-solid mb-2"
-              formControlName="idSpecialize"
-              [(ngModel)]="input.idSpecialize"
-              placeholder="Select banner"
-            >
-              <option value="" disabled selected hidden>
-                Select IdSpecialize
-              </option>
-              <option *ngFor="let item of banners" [value]="item._id">
-                {{ item.name }}
-              </option>
-            </select>
+            <input
+              formControlName="text"
+              [(ngModel)]="input.text"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Enter title"
+              name="text"
+            />
+
             <span
               class="text-danger"
               *ngIf="
-                form.controls['idSpecialize']!.invalid &&
-                (form.controls['idSpecialize'].dirty ||
-                  form.controls['idSpecialize'].touched)
+                form.controls['text']!.invalid &&
+                (form.controls['text'].dirty || form.controls['text'].touched)
               "
             >
-              <span *ngIf="form.controls['idSpecialize'].errors!.required">
+              <span *ngIf="form.controls['text'].errors!.required">
                 Vui lòng nhập trường này
               </span>
             </span>
           </div>
         </div>
 
-        <!-- Name -->
+        <!-- Image -->
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">Name</span>
+            <span class="required">Image</span>
           </label>
-          <div class="col-lg-8 fv-row">
-            <input
-              formControlName="name"
-              [(ngModel)]="input.name"
-              type="text"
-              class="form-control form-control-lg form-control-solid mrb-5"
-              placeholder="Name"
-              name="name"
-            />
 
-            <span
-              class="text-danger"
-              *ngIf="
-                form.controls['name']!.invalid &&
-                (form.controls['name'].dirty || form.controls['name'].touched)
-              "
-            >
-              <span *ngIf="form.controls['name'].errors!.required">
-                Vui lòng nhập trường này
+          <!-- Image -->
+          <div class="col-lg-8 fv-row">
+            <!--begin::Image input-->
+            <div class="image-input image-input-outline">
+              <!--begin::Image preview wrapper-->
+              <div
+                class="image-input-wrapper w-125px h-125px"
+                *ngIf="input.image != undefined && input.image != null"
+              >
+                <img
+                  class="image-input-wrapper w-125px h-125px"
+                  *ngIf="input.image != ''"
+                  [src]="input.image"
+                  alt="izi software"
+                  width="250"
+                  height="250"
+                />
+              </div>
+              <!--end::Image preview wrapper-->
+
+              <!--begin::Edit button-->
+              <label
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="change"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Change avatar"
+                (change)="onImageUploadClick()"
+              >
+                <i class="bi bi-pencil-fill fs-7"></i>
+
+                <!--begin::Inputs-->
+                <input
+                  type="file"
+                  formControlName="image"
+                  accept="image/*"
+                  #inputImage
+                  name="image"
+                />
+                <!--end::Inputs-->
+              </label>
+              <!--end::Edit button-->
+
+              <!--begin::Remove button-->
+              <span
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="remove"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Remove avatar"
+                (click)="onImageDeleteClick()"
+              >
+                <i class="bi bi-x fs-2"></i>
               </span>
-            </span>
+              <!--end::Remove button-->
+            </div>
+            <!--end::Image input-->
           </div>
         </div>
 
@@ -110,6 +142,35 @@
               "
             >
               <span *ngIf="form.controls['position'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Link to Page -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Link</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="link"
+              [(ngModel)]="input.link"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Enter title"
+              name="link"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['link']!.invalid &&
+                (form.controls['link'].dirty || form.controls['link'].touched)
+              "
+            >
+              <span *ngIf="form.controls['link'].errors!.required">
                 Vui lòng nhập trường này
               </span>
             </span>

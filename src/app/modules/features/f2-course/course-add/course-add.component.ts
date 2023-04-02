@@ -4,6 +4,8 @@ import {
   OnDestroy,
   AfterViewInit,
   ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -22,11 +24,23 @@ export class CourseAddComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
 
+  // binding uploads image or file
+  @ViewChild('inputThumbnail', { static: false })
+  inputThumbnail: ElementRef;
+
   // binding data
   input: any = {
-    idSpecialize: '',
-    name: '',
-    position: '',
+    instructor: '',
+    desc: '',
+    isPrivate: false,
+    price: 0,
+    promotionPrice: 0,
+    requirements: '',
+    tags: '',
+    target: '',
+    targetDetails: '',
+    thumbnail: '',
+    title: '',
   };
 
   courses: any[];
@@ -46,7 +60,6 @@ export class CourseAddComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   constructor(
     private api: CourseService,
-    private courseService: CourseService,
     private common: CommonService,
     private router: Router,
     private cdr: ChangeDetectorRef,
@@ -55,15 +68,18 @@ export class CourseAddComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
     );
-
-    // Get courses
-    this.getAllSpecializes();
-
     // add validate for controls
     this.form = this.formBuilder.group({
-      idSpecialize: [null, [Validators.required]],
-      name: [null, [Validators.required]],
-      position: [null, [Validators.required]],
+      desc: [null, [Validators.required]],
+      isPrivate: null,
+      price: null,
+      promotionPrice: null,
+      requirements: null,
+      tags: null,
+      target: [null, [Validators.required]],
+      targetDetails: null,
+      thumbnail: [null, [Validators.required]],
+      title: [null, [Validators.required]],
     });
   }
 
@@ -87,14 +103,24 @@ export class CourseAddComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Get all courses
+   * onThumbnailUploadClick
    */
-  getAllSpecializes() {
+  onThumbnailUploadClick() {
     this.subscription.push(
-      this.courseService.get().subscribe((data) => {
-        this.courses = data;
+      this.common.uploadImageCore(this.inputThumbnail).subscribe((data) => {
+        if (data) {
+          this.input.thumbnail = data['files'][0];
+        }
       })
     );
+  }
+
+  /**
+   * onThumbnailDeleteClick
+   */
+  onThumbnailDeleteClick() {
+    const isDelete = confirm('Bạn có muốn xóa hình? ');
+    if (isDelete) this.input.thumbnail = '';
   }
 
   /**
@@ -105,22 +131,27 @@ export class CourseAddComponent implements OnInit, AfterViewInit, OnDestroy {
     this.form.markAllAsTouched();
 
     // check form pass all validate
-    if (!this.form.invalid) {
-      // show loading
-      this.isLoading$.next(true);
+    if (this.form.invalid) return;
 
-      this.subscription.push(
-        this.api.add(this.input).subscribe(() => {
-          // hide loading
-          this.isLoading$.next(false);
-          this.cdr.detectChanges();
+    // show loading
+    this.isLoading$.next(true);
 
-          this.common.showSuccess('Insert new success!');
+    this.input.instructor = '642793fa6340df24f6806213';
+    if (this.input.price > 0) this.input.isPrivate = true;
 
-          // redirect to list
-          this.router.navigate(['/features/courses']);
-        })
-      );
-    }
+    console.log({ input: this.input });
+    console.log({ input: this.form.invalid });
+    this.subscription.push(
+      this.api.add(this.input).subscribe(() => {
+        // hide loading
+        this.isLoading$.next(false);
+        this.cdr.detectChanges();
+
+        this.common.showSuccess('Insert new success!');
+
+        // redirect to list
+        this.router.navigate(['/features/courses']);
+      })
+    );
   }
 }

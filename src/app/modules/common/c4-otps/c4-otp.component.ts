@@ -263,10 +263,6 @@ export class C4OtpComponent implements OnInit, AfterViewInit, OnDestroy {
         })
         .subscribe((data) => {
           this.dataSourcesTemp = data.results;
-          console.log(
-            '🚀 ~ file: c4-otp.component.ts ~ line 266 ~ C4OtpComponent ~ .subscribe ~ this.dataSourcesTemp',
-            this.dataSourcesTemp
-          );
 
           this.dataSources = data.results;
           this.pageLength = data.totalResults;

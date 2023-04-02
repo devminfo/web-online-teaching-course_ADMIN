@@ -137,13 +137,6 @@ export class WardService {
     }
 
     // log error when call api
-    console.log(
-      'ERROR: API: ',
-      error.url,
-      ' Status:',
-      error?.status,
-      error?.error?.errors[0]
-    );
 
     return throwError(error);
   }

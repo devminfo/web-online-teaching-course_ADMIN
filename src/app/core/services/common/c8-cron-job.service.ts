@@ -12,7 +12,7 @@ export class CronJobService {
   // Define API
   apiURL = ConstantsService.api.frontEnd;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /*========================================
     Begin CRUD Methods for consuming RESTful API
@@ -135,13 +135,6 @@ export class CronJobService {
     }
 
     // log error when call api
-    console.log(
-      'ERROR: API: ',
-      error.url,
-      ' Status:',
-      error?.status,
-      error?.error?.errors[0]
-    );
 
     return throwError(error);
   }

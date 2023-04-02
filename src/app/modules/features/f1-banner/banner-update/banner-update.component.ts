@@ -4,6 +4,8 @@ import {
   OnDestroy,
   AfterViewInit,
   ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,15 +23,20 @@ export class BannerUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
   subscription: Subscription[] = [];
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
+  // binding uploads image or file
+  @ViewChild('inputImage', { static: false })
+  inputImage: ElementRef;
 
   // binding data
   input: any = {
-    idSpecialize: '',
-    name: '',
+    text: '',
+    image: '',
     position: '',
+    isShow: true,
+    link: '',
   };
 
-  banners: any[];
+  imageOld: string;
 
   //form
   form: FormGroup;
@@ -48,7 +55,6 @@ export class BannerUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   constructor(
     private api: BannerService,
-    private bannerService: BannerService,
     private common: CommonService,
     private router: Router,
     private route: ActivatedRoute,
@@ -59,14 +65,13 @@ export class BannerUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
     );
 
-    // Get banners
-    this.getAllSpecializes();
-
     // add validate for controls
     this.form = this.formBuilder.group({
-      idSpecialize: [null, [Validators.required]],
-      name: [null, [Validators.required]],
+      text: [null, [Validators.required]],
+      image: null,
       position: [null, [Validators.required]],
+      isShow: true,
+      link: [null, [Validators.required]],
     });
   }
 
@@ -109,10 +114,13 @@ export class BannerUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
       this.api.find(id).subscribe((data) => {
         // load data to view input
         this.input = {
-          name: data.name,
+          text: data.text,
+          image: data.image,
           position: data.position,
-          idSpecialize: data.idSpecialize,
+          isShow: data.isShow,
+          link: data.link,
         };
+        this.imageOld = data.image;
 
         // hide loading
         this.isLoading$.next(false);
@@ -122,14 +130,24 @@ export class BannerUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Get all banners
+   * onImageUploadClick
    */
-  getAllSpecializes() {
+  onImageUploadClick() {
     this.subscription.push(
-      this.bannerService.get().subscribe((data) => {
-        this.banners = data;
+      this.common.uploadImageCore(this.inputImage).subscribe((data) => {
+        if (data) {
+          this.input.image = data['files'][0];
+        }
       })
     );
+  }
+
+  /**
+   * onImageDeleteClick
+   */
+  onImageDeleteClick() {
+    const isDelete = confirm('Bạn có muốn xóa hình? ');
+    if (isDelete) this.input.image = '';
   }
 
   /**
@@ -140,10 +158,29 @@ export class BannerUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.form.markAllAsTouched();
 
     // check form pass all validate
-    if (!this.form.invalid) {
-      // show loading
-      this.isLoading$.next(true);
+    if (this.form.invalid) return;
 
+    // show loading
+    this.isLoading$.next(true);
+
+    // confirm use banner
+    if (this.input.image !== this.imageOld && this.input.image) {
+      this.common.comfirmImages([this.input.image]).subscribe((dataImage) => {
+        this.input.image = dataImage[0][2];
+        this.subscription.push(
+          this.api.update(this.id, this.input).subscribe(() => {
+            // hide loading
+            this.isLoading$.next(false);
+            this.cdr.detectChanges();
+
+            this.common.showSuccess('Update Success!');
+
+            // redirect to list
+            this.router.navigate(['/features/banners']);
+          })
+        );
+      });
+    } else {
       this.subscription.push(
         this.api.update(this.id, this.input).subscribe(() => {
           // hide loading

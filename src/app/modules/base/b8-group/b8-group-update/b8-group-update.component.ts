@@ -308,7 +308,6 @@ export class B8GroupUpdateComponent
     e: any
   ) {
     const isChecked = e.target.checked;
-    console.log(id, isChecked);
 
     // check or uncheck item with id
     for (let i = 0; i < this.groupDetails.length; i++) {

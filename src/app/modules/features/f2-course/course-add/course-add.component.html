@@ -2,13 +2,13 @@
   <!-- begin::Header -->
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bolder fs-3 mb-1">Sub Specialize</span>
+      <span class="card-label fw-bolder fs-3 mb-1">Course</span>
       <span class="text-muted mt-1 fw-bold fs-7">Add New</span>
     </h3>
     <div class="card-toolbar">
       <!-- new data -->
       <div class="card-toolbar">
-        <a routerLink="/features/courses" class="btn btn-sm btn-light-primary">
+        <a routerLink="/features/banners" class="btn btn-sm btn-light-primary">
           <span
             [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'"
             class="svg-icon svg-icon-3"
@@ -23,93 +23,251 @@
   <div id="kt_account_profile_details" class="collapse show">
     <form [formGroup]="form" novalidate="" class="form">
       <div class="card-body border-top p-9">
-        <!-- Id Course -->
+        <!-- Tittle -->
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">Specialize</span>
-          </label>
-          <div class="col-lg-8 fv-row">
-            <select
-              class="form-control form-control-lg form-control-solid mb-2"
-              formControlName="idSpecialize"
-              [(ngModel)]="input.idSpecialize"
-              placeholder="Select course"
-            >
-              <option value="" disabled selected hidden>
-                Select IdSpecialize
-              </option>
-              <option *ngFor="let item of courses" [value]="item._id">
-                {{ item.name }}
-              </option>
-            </select>
-            <span
-              class="text-danger"
-              *ngIf="
-                form.controls['idSpecialize']!.invalid &&
-                (form.controls['idSpecialize'].dirty ||
-                  form.controls['idSpecialize'].touched)
-              "
-            >
-              <span *ngIf="form.controls['idSpecialize'].errors!.required">
-                Vui lòng nhập trường này
-              </span>
-            </span>
-          </div>
-        </div>
-
-        <!-- Name -->
-        <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">Name</span>
+            <span class="required">Title</span>
           </label>
           <div class="col-lg-8 fv-row">
             <input
-              formControlName="name"
-              [(ngModel)]="input.name"
+              formControlName="title"
+              [(ngModel)]="input.title"
               type="text"
               class="form-control form-control-lg form-control-solid mrb-5"
-              placeholder="Name"
-              name="name"
+              placeholder="Enter title"
+              name="title"
             />
 
             <span
               class="text-danger"
               *ngIf="
-                form.controls['name']!.invalid &&
-                (form.controls['name'].dirty || form.controls['name'].touched)
+                form.controls['title']!.invalid &&
+                (form.controls['title'].dirty || form.controls['title'].touched)
               "
             >
-              <span *ngIf="form.controls['name'].errors!.required">
+              <span *ngIf="form.controls['title'].errors!.required">
                 Vui lòng nhập trường này
               </span>
             </span>
           </div>
         </div>
 
-        <!-- Position -->
+        <!-- Thumbnail -->
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">Position</span>
+            <span class="required">Thumbnail</span>
+          </label>
+
+          <!-- Thumbnail -->
+          <div class="col-lg-8 fv-row">
+            <!--begin::Thumbnail input-->
+            <div class="image-input image-input-outline">
+              <!--begin::Thumbnail preview wrapper-->
+              <div
+                class="image-input-wrapper w-125px h-125px"
+                *ngIf="input.thumbnail != undefined && input.thumbnail != null"
+              >
+                <img
+                  class="image-input-wrapper w-125px h-125px"
+                  *ngIf="input.thumbnail != ''"
+                  [src]="input.thumbnail"
+                  alt="izi software"
+                  width="250"
+                  height="250"
+                />
+              </div>
+              <!--end::Thumbnail preview wrapper-->
+
+              <!--begin::Edit button-->
+              <label
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="change"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Change avatar"
+                (change)="onThumbnailUploadClick()"
+              >
+                <i class="bi bi-pencil-fill fs-7"></i>
+
+                <!--begin::Inputs-->
+                <input
+                  type="file"
+                  formControlName="thumbnail"
+                  accept="image/*"
+                  #inputThumbnail
+                  name="thumbnail"
+                />
+                <!--end::Inputs-->
+              </label>
+              <!--end::Edit button-->
+
+              <!--begin::Remove button-->
+              <span
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="remove"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Remove avatar"
+                (click)="onThumbnailDeleteClick()"
+              >
+                <i class="bi bi-x fs-2"></i>
+              </span>
+              <!--end::Remove button-->
+            </div>
+            <!--end::Thumbnail input-->
+          </div>
+        </div>
+
+        <!-- Target -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Target</span>
           </label>
           <div class="col-lg-8 fv-row">
             <input
-              formControlName="position"
-              [(ngModel)]="input.position"
-              type="number"
+              formControlName="target"
+              [(ngModel)]="input.target"
+              type="text"
               class="form-control form-control-lg form-control-solid mrb-5"
-              placeholder="Position"
-              name="position"
+              placeholder="Enter target"
+              name="target"
             />
 
             <span
               class="text-danger"
               *ngIf="
-                form.controls['position']!.invalid &&
-                (form.controls['position'].dirty ||
-                  form.controls['position'].touched)
+                form.controls['target']!.invalid &&
+                (form.controls['target'].dirty ||
+                  form.controls['target'].touched)
               "
             >
-              <span *ngIf="form.controls['position'].errors!.required">
+              <span *ngIf="form.controls['target'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Desc -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Description</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <textarea
+              [(ngModel)]="input.desc"
+              formControlName="desc"
+              placeholder="Enter desc"
+              name="desc"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              aria-label="With textarea"
+            ></textarea>
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['desc']!.invalid &&
+                (form.controls['desc'].dirty || form.controls['desc'].touched)
+              "
+            >
+              <span *ngIf="form.controls['desc'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Price -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Price</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="price"
+              [(ngModel)]="input.price"
+              type="number"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Price"
+              name="price"
+            />
+          </div>
+        </div>
+
+        <!-- PromotionPrice -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>PromotionPrice</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="promotionPrice"
+              [(ngModel)]="input.promotionPrice"
+              type="number"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="20%"
+              name="promotionPrice"
+            />
+          </div>
+        </div>
+
+        <!-- Target Details -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Target Details</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <textarea
+              [(ngModel)]="input.targetDetails"
+              formControlName="targetDetails"
+              placeholder="#target1, #target2, #..."
+              name="targetDetails"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              aria-label="With textarea"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Requirements -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Requirements</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <textarea
+              [(ngModel)]="input.requirements"
+              formControlName="requirements"
+              placeholder="#requirement1, #requirement2, #..."
+              name="requirements"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              aria-label="With textarea"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span>Tags</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="tags"
+              [(ngModel)]="input.tags"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="#tag1, #tag2, #..."
+              name="tags"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['tags']!.invalid &&
+                (form.controls['tags'].dirty || form.controls['tags'].touched)
+              "
+            >
+              <span *ngIf="form.controls['tags'].errors!.required">
                 Vui lòng nhập trường này
               </span>
             </span>

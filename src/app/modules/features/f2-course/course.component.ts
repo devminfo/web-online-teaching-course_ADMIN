@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  AfterViewInit,
-  HostBinding,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { CourseService } from 'src/app/core/services/features/f2-course.service';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -193,7 +187,7 @@ export class CourseComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // data source for grid
   dataSources: any[] = [];
-  dataSourcesSpecialize: any[] = [];
+  dataSourcesCourse: any[] = [];
 
   // delete id
   deleteId: String;
@@ -207,8 +201,7 @@ export class CourseComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   constructor(
     private commonService: CommonService,
-    private api: CourseService,
-    private apiSpecialize: CourseService
+    private api: CourseService
   ) {
     // xử lý bất đồng bộ
     this.observable = Observable.create((observer: any) => {
@@ -220,17 +213,7 @@ export class CourseComponent implements OnInit, AfterViewInit, OnDestroy {
    * ngOnInit
    */
   ngOnInit() {
-    // load data reference
-    this.loadDataReference();
-
-    // check data reference loaded
-    this.observable.subscribe((data) => {
-      // number api reference call
-      if (data == 1) {
-        // load data user
-        this.onLoadDataGrid();
-      }
-    });
+    this.onLoadDataGrid();
   }
 
   /**
@@ -259,41 +242,29 @@ export class CourseComponent implements OnInit, AfterViewInit, OnDestroy {
    * on Load Data Grid
    */
   onLoadDataGrid() {
-    const filter = {
-      page: this.pageIndex,
-      limit: this.pageSize,
-      filter: this.conditonFilter,
-      fields: '',
-    };
+    const filter = 'instructor=642793fa6340df24f6806213';
     this.subscription.push(
-      this.api.paginate(filter).subscribe((data) => {
-        this.dataSources = data.results;
-        this.pageLength = data.totalResults;
-      })
+      this.api
+        .paginate({
+          limit: this.pageSize,
+          fields: '',
+          filter,
+          page: this.pageIndex,
+        })
+        .subscribe((data) => {
+          console.log({ data });
+          this.dataSources = data.results;
+          this.pageLength = data.totalResults;
+        })
     );
   }
 
   /**
-   * load Data Reference
-   */
-  loadDataReference() {
-    this.subscription.push(
-      this.apiSpecialize.get().subscribe((data) => {
-        this.dataSourcesSpecialize = data;
-
-        // loading finished
-        this.call += 1;
-        this.observer.next(this.call);
-      })
-    );
-  }
-
-  /**
-   * getSpecializeById
+   * getCourseById
    * @param id
    */
-  getSpecializeById(id: string) {
-    const result = this.dataSourcesSpecialize.filter((item) => item._id == id);
+  getCourseById(id: string) {
+    const result = this.dataSourcesCourse.filter((item) => item._id == id);
 
     // check exists
     if (result.length > 0) {
@@ -306,7 +277,7 @@ export class CourseComponent implements OnInit, AfterViewInit, OnDestroy {
    * onApplyBtnClick
    */
   onApplyBtnClick(event: string) {
-    const condition = { key: 'idSpecialize', value: event };
+    const condition = { key: 'idCourse', value: event };
 
     // add new condition to list
     this.addNewConditionToList(condition);

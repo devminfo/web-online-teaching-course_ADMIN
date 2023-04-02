@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  AfterViewInit,
-  HostBinding,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { BannerService } from 'src/app/core/services/features/f1-banner.service';
 import { CommonService } from 'src/app/core/services/common.service';
@@ -193,7 +187,6 @@ export class BannerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // data source for grid
   dataSources: any[] = [];
-  dataSourcesSpecialize: any[] = [];
 
   // delete id
   deleteId: String;
@@ -207,8 +200,7 @@ export class BannerComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   constructor(
     private commonService: CommonService,
-    private api: BannerService,
-    private apiSpecialize: BannerService
+    private api: BannerService
   ) {
     // xử lý bất đồng bộ
     this.observable = Observable.create((observer: any) => {
@@ -220,17 +212,7 @@ export class BannerComponent implements OnInit, AfterViewInit, OnDestroy {
    * ngOnInit
    */
   ngOnInit() {
-    // load data reference
-    this.loadDataReference();
-
-    // check data reference loaded
-    this.observable.subscribe((data) => {
-      // number api reference call
-      if (data == 1) {
-        // load data user
-        this.onLoadDataGrid();
-      }
-    });
+    this.onLoadDataGrid();
   }
 
   /**
@@ -268,35 +250,6 @@ export class BannerComponent implements OnInit, AfterViewInit, OnDestroy {
           this.pageLength = data.totalResults;
         })
     );
-  }
-
-  /**
-   * load Data Reference
-   */
-  loadDataReference() {
-    this.subscription.push(
-      this.apiSpecialize.get().subscribe((data) => {
-        this.dataSourcesSpecialize = data;
-
-        // loading finished
-        this.call += 1;
-        this.observer.next(this.call);
-      })
-    );
-  }
-
-  /**
-   * getSpecializeById
-   * @param id
-   */
-  getSpecializeById(id: string) {
-    const result = this.dataSourcesSpecialize.filter((item) => item._id == id);
-
-    // check exists
-    if (result.length > 0) {
-      return result[0].name;
-    }
-    return '';
   }
 
   /**

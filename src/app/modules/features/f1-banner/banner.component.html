@@ -2,7 +2,7 @@
   <!-- begin::Header -->
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bolder fs-3 mb-1">Sub Specialize</span>
+      <span class="card-label fw-bolder fs-3 mb-1">Banners</span>
       <span class="text-muted mt-1 fw-bold fs-7"
         >Selected {{ getSelection().length }} records</span
       >
@@ -37,28 +37,6 @@
           Add New
         </a>
       </div>
-
-      <!-- begin::Menu -->
-      <button
-        type="button"
-        class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
-        data-kt-menu-trigger="click"
-        data-kt-menu-placement="bottom-end"
-        data-kt-menu-flip="top-end"
-      >
-        <span
-          [inlineSVG]="'./assets/media/icons/duotune/general/gen024.svg'"
-          class="svg-icon svg-icon-2"
-        ></span>
-      </button>
-      <!-- begin::Menu 1 -->
-      <banner-filter
-        [banners]="dataSourcesSpecialize"
-        (applyBtnClick)="onApplyBtnClick($event)"
-      >
-      </banner-filter>
-      <!-- end::Menu 1 -->
-      <!-- end::Menu -->
     </div>
   </div>
   <!-- end::Header -->
@@ -89,9 +67,9 @@
               </div>
             </th>
             <th class="min-w-150px">ID</th>
-            <th class="min-w-140px">Specialize Name</th>
-            <th class="min-w-140px">Sub Specialize Name</th>
-            <th class="min-w-120px">Position</th>
+            <th class="min-w-140px">Title</th>
+            <th class="min-w-140px">Position</th>
+            <th class="min-w-120px">Image</th>
             <th class="min-w-100px text-end">Actions</th>
           </tr>
         </thead>
@@ -128,31 +106,31 @@
               </a>
             </td>
 
-            <!-- Id Specialize -->
+            <!-- Title -->
             <td>
               <p
                 class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
               >
-                {{ getSpecializeById(data.idSpecialize) }}
+                {{ data.text }}
               </p>
             </td>
 
-            <!-- Specialize Name -->
-            <td>
-              <p
-                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
-              >
-                {{ data.name }}
-              </p>
-            </td>
-
-            <!-- Posision -->
+            <!-- Position -->
             <td>
               <p
                 class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
               >
                 {{ data.position }}
               </p>
+            </td>
+
+            <!-- Image -->
+            <td>
+              <img
+                class="image-input-wrapper w-125px h-125px"
+                src="{{ data.image }}"
+                alt="{{ data.title }}"
+              />
             </td>
 
             <!-- Acction -->

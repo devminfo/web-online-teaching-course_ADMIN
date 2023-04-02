@@ -12,7 +12,7 @@ export class UserService {
   // Define API
   apiURL = ConstantsService.api.frontEnd;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /*========================================
     Begin CRUD Methods for consuming RESTful API
@@ -184,6 +184,7 @@ export class UserService {
     let url = `${this.apiURL}/users/paginate?page=${params.page}&limit=${params.limit}&populate=${params.populate}${params.filter}`;
 
     if (params.fields) url = url.concat(`&fields=${params.fields}`);
+    if (params.populate) url = url.concat(`&populate=${params.populate}`);
 
     return this.http.get<any>(url).pipe(retry(1), catchError(this.handleError));
   }
@@ -208,13 +209,6 @@ export class UserService {
     }
 
     // log error when call api
-    console.log(
-      'ERROR: API: ',
-      error.url,
-      ' Status:',
-      error?.status,
-      error?.error?.errors[0]
-    );
 
     return throwError(error);
   }

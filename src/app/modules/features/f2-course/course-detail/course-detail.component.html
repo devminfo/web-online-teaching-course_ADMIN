@@ -1,0 +1,356 @@
+<div class="card mb-5 mb-xl-8">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1"
+        >Courses: {{ data.title }}</span
+      >
+    </h3>
+    <div class="card-toolbar">
+      <!-- new data -->
+      <div class="card-toolbar">
+        <a
+          routerLink="/features/chapters/course/{{ data._id }}"
+          class="btn btn-sm btn-light-primary mr-1"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'"
+            class="svg-icon svg-icon-3"
+          ></span>
+          Chapters
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body py-3">
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table
+        class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+      >
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-muted">
+            <th class="min-w-140px">Thumbnail</th>
+            <th class="min-w-140px">Title</th>
+            <th class="min-w-140px">Chapters</th>
+            <th class="min-w-140px">Lectures</th>
+            <th class="min-w-120px">Price</th>
+            <th class="min-w-100px text-end">Actions</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr>
+            <!-- Image -->
+            <td>
+              <img
+                class="image-input-wrapper w-80px h-80px"
+                src="{{ data.thumbnail }}"
+                alt="{{ data.title }}"
+              />
+            </td>
+
+            <!-- Title -->
+            <td>
+              <p
+                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+              >
+                {{ data.title }}
+              </p>
+            </td>
+
+            <!-- totalChapter -->
+            <td>
+              <p class="text-dark text-hover-primary d-block mb-1 fs-6">
+                <span class="badge badge-circle badge-primary">
+                  {{ data.totalChapter }}</span
+                >
+              </p>
+            </td>
+
+            <!-- totalLectures -->
+            <td>
+              <p class="text-dark text-hover-primary d-block mb-1 fs-6">
+                <span class="badge badge-circle badge-success">{{
+                  data.totalLectures
+                }}</span>
+              </p>
+            </td>
+
+            <!-- Price -->
+            <td>
+              <p
+                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+              >
+                {{ data.price }}
+              </p>
+            </td>
+
+            <!-- Acction -->
+            <td class="text-end">
+              <a
+                routerLink="/features/courses/update/{{ data.id }}"
+                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
+              >
+                <span
+                  [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
+                  class="svg-icon svg-icon-3"
+                >
+                </span>
+              </a>
+
+              <!-- delete -->
+              <a
+                (click)="updateDeleteId()"
+                data-toggle="modal"
+                data-target="#deleteOneModal"
+                routerLink="/features/courses"
+                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+              >
+                <span
+                  [inlineSVG]="
+                    './assets/media/icons/duotune/general/gen027.svg'
+                  "
+                  class="svg-icon svg-icon-3"
+                >
+                </span>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+
+      <!-- test -->
+    </div>
+    <!-- end::Table container -->
+  </div>
+
+  <!-- Statistical -->
+  <h4 class="my-0 mt-12 fw-bolder fs-4" style="margin-left: 30px">
+    Statistical
+  </h4>
+  <div class="card-body py-3">
+    <!-- begin::Table container -->
+    <div class="table-responsive">
+      <!-- begin::Table -->
+      <table
+        class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3"
+      >
+        <!-- begin::Table head -->
+        <thead>
+          <tr class="fw-bolder text-muted">
+            <th class="min-w-140px">Students</th>
+            <th class="min-w-120px">Classes</th>
+            <th class="min-w-140px">Dislikes</th>
+            <th class="min-w-120px">Views</th>
+            <th class="min-w-120px">Total Time</th>
+            <th class="min-w-120px text-end">Updated At</th>
+          </tr>
+        </thead>
+        <!-- end::Table head -->
+        <!-- begin::Table body -->
+        <tbody>
+          <tr>
+            <!-- ClassesJoined -->
+            <td>
+              <p class="text-dark text-hover-primary d-block mb-1 fs-6">
+                <span class="badge badge-circle badge-outline badge-info">{{
+                  data?.userJoined?.length || 0
+                }}</span>
+              </p>
+            </td>
+
+            <!-- ClassesJoined -->
+            <td>
+              <p class="text-dark text-hover-primary d-block mb-1 fs-6">
+                <span class="badge badge-circle badge-outline badge-warning">{{
+                  data?.classesJoined?.length || 0
+                }}</span>
+              </p>
+            </td>
+
+            <!-- Dislikes -->
+            <td>
+              <p class="text-dark text-hover-primary d-block mb-1 fs-6">
+                {{ data.totalDislikes }}
+              </p>
+            </td>
+
+            <!-- Views -->
+            <td>
+              <p class="text-dark text-hover-primary d-block mb-1 fs-6">
+                {{ data.totalViews }}
+              </p>
+            </td>
+
+            <!-- Total Time -->
+            <td>
+              <p class="text-dark text-hover-primary d-block mb-1 fs-6">
+                {{ data.totalTime }}
+              </p>
+            </td>
+
+            <!-- UpdatedAt -->
+            <td>
+              <p
+                class="text-dark text-hover-primary d-block mb-1 fs-6 text-end font-bold"
+              >
+                {{ data.updatedAt | date : "hh:mm:ss dd/MM/yyyy" }}
+              </p>
+            </td>
+          </tr>
+        </tbody>
+        <!-- end::Table body -->
+      </table>
+      <!-- end::Table -->
+
+      <!-- test -->
+    </div>
+    <!-- end::Table container -->
+
+    <!-- begin::Body -->
+  </div>
+
+  <hr />
+  <!-- Lessons -->
+  <h4 class="my-0 mt-12 fw-bolder fs-4 border-bottom" style="margin-left: 30px">
+    Lessons
+  </h4>
+  <!--begin::Menu-->
+  <div
+    class="menu menu-rounded menu-column menu-title-gray-700 menu-icon-gray-400 menu-arrow-gray-400 menu-bullet-gray-400 menu-arrow-gray-400 menu-state-bg fw-semibold py-10"
+    data-kt-menu="true"
+  >
+    <!--begin::Menu item-->
+    <div
+      class="menu-item menu-sub-indention menu-accordion"
+      data-kt-menu-trigger="click"
+      *ngFor="let chapter of chapters"
+    >
+      <!--begin::Menu link-->
+      <div class="menu-link pt-3">
+        <span class="menu-icon">
+          <i class="ki-duotone ki-chart-simple-2 fs-3"
+            ><span class="path1"></span><span class="path2"></span
+            ><span class="path3"></span><span class="path4"></span
+          ></i>
+        </span>
+        <span class="menu-title fw-bold"
+          >{{ chapter.position }}. {{ chapter.title }}</span
+        >
+        <span class="menu-arrow"></span>
+      </div>
+      <!--end::Menu link-->
+
+      <div
+        class="menu-sub menu-sub-accordion pt-3"
+        *ngFor="let lecture of chapter.lectures"
+      >
+        <div class="menu-item">
+          <div
+            class="menu-link py-3 flex"
+            style="margin-left: 30px; display: flex"
+          >
+            <div>
+              <span class="fw-bold px-12 fs-5">{{ lecture.lesson }}</span>
+            </div>
+
+            <div width="160" height="120">
+              <video width="160" height="120" controls>
+                <source src="{{ lecture.url }}" type="video/mp4" />
+                <source src="{{ lecture.url }}" type="video/ogg" />
+              </video>
+            </div>
+
+            <h3 class="fw-bold px-12 fs-5" style="flex: 1">
+              {{ lecture.title }}
+            </h3>
+            <div class="fw-bold px-12 fs-5">
+              <a
+                routerLink="/features/lectures/update/{{ lecture._id }}"
+                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
+              >
+                <span
+                  [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
+                  class="svg-icon svg-icon-3"
+                >
+                </span>
+              </a>
+
+              <!-- delete -->
+              <a
+                (click)="updateDeleteId()"
+                data-toggle="modal"
+                data-target="#deleteOneModal"
+                routerLink="/features/lectures"
+                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+              >
+                <span
+                  [inlineSVG]="
+                    './assets/media/icons/duotune/general/gen027.svg'
+                  "
+                  class="svg-icon svg-icon-3"
+                >
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--end::Menu item-->
+  </div>
+  <!--end::Menu-->
+
+  <!-- Delete one Modal -->
+  <div
+    class="modal fade"
+    id="deleteOneModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="deleteOneModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteOneModalLabel">
+            <b>CONFIRM REMOVE DATA</b>
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Do you really want to delete these records? This process cannot be
+          undone.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            data-dismiss="modal"
+            (click)="onDeleteBtnClick()"
+          >
+            Accept
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -75,7 +75,6 @@ export class AsideComponent implements OnInit, OnDestroy {
    * Load settings
    */
   onLoadSettings() {
-    console.log('Loading settings...');
     this.unsubscribe.push(
       this.settingService
         .paginate({

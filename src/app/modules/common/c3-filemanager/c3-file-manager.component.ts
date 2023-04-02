@@ -268,10 +268,6 @@ export class C3FileManagerComponent
           populate: 'owner',
         })
         .subscribe((data) => {
-          console.log(
-            '🚀 ~ file: c3-filemanager.component.ts ~ line 275 ~ C4FileManagerComponent ~ .subscribe ~ data',
-            data
-          );
           this.dataSourcesTemp = data.results;
           this.dataSources = data.results;
           this.pageLength = data.totalResults;

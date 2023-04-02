@@ -280,8 +280,6 @@ export class C7WardComponent implements OnInit, AfterViewInit, OnDestroy {
     if (event.idDistrict !== '0')
       this.filterString = `&${this.filterString}&idDistrict=${event.idDistrict}`;
 
-    console.log(this.filterString);
-
     // add new condition to list
     this.onLoadDataGrid();
   }

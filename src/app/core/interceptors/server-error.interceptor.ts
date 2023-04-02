@@ -3,7 +3,7 @@ import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
-  HttpRequest
+  HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -17,26 +17,28 @@ import { StorageItem } from '../utils';
 export class ServerErrorInterceptor implements HttpInterceptor {
   private isRefreshing = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
-    null,
+    null
   );
 
-  constructor(private router: Router, private tokenService: TokenService, private auth: AuthService) { }
+  constructor(
+    private router: Router,
+    private tokenService: TokenService,
+    private auth: AuthService
+  ) {}
   intercept(
     request: HttpRequest<unknown>,
-    next: HttpHandler,
+    next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     let authReq = request;
     // return next.handle(authReq);
     return next.handle(authReq).pipe(
       catchError((error) => {
-        console.log('server-error.interceptor.ts', error);
         // 403
-        if (error instanceof HttpErrorResponse && error.status === 403
-        ) {
+        if (error instanceof HttpErrorResponse && error.status === 403) {
           // Logout
           this.auth.logout();
         }
-        
+
         if (
           error instanceof HttpErrorResponse &&
           !authReq.url.includes('auth/sign-in') &&
@@ -45,14 +47,13 @@ export class ServerErrorInterceptor implements HttpInterceptor {
           // Refesh token
           return this.handle401Error(authReq, next);
         } else if (error.status === 500) {
-
           // Lỗi 500 => logout
           // this.logout(error);
         }
 
         // Throw error
         return throwError(error);
-      }),
+      })
     );
   }
 
@@ -76,37 +77,37 @@ export class ServerErrorInterceptor implements HttpInterceptor {
             // Save access token
             localStorage.setItem(
               StorageItem.accessToken,
-              data['access']['token'],
+              data['access']['token']
             );
 
             // Save refresh token
             localStorage.setItem(
               StorageItem.refreshToken,
-              data['refresh']['token'],
+              data['refresh']['token']
             );
 
             this.refreshTokenSubject.next(data['access']['token']);
 
             return next.handle(
-              this.addTokenHeader(request, data['access']['token']),
+              this.addTokenHeader(request, data['access']['token'])
             );
           }),
           catchError((err) => {
             return this.logout(err);
-          }),
+          })
         );
       }
       return this.refreshTokenSubject.pipe(
         filter((token) => token !== null),
         take(1),
-        switchMap((token) => next.handle(this.addTokenHeader(request, token))),
+        switchMap((token) => next.handle(this.addTokenHeader(request, token)))
       );
     }
 
     return this.refreshTokenSubject.pipe(
       filter((token) => token !== null),
       take(1),
-      switchMap((token) => next.handle(this.addTokenHeader(request, token))),
+      switchMap((token) => next.handle(this.addTokenHeader(request, token)))
     );
   }
 

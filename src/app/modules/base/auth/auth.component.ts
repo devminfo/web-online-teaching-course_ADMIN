@@ -22,7 +22,6 @@ export class AuthComponent implements OnInit, OnDestroy {
    * Load settings
    */
   onLoadSettings() {
-    console.log('Loading settings...');
     this.subscription.push(
       this.settingService
         .paginate({
