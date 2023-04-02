@@ -99,7 +99,6 @@ export class C7WardAddComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.form.invalid) {
       // show loading
       this.isLoading$.next(true);
-      console.log(this.input);
 
       this.subscription.push(
         this.api.add(this.input).subscribe(() => {

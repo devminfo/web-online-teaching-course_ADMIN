@@ -84,10 +84,7 @@ export class FreeAPIService {
    */
   deleteManyByIds(ids: any) {
     return this.http
-      .delete<any>(
-        `${this.apiURL}/free-apis/${ids}/ids`,
-        this.httpOptions
-      )
+      .delete<any>(`${this.apiURL}/free-apis/${ids}/ids`, this.httpOptions)
       .pipe(retry(1), catchError(this.handleError));
   }
 
@@ -143,15 +140,6 @@ export class FreeAPIService {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-
-    // log error when call api
-    console.log(
-      'ERROR: API: ',
-      error.url,
-      ' Status:',
-      error?.status,
-      error?.error?.errors[0]
-    );
 
     return throwError(error);
   }

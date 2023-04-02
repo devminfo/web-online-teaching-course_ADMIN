@@ -105,7 +105,11 @@ export class BannerService {
    */
   paginate(page: number, limit: number, filter: any): Observable<any> {
     let url =
-      this.apiURL + '/banners/paginate?page=' + page + '&limit=' + limit;
+      this.apiURL +
+      '/banners/paginate?sort=position&page=' +
+      page +
+      '&limit=' +
+      limit;
 
     // add condition filter
     if (filter != '') {
@@ -141,13 +145,6 @@ export class BannerService {
     }
 
     // log error when call api
-    console.log(
-      'ERROR: API: ',
-      error.url,
-      ' Status:',
-      error?.status,
-      error?.error?.errors[0]
-    );
 
     return throwError(error);
   }

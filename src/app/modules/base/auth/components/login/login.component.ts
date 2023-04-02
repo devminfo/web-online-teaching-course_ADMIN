@@ -24,13 +24,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   returnUrl: string;
   isLoading$: Observable<boolean>;
 
-
   /**
    * constructor
-   * @param fb 
-   * @param authService 
-   * @param route 
-   * @param router 
+   * @param fb
+   * @param authService
+   * @param route
+   * @param router
    */
   constructor(
     private fb: FormBuilder,
@@ -93,45 +92,48 @@ export class LoginComponent implements OnInit, OnDestroy {
   onSubmitBtnClick() {
     this.hasError = false;
 
-    this.unsubscribe.push(this.authService
-      .signin(this.f.email.value, this.f.password.value)
-      .pipe(first())
-      .subscribe((user: any | undefined) => {
-        if (user) {
-          // nếu là user quản lý mới được phép đăng nhập vào admin
-          if (user.user.role === 'manager') {
-            // save data login to local store
-            this.authService.setAuthFromLocalStorage(user);
+    this.unsubscribe.push(
+      this.authService
+        .signin(this.f.email.value, this.f.password.value)
+        .pipe(first())
+        .subscribe(
+          (user: any | undefined) => {
+            if (user) {
+              // nếu là user quản lý mới được phép đăng nhập vào admin
+              if (user.user.role === 'manager') {
+                // save data login to local store
+                this.authService.setAuthFromLocalStorage(user);
 
-            // redirect to last page login or dashboard
-            this.router.navigate([this.returnUrl]);
-          }else{
-            alert('Bạn không có quyền truy cập!');
+                // redirect to last page login or dashboard
+                this.router.navigate([this.returnUrl]);
+              } else {
+                alert('Bạn không có quyền truy cập!');
+              }
+            } else {
+              this.hasError = true;
+            }
+
+            // hide spiner
+            this.authService.isLoadingSubject.next(false);
+          },
+          (error) => {
+            // handle error
+            if (error.status == 404) {
+              alert('Tài khoản hoặc mật khẩu bị sai vui lòng kiểm tra lại!');
+            }
+
+            // hide spiner
+            this.authService.isLoadingSubject.next(false);
           }
-        } else {
-          this.hasError = true;
-        }
-
-        // hide spiner
-        this.authService.isLoadingSubject.next(false);
-      }, (error) => {
-        // handle error
-        if (error.status == 404) {
-          alert('Tài khoản hoặc mật khẩu bị sai vui lòng kiểm tra lại!');
-        }
-
-        // hide spiner
-        this.authService.isLoadingSubject.next(false);
-      }));
+        )
+    );
   }
 
   /**
    * on Google Btn Click
    */
   onGoogleBtnClick() {
-    this.authService.getUserByToken().subscribe(data1 => {
-      console.log('phuong me', data1);
-    });
+    this.authService.getUserByToken().subscribe((data1) => {});
   }
 
   /**

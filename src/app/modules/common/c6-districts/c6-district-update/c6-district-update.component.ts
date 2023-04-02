@@ -126,7 +126,6 @@ export class C6DistrictUpdateComponent
     if (!this.form.invalid) {
       // show loading
       this.isLoading$.next(true);
-      console.log(this.input);
 
       this.subscription.push(
         this.api.update(this.id, this.input).subscribe(() => {

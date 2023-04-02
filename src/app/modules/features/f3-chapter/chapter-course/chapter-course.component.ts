@@ -2,13 +2,17 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { ChapterService } from 'src/app/core/services/features/f3-chapter.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { CourseService } from 'src/app/core/services/features/f2-course.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-chapter',
-  templateUrl: './chapter.component.html',
-  styleUrls: ['./chapter.component.scss'],
+  selector: 'app-chapter-course',
+  templateUrl: './chapter-course.component.html',
+  styleUrls: ['./chapter-course.component.scss'],
 })
-export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ChapterCourseComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   // subscription
   subscription: Subscription[] = [];
 
@@ -19,6 +23,16 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
   // condition fillter
   conditonFilter: string = '';
   conditions: any[] = [];
+
+  // data source for grid
+  dataSources: any[] = [];
+  course: any;
+
+  // delete id
+  deleteId: String;
+
+  // delete id
+  idCourse: any;
 
   /**
    * ****************** Begin for pagination ******************
@@ -72,7 +86,7 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // reset page index and load grid
     this.pageIndex = 1;
-    this.onLoadDataGrid();
+    this.onLoadDataGrid(this.idCourse);
   }
 
   /**
@@ -84,7 +98,7 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isSelectAll = false;
 
       this.pageIndex = 1;
-      this.onLoadDataGrid();
+      this.onLoadDataGrid(this.idCourse);
     }
   }
 
@@ -97,7 +111,7 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isSelectAll = false;
 
       this.pageIndex -= 1;
-      this.onLoadDataGrid();
+      this.onLoadDataGrid(this.idCourse);
     }
   }
 
@@ -111,7 +125,7 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isSelectAll = false;
 
       this.pageIndex += 1;
-      this.onLoadDataGrid();
+      this.onLoadDataGrid(this.idCourse);
     }
   }
 
@@ -126,7 +140,7 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isSelectAll = false;
 
       this.pageIndex = lastPage;
-      this.onLoadDataGrid();
+      this.onLoadDataGrid(this.idCourse);
     }
   }
 
@@ -161,7 +175,7 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
     this.createConditionFilter();
 
     // load grid with new condition
-    this.onLoadDataGrid();
+    this.onLoadDataGrid(this.idCourse);
   }
 
   /**
@@ -185,12 +199,6 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
    * ****************** End for pagination ******************
    */
 
-  // data source for grid
-  dataSources: any[] = [];
-
-  // delete id
-  deleteId: String;
-
   /**
    * ************************************ constructor ************************************
    * ************************************ constructor ************************************
@@ -200,6 +208,8 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   constructor(
     private commonService: CommonService,
+    private courseService: CourseService,
+    private route: ActivatedRoute,
     private api: ChapterService
   ) {
     // xử lý bất đồng bộ
@@ -212,7 +222,13 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
    * ngOnInit
    */
   ngOnInit() {
-    this.onLoadDataGrid();
+    // get id from url
+    this.idCourse = this.route.snapshot.paramMap.get('id');
+    // load data by param
+    if (this.idCourse) {
+      this.onLoadDataGrid(this.idCourse);
+      this.onLoadCourse(this.idCourse);
+    }
   }
 
   /**
@@ -240,11 +256,11 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * on Load Data Grid
    */
-  onLoadDataGrid() {
+  onLoadDataGrid(idCourse: string) {
     const filter = {
       page: this.pageIndex,
       limit: this.pageSize,
-      filter: this.conditonFilter,
+      filter: this.conditonFilter + `&idCourse=${idCourse}&sort=position`,
       fields: '',
       populate: 'idCourse',
     };
@@ -253,6 +269,18 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log({ data });
         this.dataSources = data.results;
         this.pageLength = data.totalResults;
+      })
+    );
+  }
+
+  /**
+   * on Load Data Grid
+   */
+  onLoadCourse(idCourse: string) {
+    this.subscription.push(
+      this.courseService.find(idCourse).subscribe((data) => {
+        this.course = data;
+        console.log({ course: this.course });
       })
     );
   }
@@ -275,7 +303,7 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
       this.api.delete(this.deleteId).subscribe(() => {
         this.commonService.showSuccess('Delete Success!');
         // load new data
-        this.onLoadDataGrid();
+        this.onLoadDataGrid(this.idCourse);
       })
     );
   }
@@ -294,7 +322,7 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
       this.api.deleteManyByIds(listIdSelect).subscribe(() => {
         this.commonService.showSuccess('Delete Success!');
         // load new data
-        this.onLoadDataGrid();
+        this.onLoadDataGrid(this.idCourse);
       })
     );
   }

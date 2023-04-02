@@ -344,11 +344,9 @@ export class C6DistrictComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param keyword
    */
   onSearchChange(keyword: String) {
-    console.log(this.provinces);
     let filterStr = '';
     if (keyword) filterStr = `idProvince=${keyword}`;
     this.conditonFilter = `&sort=createdAt&${filterStr}`;
-    console.log(this.conditonFilter);
 
     this.onLoadDataGrid();
   }

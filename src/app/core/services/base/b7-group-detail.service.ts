@@ -232,13 +232,6 @@ export class GroupDetailService {
     }
 
     // log error when call api
-    console.log(
-      'ERROR: API: ',
-      error.url,
-      ' Status:',
-      error?.status,
-      error?.error?.errors[0]
-    );
 
     return throwError(error);
   }
@@ -249,7 +242,6 @@ export class GroupDetailService {
    */
   handleDataMenus(data: any) {
     const { results } = data;
-    console.log({ results });
     const groupDetailsMap = new Map<string, any>();
     // Update response
     const groups = results.filter((result: any) => result.isGroup);
@@ -272,7 +264,6 @@ export class GroupDetailService {
 
         if (childExist) {
           newChilds.unshift(childExist);
-          console.log(groupDetailsMap.delete(childExist._id));
         }
       });
 

@@ -7,12 +7,14 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
 import { ChapterAddComponent } from './chapter-add/chapter-add.component';
 import { ChapterUpdateComponent } from './chapter-update/chapter-update.component';
 import { ChapterFilterComponent } from './chapter-filter/chapter-filter.component';
+import { ChapterCourseComponent } from './chapter-course/chapter-course.component';
 @NgModule({
   declarations: [
     ChapterComponent,
     ChapterAddComponent,
     ChapterUpdateComponent,
     ChapterFilterComponent,
+    ChapterCourseComponent,
   ],
   imports: [
     CommonModule,
@@ -20,7 +22,10 @@ import { ChapterFilterComponent } from './chapter-filter/chapter-filter.componen
       {
         path: '',
         component: ChapterComponent,
-        children: [],
+      },
+      {
+        path: 'course/:id',
+        component: ChapterCourseComponent,
       },
       {
         path: 'add',

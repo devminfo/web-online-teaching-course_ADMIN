@@ -131,7 +131,6 @@ export class B2TabUsersGroupComponent
    * on leave group btn click
    */
   onLeaveGroupBtnClick() {
-    console.log(this.leaveGroupId);
     this.subscription.push(
       this.groupService
         .updateUsers(this.leaveGroupId, {

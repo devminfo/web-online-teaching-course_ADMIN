@@ -109,10 +109,12 @@ export class LearningPathService {
     limit: number;
     filter: string;
     fields: string;
+    populate?: string;
   }): Observable<any> {
     let url = `${this.apiURL}/learning-paths/paginate?page=${params.page}&limit=${params.limit}&${params.filter}`;
 
     if (params.fields) url = url.concat(`&fields=${params.fields}`);
+    if (params.populate) url = url.concat(`&populate=${params.populate}`);
 
     return this.http.get<any>(url).pipe(retry(1), catchError(this.handleError));
   }
@@ -138,13 +140,6 @@ export class LearningPathService {
     }
 
     // log error when call api
-    console.log(
-      'ERROR: API: ',
-      error.url,
-      ' Status:',
-      error?.status,
-      error?.error?.errors[0]
-    );
 
     return throwError(error);
   }

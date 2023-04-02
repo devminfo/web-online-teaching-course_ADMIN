@@ -101,7 +101,6 @@ export class C5ProvinceAddComponent
     if (!this.form.invalid) {
       // show loading
       this.isLoading$.next(true);
-      console.log(this.input);
 
       this.subscription.push(
         this.api.add(this.input).subscribe(() => {

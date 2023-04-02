@@ -156,8 +156,7 @@ export class B3FreeAPIComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * ng After View Init
    */
-  ngAfterViewInit(): void {
-  }
+  ngAfterViewInit(): void {}
 
   /**
    * ngOnDestroy
@@ -186,11 +185,8 @@ export class B3FreeAPIComponent implements OnInit, AfterViewInit, OnDestroy {
         .paginate(this.pageIndex, this.pageSize, filter)
         .subscribe((data) => {
           this.dataSources = data.results;
-          this.dataSources.forEach(element => {
-            console.log(element.url);
-            
-          });
-          
+          this.dataSources.forEach((element) => {});
+
           this.pageLength = data.totalResults;
         })
     );

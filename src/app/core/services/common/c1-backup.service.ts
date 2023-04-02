@@ -42,10 +42,6 @@ export class BackupService {
    */
   backup(): Observable<any> {
     const url = this.apiURL + '/backup-datas';
-    console.log(
-      '🚀 ~ file: c1-backup.service.ts ~ line 45 ~ BackupService ~ backup ~ url',
-      url
-    );
 
     return this.http
       .post<any>(url, {}, this.httpOptions)
@@ -59,10 +55,6 @@ export class BackupService {
    */
   restore(id: string): Observable<any> {
     const url = this.apiURL + '/backup-datas/' + id + '/restore';
-    console.log(
-      '🚀 ~ file: c1-backup.service.ts ~ line 57 ~ BackupService ~ restore ~ url',
-      url
-    );
 
     return this.http
       .post<any>(url, {}, this.httpOptions)
@@ -155,15 +147,6 @@ export class BackupService {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-
-    // log error when call api
-    console.log(
-      'ERROR: API: ',
-      error.url,
-      ' Status:',
-      error?.status,
-      error?.error?.errors[0]
-    );
 
     return throwError(error);
   }

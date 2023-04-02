@@ -4,6 +4,8 @@ import {
   OnDestroy,
   AfterViewInit,
   ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -22,11 +24,17 @@ export class BannerAddComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
 
+  // binding uploads image or file
+  @ViewChild('inputImage', { static: false })
+  inputImage: ElementRef;
+
   // binding data
   input: any = {
-    idSpecialize: '',
-    name: '',
+    text: '',
+    image: '',
     position: '',
+    isShow: true,
+    link: '',
   };
 
   banners: any[];
@@ -46,7 +54,6 @@ export class BannerAddComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   constructor(
     private api: BannerService,
-    private bannerService: BannerService,
     private common: CommonService,
     private router: Router,
     private cdr: ChangeDetectorRef,
@@ -55,15 +62,13 @@ export class BannerAddComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
     );
-
-    // Get banners
-    this.getAllSpecializes();
-
     // add validate for controls
     this.form = this.formBuilder.group({
-      idSpecialize: [null, [Validators.required]],
-      name: [null, [Validators.required]],
+      text: [null, [Validators.required]],
+      image: [null, [Validators.required]],
       position: [null, [Validators.required]],
+      isShow: true,
+      link: [null, [Validators.required]],
     });
   }
 
@@ -87,14 +92,24 @@ export class BannerAddComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Get all banners
+   * onImageUploadClick
    */
-  getAllSpecializes() {
+  onImageUploadClick() {
     this.subscription.push(
-      this.bannerService.get().subscribe((data) => {
-        this.banners = data;
+      this.common.uploadImageCore(this.inputImage).subscribe((data) => {
+        if (data) {
+          this.input.image = data['files'][0];
+        }
       })
     );
+  }
+
+  /**
+   * onImageDeleteClick
+   */
+  onImageDeleteClick() {
+    const isDelete = confirm('Bạn có muốn xóa hình? ');
+    if (isDelete) this.input.image = '';
   }
 
   /**

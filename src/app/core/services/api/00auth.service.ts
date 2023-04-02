@@ -2,7 +2,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { BehaviorSubject, Observable, of, Subscription, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  of,
+  Subscription,
+  throwError,
+} from 'rxjs';
 import { catchError, finalize, map, retry } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { TinhTpRequest } from '../../model/request/50tinh-tp.request.model';
@@ -41,8 +47,7 @@ export class AuthService {
     this.currentUserSubject.next(user);
   }
 
-  constructor(private http: HttpClient,
-    private router: Router) {
+  constructor(private http: HttpClient, private router: Router) {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
     this.currentUserSubject = new BehaviorSubject<UserType>(undefined);
     this.currentUser$ = this.currentUserSubject.asObservable();
@@ -58,24 +63,23 @@ export class AuthService {
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json; charset=utf-8',
-      'Accept': 'application/json',
+      Accept: 'application/json',
     }),
   };
 
-
   /**
-  * HttpClient API post() method => Create TinhTpRequest
-  * @param TinhTpRequest
-  * @returns
-  */
+   * HttpClient API post() method => Create TinhTpRequest
+   * @param TinhTpRequest
+   * @returns
+   */
   signin(email: String, password: String): Observable<any> {
     this.isLoadingSubject.next(true);
 
     return this.http
       .post<any>(
         this.apiURL + '/auth/signin',
-        JSON.stringify({ 'email': email, 'password': password }),
-        this.httpOptions,
+        JSON.stringify({ email: email, password: password }),
+        this.httpOptions
       )
       .pipe(retry(1), catchError(this.handleError));
   }
@@ -100,30 +104,28 @@ export class AuthService {
       return of(undefined);
     }
 
-    return this.http
-      .get<any>(this.apiURL + '/users/me')
-      .pipe(map((user) => {
-        console.log('toi ne', user);
-
+    return this.http.get<any>(this.apiURL + '/users/me').pipe(
+      map((user) => {
         if (user) {
           this.currentUserSubject.next(user);
         } else {
           this.logout();
         }
         return user;
-      }), catchError(this.handleError));
+      }),
+      catchError(this.handleError)
+    );
   }
- 
+
   /**
    * setAuthFromLocalStorage
-   * @param auth 
-   * @returns 
+   * @param auth
+   * @returns
    */
   setAuthFromLocalStorage(auth: AuthModel): boolean {
     // store auth authToken/refreshToken/epiresIn in local storage to keep user logged in between page refreshes
     if (auth && auth.accessToken) {
       localStorage.setItem(this.authLocalStorageToken, JSON.stringify(auth));
-      console.log('phuong đã set');
 
       return true;
     }
@@ -132,7 +134,7 @@ export class AuthService {
 
   /**
    * getAuthFromLocalStorage
-   * @returns 
+   * @returns
    */
   getAuthFromLocalStorage(): AuthModel | undefined {
     try {
@@ -164,9 +166,6 @@ export class AuthService {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
-
-    // log error when call api
-    console.log('ERROR: API: ', error.url, ' Status:', error?.status, error?.error?.errors[0]);
 
     return throwError(error);
   }

@@ -262,7 +262,6 @@ export class B8TabAddUserToGroupComponent
    * Add user to group
    */
   onAddOneUserToGroupClick() {
-    console.log(this.addUserToGroupId);
     this.subscription.push(
       this.api
         .updateUsers(this.groupId, {
