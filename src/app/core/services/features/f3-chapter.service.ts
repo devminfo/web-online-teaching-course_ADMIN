@@ -93,9 +93,9 @@ export class ChapterService {
    * @param id
    * @returns
    */
-  find(id: any): Observable<any> {
+  find(id: any, query = ''): Observable<any> {
     return this.http
-      .get<any>(this.apiURL + '/chapters/' + id)
+      .get<any>(this.apiURL + '/chapters/' + id + `?${query}`)
       .pipe(retry(1), catchError(this.handleError));
   }
 

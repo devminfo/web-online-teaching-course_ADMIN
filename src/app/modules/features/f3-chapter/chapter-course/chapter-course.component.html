@@ -29,7 +29,7 @@
       <!-- new data -->
       <div class="card-toolbar">
         <a
-          routerLink="/features/chapters/add"
+          routerLink="/features/chapters/course/{{ course._id }}/add"
           class="btn btn-sm btn-light-primary mr-1"
         >
           <span
@@ -37,6 +37,20 @@
             class="svg-icon svg-icon-3"
           ></span>
           Add New
+        </a>
+      </div>
+
+      <!-- new data -->
+      <div class="card-toolbar">
+        <a
+          routerLink="/features/courses/detail/{{ course._id }}/"
+          class="btn btn-sm btn-light-primary mr-1"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'"
+            class="svg-icon svg-icon-3"
+          ></span>
+          Go back
         </a>
       </div>
     </div>
@@ -137,7 +151,7 @@
               </p>
             </td>
 
-            <!-- Acction -->
+            <!-- Actions -->
             <td class="text-end">
               <!-- update -->
               <a

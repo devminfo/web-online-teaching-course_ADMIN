@@ -4,12 +4,16 @@ import {
   OnDestroy,
   AfterViewInit,
   ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LectureService } from 'src/app/core/services/features/f4-lecture.service';
+import { ChapterService } from 'src/app/core/services/features/f3-chapter.service';
+
 @Component({
   selector: 'app-lecture-update',
   templateUrl: './lecture-update.component.html',
@@ -23,19 +27,26 @@ export class LectureUpdateComponent
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
 
+  // binding uploads image or file
+  @ViewChild('inputVideo', { static: false })
+  inputVideo: ElementRef;
+
   // binding data
   input: any = {
-    idSpecialize: '',
-    name: '',
-    position: '',
+    type: 'VIDEO',
+    title: '',
+    url: '',
+    position: 0,
+    lesson: 0,
+    totalTimes: 0,
   };
+  urlOld: string;
 
-  lectures: any[];
+  id: any;
+  chapter: any = {};
 
   //form
   form: FormGroup;
-
-  id: any;
 
   amGet: boolean = false;
   amPost: boolean = false;
@@ -49,24 +60,19 @@ export class LectureUpdateComponent
    */
   constructor(
     private api: LectureService,
-    private lectureService: LectureService,
     private common: CommonService,
     private router: Router,
-    private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute
   ) {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
     );
-
-    // Get lectures
-    this.getAllSpecializes();
-
     // add validate for controls
     this.form = this.formBuilder.group({
-      idSpecialize: [null, [Validators.required]],
-      name: [null, [Validators.required]],
+      title: [null, [Validators.required]],
+      url: [null, [Validators.required]],
       position: [null, [Validators.required]],
     });
   }
@@ -77,10 +83,9 @@ export class LectureUpdateComponent
   ngOnInit() {
     // get id from url
     this.id = this.route.snapshot.paramMap.get('id');
-
     // load data by param
     if (this.id) {
-      this.onLoadDataById(this.id);
+      this.onLoadLectureById(this.id);
     }
   }
 
@@ -99,21 +104,26 @@ export class LectureUpdateComponent
   }
 
   /**
-   * onLoadDataById
+   * onLoadLectureById
    * @param id
    */
-  onLoadDataById(id: String) {
+  onLoadLectureById(id: String) {
     // show loading
     this.isLoading$.next(true);
 
+    const populate = `populate=idChapter.idCourse`;
     this.subscription.push(
-      this.api.find(id).subscribe((data) => {
-        // load data to view input
+      this.api.find(id, populate).subscribe((data) => {
         this.input = {
-          name: data.name,
+          type: data.type,
+          title: data.title,
+          url: data.url,
           position: data.position,
-          idSpecialize: data.idSpecialize,
+          lesson: data.lesson,
+          totalTimes: data.totalTimes,
         };
+        this.urlOld = data.url;
+        this.chapter = data.idChapter;
 
         // hide loading
         this.isLoading$.next(false);
@@ -123,14 +133,24 @@ export class LectureUpdateComponent
   }
 
   /**
-   * Get all lectures
+   * onVideoUploadClick
    */
-  getAllSpecializes() {
+  onVideoUploadClick() {
     this.subscription.push(
-      this.lectureService.get().subscribe((data) => {
-        this.lectures = data;
+      this.common.uploadVideoCore(this.inputVideo).subscribe((data) => {
+        if (data) {
+          this.input.url = data['files'][0];
+        }
       })
     );
+  }
+
+  /**
+   * onVideoDeleteClick
+   */
+  onVideoDeleteClick() {
+    const isDelete = confirm('Bạn có muốn xóa video? ');
+    if (isDelete) this.input.url = '';
   }
 
   /**
@@ -138,13 +158,35 @@ export class LectureUpdateComponent
    */
   onUpdateBtnClick() {
     // touch all control to show error
+    if (this.input.price > 0) this.input.isPrivate = true;
     this.form.markAllAsTouched();
 
     // check form pass all validate
-    if (!this.form.invalid) {
-      // show loading
-      this.isLoading$.next(true);
+    if (this.form.invalid) return;
 
+    // show loading
+    this.isLoading$.next(true);
+
+    // confirm use course
+    if (this.input.url !== this.urlOld && this.input.url) {
+      this.common.comfirmImages([this.input.url]).subscribe((urls) => {
+        this.input.url = urls[0][0];
+        this.subscription.push(
+          this.api.update(this.id, this.input).subscribe(() => {
+            // hide loading
+            this.isLoading$.next(false);
+            this.cdr.detectChanges();
+
+            this.common.showSuccess('Update Success!');
+
+            // redirect to list
+            this.router.navigate([
+              `/features/lectures/chapter/${this.chapter._id}`,
+            ]);
+          })
+        );
+      });
+    } else {
       this.subscription.push(
         this.api.update(this.id, this.input).subscribe(() => {
           // hide loading
@@ -154,7 +196,9 @@ export class LectureUpdateComponent
           this.common.showSuccess('Update Success!');
 
           // redirect to list
-          this.router.navigate(['/features/lectures']);
+          this.router.navigate([
+            `/features/lectures/chapter/${this.chapter._id}`,
+          ]);
         })
       );
     }

@@ -24,7 +24,7 @@ export class CourseDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // binding data
   data: any = {};
-  chapters: any = {};
+  chapters: any = [];
 
   id: any;
 

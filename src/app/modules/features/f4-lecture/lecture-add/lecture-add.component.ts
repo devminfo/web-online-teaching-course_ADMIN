@@ -4,12 +4,15 @@ import {
   OnDestroy,
   AfterViewInit,
   ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LectureService } from 'src/app/core/services/features/f4-lecture.service';
+import { ChapterService } from 'src/app/core/services/features/f3-chapter.service';
 
 @Component({
   selector: 'app-lecture-add',
@@ -22,14 +25,22 @@ export class LectureAddComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
 
+  // binding uploads image or file
+  @ViewChild('inputVideo', { static: false })
+  inputVideo: ElementRef;
+
   // binding data
   input: any = {
-    idSpecialize: '',
-    name: '',
-    position: '',
+    type: 'VIDEO',
+    title: '',
+    url: '',
+    position: 0,
+    lesson: 0,
+    totalTimes: 0,
   };
 
-  lectures: any[];
+  idChapter: any;
+  chapter: any = {};
 
   //form
   form: FormGroup;
@@ -46,23 +57,20 @@ export class LectureAddComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   constructor(
     private api: LectureService,
-    private lectureService: LectureService,
+    private chapterService: ChapterService,
     private common: CommonService,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute
   ) {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
     );
-
-    // Get lectures
-    this.getAllSpecializes();
-
     // add validate for controls
     this.form = this.formBuilder.group({
-      idSpecialize: [null, [Validators.required]],
-      name: [null, [Validators.required]],
+      title: [null, [Validators.required]],
+      url: [null, [Validators.required]],
       position: [null, [Validators.required]],
     });
   }
@@ -70,7 +78,14 @@ export class LectureAddComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * ngOnInit
    */
-  ngOnInit() {}
+  ngOnInit() {
+    // get id from url
+    this.idChapter = this.route.snapshot.paramMap.get('id');
+    // load data by param
+    if (this.idChapter) {
+      this.onLoadChapterById(this.idChapter);
+    }
+  }
 
   /**
    * ng After View Init
@@ -87,14 +102,51 @@ export class LectureAddComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Get all lectures
+   * onLoadChapterById
+   * @param id
    */
-  getAllSpecializes() {
+  onLoadChapterById(id: String) {
+    // show loading
+    this.isLoading$.next(true);
+
+    const populate = `populate=idCourse,lectures`;
     this.subscription.push(
-      this.lectureService.get().subscribe((data) => {
-        this.lectures = data;
+      this.chapterService.find(id, populate).subscribe((data) => {
+        this.chapter = {
+          _id: data._id,
+          idCourse: data.idCourse,
+          lectures: data.lectures,
+          title: data.title,
+          position: data.position,
+          updatedAt: data.updatedAt,
+        };
+
+        // hide loading
+        this.isLoading$.next(false);
+        this.cdr.detectChanges();
       })
     );
+  }
+
+  /**
+   * onVideoUploadClick
+   */
+  onVideoUploadClick() {
+    this.subscription.push(
+      this.common.uploadVideoCore(this.inputVideo).subscribe((data) => {
+        if (data) {
+          this.input.url = data['files'][0];
+        }
+      })
+    );
+  }
+
+  /**
+   * onVideoDeleteClick
+   */
+  onVideoDeleteClick() {
+    const isDelete = confirm('Bạn có muốn xóa video? ');
+    if (isDelete) this.input.url = '';
   }
 
   /**
@@ -105,12 +157,39 @@ export class LectureAddComponent implements OnInit, AfterViewInit, OnDestroy {
     this.form.markAllAsTouched();
 
     // check form pass all validate
-    if (!this.form.invalid) {
-      // show loading
-      this.isLoading$.next(true);
+    if (this.form.invalid) return;
 
+    this.input.lesson = this.input.position;
+    const item = {
+      ...this.input,
+      idChapter: this.chapter._id,
+    };
+
+    // show loading
+    this.isLoading$.next(true);
+
+    if (this.input.url) {
+      this.common.comfirmImages([this.input.url]).subscribe((urls) => {
+        this.input.url = urls[0][0];
+
+        this.subscription.push(
+          this.api.add(item).subscribe(() => {
+            // hide loading
+            this.isLoading$.next(false);
+            this.cdr.detectChanges();
+
+            this.common.showSuccess('Insert new success!');
+
+            // redirect to list
+            this.router.navigate([
+              `/features/lectures/chapter/${this.chapter._id}`,
+            ]);
+          })
+        );
+      });
+    } else {
       this.subscription.push(
-        this.api.add(this.input).subscribe(() => {
+        this.api.add(item).subscribe(() => {
           // hide loading
           this.isLoading$.next(false);
           this.cdr.detectChanges();
@@ -118,7 +197,9 @@ export class LectureAddComponent implements OnInit, AfterViewInit, OnDestroy {
           this.common.showSuccess('Insert new success!');
 
           // redirect to list
-          this.router.navigate(['/features/lectures']);
+          this.router.navigate([
+            `/features/lectures/chapter/${this.chapter._id}`,
+          ]);
         })
       );
     }

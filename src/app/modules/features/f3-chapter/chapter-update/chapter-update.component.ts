@@ -25,17 +25,29 @@ export class ChapterUpdateComponent
 
   // binding data
   input: any = {
-    idSpecialize: '',
-    name: '',
-    position: '',
+    title: '',
+    position: 0,
   };
 
-  chapters: any[];
+  id: any;
+  chapter: {
+    _id: string;
+    idCourse: any;
+    lectures: any[];
+    title: string;
+    position: number;
+    updatedAt: string;
+  } = {
+    _id: '',
+    idCourse: {},
+    lectures: [],
+    title: '',
+    position: 0,
+    updatedAt: '',
+  };
 
   //form
   form: FormGroup;
-
-  id: any;
 
   amGet: boolean = false;
   amPost: boolean = false;
@@ -49,24 +61,18 @@ export class ChapterUpdateComponent
    */
   constructor(
     private api: ChapterService,
-    private chapterService: ChapterService,
     private common: CommonService,
     private router: Router,
-    private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute
   ) {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
     );
-
-    // Get chapters
-    this.getAllSpecializes();
-
     // add validate for controls
     this.form = this.formBuilder.group({
-      idSpecialize: [null, [Validators.required]],
-      name: [null, [Validators.required]],
+      title: [null, [Validators.required]],
       position: [null, [Validators.required]],
     });
   }
@@ -77,7 +83,6 @@ export class ChapterUpdateComponent
   ngOnInit() {
     // get id from url
     this.id = this.route.snapshot.paramMap.get('id');
-
     // load data by param
     if (this.id) {
       this.onLoadDataById(this.id);
@@ -106,14 +111,25 @@ export class ChapterUpdateComponent
     // show loading
     this.isLoading$.next(true);
 
+    const populate = `populate=idCourse,lectures`;
     this.subscription.push(
-      this.api.find(id).subscribe((data) => {
+      this.api.find(id, populate).subscribe((data) => {
         // load data to view input
         this.input = {
-          name: data.name,
+          title: data.title,
           position: data.position,
-          idSpecialize: data.idSpecialize,
         };
+
+        this.chapter = {
+          _id: data._id,
+          idCourse: data.idCourse,
+          lectures: data.lectures,
+          title: data.title,
+          position: data.position,
+          updatedAt: data.updatedAt,
+        };
+
+        console.log(this.chapter);
 
         // hide loading
         this.isLoading$.next(false);
@@ -122,41 +138,34 @@ export class ChapterUpdateComponent
     );
   }
 
-  /**
-   * Get all chapters
-   */
-  getAllSpecializes() {
-    this.subscription.push(
-      this.chapterService.get().subscribe((data) => {
-        this.chapters = data;
-      })
-    );
-  }
+  updateDeleteId() {}
 
   /**
-   * onUpdateBtnClick
+   * onAddNewBtnClick
    */
   onUpdateBtnClick() {
     // touch all control to show error
     this.form.markAllAsTouched();
 
     // check form pass all validate
-    if (!this.form.invalid) {
-      // show loading
-      this.isLoading$.next(true);
+    if (this.form.invalid) return;
 
-      this.subscription.push(
-        this.api.update(this.id, this.input).subscribe(() => {
-          // hide loading
-          this.isLoading$.next(false);
-          this.cdr.detectChanges();
+    // show loading
+    this.isLoading$.next(true);
 
-          this.common.showSuccess('Update Success!');
+    this.subscription.push(
+      this.api.update(this.id, this.input).subscribe(() => {
+        // hide loading
+        this.isLoading$.next(false);
+        this.cdr.detectChanges();
 
-          // redirect to list
-          this.router.navigate(['/features/chapters']);
-        })
-      );
-    }
+        this.common.showSuccess('Update Success!');
+
+        // redirect to list
+        this.router.navigate([
+          `/features/chapters/course/${this.chapter.idCourse?._id}`,
+        ]);
+      })
+    );
   }
 }

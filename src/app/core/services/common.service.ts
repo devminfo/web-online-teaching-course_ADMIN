@@ -299,6 +299,37 @@ export class CommonService {
   }
 
   /**
+   * upload image Core
+   */
+  public uploadVideoCore(inputVideos: any): Observable<any> {
+    const uploadFileFinish = new Observable((observer) => {
+      let files: any[] = [];
+      const formData = new FormData();
+      const fileUpload = inputVideos.nativeElement;
+      // Create file
+      for (let index = 0; index < fileUpload.files.length; index++) {
+        const file = fileUpload.files[index];
+        files.push({ data: file, inProgress: false, progress: 0 });
+      }
+
+      // Upload file
+      files.forEach((file) => {
+        formData.append('videos', file.data);
+      });
+
+      // Post image to server
+      this.http
+        .post<any>(this.BASEURL + '/uploads/videos', formData, {})
+        .subscribe((data) => {
+          observer.next(data);
+          // this.spinner.hide();
+        });
+    });
+
+    return uploadFileFinish;
+  }
+
+  /**
    * onSearchKeyWordReturnArray
    * @param data
    * @param texts
