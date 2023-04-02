@@ -245,9 +245,9 @@ export class GroupDetailService {
     const groupDetailsMap = new Map<string, any>();
     // Update response
     const groups = results.filter((result: any) => result.isGroup);
-    let groupDetails = results.filter(
-      (result: any) => result.isChild || (!result.isGroup && !result.isChild)
-    );
+    let groupDetails = results.filter((result: any) => {
+      return result.isChild || (!result.isGroup && !result.isChild);
+    });
 
     // add group details map
     groupDetails.forEach((groupDetail: any) => {
@@ -264,6 +264,7 @@ export class GroupDetailService {
 
         if (childExist) {
           newChilds.unshift(childExist);
+          groupDetailsMap.delete(child._id);
         }
       });
 
