@@ -4,12 +4,15 @@ import {
   OnDestroy,
   AfterViewInit,
   ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ChapterService } from 'src/app/core/services/features/f3-chapter.service';
+import { CourseService } from 'src/app/core/services/features/f2-course.service';
 
 @Component({
   selector: 'app-chapter-add',
@@ -24,11 +27,12 @@ export class ChapterAddComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // binding data
   input: any = {
-    idSpecialize: '',
-    name: '',
-    position: '',
+    title: '',
+    position: 0,
   };
 
+  idCourse: any;
+  course: any = {};
   chapters: any[];
 
   //form
@@ -46,23 +50,19 @@ export class ChapterAddComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   constructor(
     private api: ChapterService,
-    private chapterService: ChapterService,
+    private courseService: CourseService,
     private common: CommonService,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute
   ) {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
     );
-
-    // Get chapters
-    this.getAllSpecializes();
-
     // add validate for controls
     this.form = this.formBuilder.group({
-      idSpecialize: [null, [Validators.required]],
-      name: [null, [Validators.required]],
+      title: [null, [Validators.required]],
       position: [null, [Validators.required]],
     });
   }
@@ -70,7 +70,14 @@ export class ChapterAddComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * ngOnInit
    */
-  ngOnInit() {}
+  ngOnInit() {
+    // get id from url
+    this.idCourse = this.route.snapshot.paramMap.get('id');
+    // load data by param
+    if (this.idCourse) {
+      this.onLoadCourse(this.idCourse);
+    }
+  }
 
   /**
    * ng After View Init
@@ -87,12 +94,12 @@ export class ChapterAddComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Get all chapters
+   * on Load Data Grid
    */
-  getAllSpecializes() {
+  onLoadCourse(idCourse: string) {
     this.subscription.push(
-      this.chapterService.get().subscribe((data) => {
-        this.chapters = data;
+      this.courseService.find(idCourse).subscribe((data) => {
+        this.course = data;
       })
     );
   }
@@ -105,22 +112,27 @@ export class ChapterAddComponent implements OnInit, AfterViewInit, OnDestroy {
     this.form.markAllAsTouched();
 
     // check form pass all validate
-    if (!this.form.invalid) {
-      // show loading
-      this.isLoading$.next(true);
+    if (this.form.invalid) return;
 
-      this.subscription.push(
-        this.api.add(this.input).subscribe(() => {
-          // hide loading
-          this.isLoading$.next(false);
-          this.cdr.detectChanges();
+    // show loading
+    this.isLoading$.next(true);
 
-          this.common.showSuccess('Insert new success!');
+    const item = {
+      ...this.input,
+      idCourse: this.course._id,
+      lectures: [],
+    };
+    this.subscription.push(
+      this.api.add(item).subscribe(() => {
+        // hide loading
+        this.isLoading$.next(false);
+        this.cdr.detectChanges();
 
-          // redirect to list
-          this.router.navigate(['/features/chapters']);
-        })
-      );
-    }
+        this.common.showSuccess('Insert new success!');
+
+        // redirect to list
+        this.router.navigate([`/features/chapters/course/${this.course._id}`]);
+      })
+    );
   }
 }

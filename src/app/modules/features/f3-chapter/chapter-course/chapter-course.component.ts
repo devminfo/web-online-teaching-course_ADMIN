@@ -26,7 +26,7 @@ export class ChapterCourseComponent
 
   // data source for grid
   dataSources: any[] = [];
-  course: any;
+  course: any = {};
 
   // delete id
   deleteId: String;

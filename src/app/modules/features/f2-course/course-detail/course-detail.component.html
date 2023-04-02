@@ -9,15 +9,12 @@
     <div class="card-toolbar">
       <!-- new data -->
       <div class="card-toolbar">
-        <a
-          routerLink="/features/chapters/course/{{ data._id }}"
-          class="btn btn-sm btn-light-primary mr-1"
-        >
+        <a routerLink="/features/courses" class="btn btn-sm btn-light-primary">
           <span
-            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'"
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'"
             class="svg-icon svg-icon-3"
           ></span>
-          Chapters
+          Go back
         </a>
       </div>
     </div>
@@ -91,7 +88,7 @@
               </p>
             </td>
 
-            <!-- Acction -->
+            <!-- Actions -->
             <td class="text-end">
               <a
                 routerLink="/features/courses/update/{{ data.id }}"
@@ -131,7 +128,6 @@
     </div>
     <!-- end::Table container -->
   </div>
-
   <!-- Statistical -->
   <h4 class="my-0 mt-12 fw-bolder fs-4" style="margin-left: 30px">
     Statistical
@@ -220,10 +216,44 @@
 
   <hr />
   <!-- Lessons -->
-  <h4 class="my-0 mt-12 fw-bolder fs-4 border-bottom" style="margin-left: 30px">
-    Lessons
-  </h4>
+  <div
+    style="
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-right: 20px;
+    "
+    class="border-bottom"
+  >
+    <h4
+      class="my-0 mt-12 fw-bolder fs-4 border-bottom"
+      style="margin-left: 30px"
+    >
+      Chapters
+    </h4>
+
+    <a
+      routerLink="/features/chapters/course/{{ data._id }}"
+      class="btn btn-sm btn-light-primary mr-1"
+    >
+      <span
+        [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'"
+        class="svg-icon svg-icon-3"
+      ></span>
+      Views
+    </a>
+  </div>
+
   <!--begin::Menu-->
+  <div *ngIf="chapters.length < 1" class="text-center my-4">
+    <p class="fs-5">Nothing to show</p>
+    <a
+      routerLink="/features/chapters/course/{{ data._id }}/add"
+      class="btn btn-sm btn-light-success mr-1"
+    >
+      Add New
+    </a>
+  </div>
   <div
     class="menu menu-rounded menu-column menu-title-gray-700 menu-icon-gray-400 menu-arrow-gray-400 menu-bullet-gray-400 menu-arrow-gray-400 menu-state-bg fw-semibold py-10"
     data-kt-menu="true"
@@ -233,6 +263,7 @@
       class="menu-item menu-sub-indention menu-accordion"
       data-kt-menu-trigger="click"
       *ngFor="let chapter of chapters"
+      style="padding-right: 30px; padding-left: 30px"
     >
       <!--begin::Menu link-->
       <div class="menu-link pt-3">
@@ -279,23 +310,6 @@
               >
                 <span
                   [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
-                  class="svg-icon svg-icon-3"
-                >
-                </span>
-              </a>
-
-              <!-- delete -->
-              <a
-                (click)="updateDeleteId()"
-                data-toggle="modal"
-                data-target="#deleteOneModal"
-                routerLink="/features/lectures"
-                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
-              >
-                <span
-                  [inlineSVG]="
-                    './assets/media/icons/duotune/general/gen027.svg'
-                  "
                   class="svg-icon svg-icon-3"
                 >
                 </span>

@@ -2,13 +2,23 @@
   <!-- begin::Header -->
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bolder fs-3 mb-1">Sub Specialize</span>
-      <span class="text-muted mt-1 fw-bold fs-7">Add New</span>
+      <h3 class="card-title align-items-start flex-column">
+        <span class="card-label fw-bolder fs-3 mb-1"
+          >Course: {{ chapter?.idCourse?.title }}</span
+        >
+        <span class="text-muted mt-1 fw-bold fs-5"
+          >Chapter: {{ chapter?.title }}</span
+        >
+        <span class="text-muted mt-1 fw-bold fs-7">Add new lesson</span>
+      </h3>
     </h3>
     <div class="card-toolbar">
       <!-- new data -->
       <div class="card-toolbar">
-        <a routerLink="/features/lectures" class="btn btn-sm btn-light-primary">
+        <a
+          routerLink="/features/lectures/chapter/{{ chapter?._id }}"
+          class="btn btn-sm btn-light-primary"
+        >
           <span
             [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'"
             class="svg-icon svg-icon-3"
@@ -23,73 +33,10 @@
   <div id="kt_account_profile_details" class="collapse show">
     <form [formGroup]="form" novalidate="" class="form">
       <div class="card-body border-top p-9">
-        <!-- Id Lecture -->
+        <!-- Lesson -->
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">Specialize</span>
-          </label>
-          <div class="col-lg-8 fv-row">
-            <select
-              class="form-control form-control-lg form-control-solid mb-2"
-              formControlName="idSpecialize"
-              [(ngModel)]="input.idSpecialize"
-              placeholder="Select lecture"
-            >
-              <option value="" disabled selected hidden>
-                Select IdSpecialize
-              </option>
-              <option *ngFor="let item of lectures" [value]="item._id">
-                {{ item.name }}
-              </option>
-            </select>
-            <span
-              class="text-danger"
-              *ngIf="
-                form.controls['idSpecialize']!.invalid &&
-                (form.controls['idSpecialize'].dirty ||
-                  form.controls['idSpecialize'].touched)
-              "
-            >
-              <span *ngIf="form.controls['idSpecialize'].errors!.required">
-                Vui lòng nhập trường này
-              </span>
-            </span>
-          </div>
-        </div>
-
-        <!-- Name -->
-        <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">Name</span>
-          </label>
-          <div class="col-lg-8 fv-row">
-            <input
-              formControlName="name"
-              [(ngModel)]="input.name"
-              type="text"
-              class="form-control form-control-lg form-control-solid mrb-5"
-              placeholder="Name"
-              name="name"
-            />
-
-            <span
-              class="text-danger"
-              *ngIf="
-                form.controls['name']!.invalid &&
-                (form.controls['name'].dirty || form.controls['name'].touched)
-              "
-            >
-              <span *ngIf="form.controls['name'].errors!.required">
-                Vui lòng nhập trường này
-              </span>
-            </span>
-          </div>
-        </div>
-
-        <!-- Position -->
-        <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">Position</span>
+            <span class="required">Lesson</span>
           </label>
           <div class="col-lg-8 fv-row">
             <input
@@ -97,7 +44,7 @@
               [(ngModel)]="input.position"
               type="number"
               class="form-control form-control-lg form-control-solid mrb-5"
-              placeholder="Position"
+              placeholder="Enter position"
               name="position"
             />
 
@@ -113,6 +60,107 @@
                 Vui lòng nhập trường này
               </span>
             </span>
+          </div>
+        </div>
+
+        <!-- Title -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Title</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="title"
+              [(ngModel)]="input.title"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Enter title"
+              name="title"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['title']!.invalid &&
+                (form.controls['title'].dirty || form.controls['title'].touched)
+              "
+            >
+              <span *ngIf="form.controls['title'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Video -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Video</span>
+          </label>
+
+          <!-- Video -->
+          <div class="col-lg-8 fv-row">
+            <!--begin::Video input-->
+            <div class="image-input image-input-outline">
+              <!--begin::Video preview wrapper-->
+              <div
+                class="image-input-wrapper w-400px h-300px"
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+                *ngIf="input.url != undefined && input.url != null"
+              >
+                <video
+                  width="380"
+                  height="280"
+                  controls
+                  *ngIf="input.url != ''"
+                >
+                  <source src="{{ input.url }}" type="video/mp4" />
+                  <source src="{{ input.url }}" type="video/ogg" />
+                </video>
+              </div>
+              <!--end::Video preview wrapper-->
+
+              <!--begin::Edit button-->
+              <label
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="change"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Change avatar"
+                (change)="onVideoUploadClick()"
+              >
+                <i class="bi bi-pencil-fill fs-7"></i>
+
+                <!--begin::Inputs-->
+                <input
+                  type="file"
+                  formControlName="url"
+                  accept="video/mp4,video/x-m4v,video/*"
+                  #inputVideo
+                  name="url"
+                />
+                <!--end::Inputs-->
+              </label>
+              <!--end::Edit button-->
+
+              <!--begin::Remove button-->
+              <span
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="remove"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Remove video"
+                (click)="onVideoDeleteClick()"
+              >
+                <i class="bi bi-x fs-2"></i>
+              </span>
+              <!--end::Remove button-->
+            </div>
+            <!--end::Video input-->
           </div>
         </div>
       </div>

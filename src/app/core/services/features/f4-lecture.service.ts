@@ -93,9 +93,9 @@ export class LectureService {
    * @param id
    * @returns
    */
-  find(id: any): Observable<any> {
+  find(id: any, query = ''): Observable<any> {
     return this.http
-      .get<any>(this.apiURL + '/lectures/' + id)
+      .get<any>(this.apiURL + '/lectures/' + id + `?${query}`)
       .pipe(retry(1), catchError(this.handleError));
   }
 

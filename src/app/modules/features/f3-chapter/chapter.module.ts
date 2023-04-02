@@ -28,7 +28,7 @@ import { ChapterCourseComponent } from './chapter-course/chapter-course.componen
         component: ChapterCourseComponent,
       },
       {
-        path: 'add',
+        path: 'course/:id/add',
         component: ChapterAddComponent,
       },
       {

@@ -124,18 +124,37 @@ export class BannerAddComponent implements OnInit, AfterViewInit, OnDestroy {
       // show loading
       this.isLoading$.next(true);
 
-      this.subscription.push(
-        this.api.add(this.input).subscribe(() => {
-          // hide loading
-          this.isLoading$.next(false);
-          this.cdr.detectChanges();
+      if (this.input.image) {
+        this.common.comfirmImages([this.input.image]).subscribe((dataImage) => {
+          this.input.image = dataImage[0][2];
 
-          this.common.showSuccess('Insert new success!');
+          this.subscription.push(
+            this.api.add(this.input).subscribe(() => {
+              // hide loading
+              this.isLoading$.next(false);
+              this.cdr.detectChanges();
 
-          // redirect to list
-          this.router.navigate(['/features/banners']);
-        })
-      );
+              this.common.showSuccess('Insert new success!');
+
+              // redirect to list
+              this.router.navigate(['/features/banners']);
+            })
+          );
+        });
+      } else {
+        this.subscription.push(
+          this.api.add(this.input).subscribe(() => {
+            // hide loading
+            this.isLoading$.next(false);
+            this.cdr.detectChanges();
+
+            this.common.showSuccess('Insert new success!');
+
+            // redirect to list
+            this.router.navigate(['/features/banners']);
+          })
+        );
+      }
     }
   }
 }

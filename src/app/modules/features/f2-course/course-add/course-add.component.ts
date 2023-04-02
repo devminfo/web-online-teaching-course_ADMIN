@@ -139,19 +139,38 @@ export class CourseAddComponent implements OnInit, AfterViewInit, OnDestroy {
     this.input.instructor = '642793fa6340df24f6806213';
     if (this.input.price > 0) this.input.isPrivate = true;
 
-    console.log({ input: this.input });
-    console.log({ input: this.form.invalid });
-    this.subscription.push(
-      this.api.add(this.input).subscribe(() => {
-        // hide loading
-        this.isLoading$.next(false);
-        this.cdr.detectChanges();
+    if (this.input.thumbnail) {
+      this.common
+        .comfirmImages([this.input.thumbnail])
+        .subscribe((dataImage) => {
+          this.input.thumbnail = dataImage[0][2];
 
-        this.common.showSuccess('Insert new success!');
+          this.subscription.push(
+            this.api.add(this.input).subscribe(() => {
+              // hide loading
+              this.isLoading$.next(false);
+              this.cdr.detectChanges();
 
-        // redirect to list
-        this.router.navigate(['/features/courses']);
-      })
-    );
+              this.common.showSuccess('Insert new success!');
+
+              // redirect to list
+              this.router.navigate(['/features/courses']);
+            })
+          );
+        });
+    } else {
+      this.subscription.push(
+        this.api.add(this.input).subscribe(() => {
+          // hide loading
+          this.isLoading$.next(false);
+          this.cdr.detectChanges();
+
+          this.common.showSuccess('Insert new success!');
+
+          // redirect to list
+          this.router.navigate(['/features/courses']);
+        })
+      );
+    }
   }
 }
