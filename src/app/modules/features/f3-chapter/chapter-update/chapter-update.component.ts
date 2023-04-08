@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ChapterService } from 'src/app/core/services/features/f3-chapter.service';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-chapter-update',
   templateUrl: './chapter-update.component.html',
@@ -65,7 +66,8 @@ export class ChapterUpdateComponent
     private router: Router,
     private cdr: ChangeDetectorRef,
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _location: Location
   ) {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
@@ -101,6 +103,10 @@ export class ChapterUpdateComponent
     this.subscription.forEach((item) => {
       item.unsubscribe();
     });
+  }
+
+  onGoBack() {
+    this._location.back();
   }
 
   /**

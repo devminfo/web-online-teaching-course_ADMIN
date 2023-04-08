@@ -40,18 +40,15 @@
         </a>
       </div>
 
-      <!-- new data -->
+      <!-- go back -->
       <div class="card-toolbar">
-        <a
-          routerLink="/features/courses/detail/{{ course._id }}/"
-          class="btn btn-sm btn-light-primary mr-1"
-        >
+        <span class="btn btn-sm btn-light-primary mr-1" (click)="onGoBack()">
           <span
             [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'"
             class="svg-icon svg-icon-3"
           ></span>
           Go back
-        </a>
+        </span>
       </div>
     </div>
   </div>
@@ -111,13 +108,13 @@
             <!-- ID -->
             <td>
               <a
-                routerLink="/features/chapters/update/{{ data.id }}"
+                routerLink="/features/chapters/update/{{ data._id }}"
                 class="text-dark fw-bolder text-hover-primary fs-6"
               >
                 <p
                   class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
                 >
-                  {{ data.id }}
+                  {{ data._id }}
                 </p>
               </a>
             </td>
@@ -145,7 +142,10 @@
               <p
                 class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
               >
-                <span class="badge badge-circle badge-primary">
+                <span
+                  routerLink="/features/lectures/chapter/{{ data._id }}"
+                  class="badge badge-circle badge-primary cursor-pointer"
+                >
                   {{ data.lectures.length }}</span
                 >
               </p>
@@ -155,7 +155,7 @@
             <td class="text-end">
               <!-- update -->
               <a
-                routerLink="/features/chapters/update/{{ data.id }}"
+                routerLink="/features/chapters/update/{{ data._id }}"
                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
               >
                 <span

@@ -1,13 +1,8 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  AfterViewInit,
-  HostBinding,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { LearningPathService } from 'src/app/core/services/features/f5-learning-path.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { AuthService } from 'src/app/core/services/api/00auth.service';
 
 @Component({
   selector: 'app-learningPath',
@@ -26,181 +21,14 @@ export class LearningPathComponent implements OnInit, AfterViewInit, OnDestroy {
   conditonFilter: string = '';
   conditions: any[] = [];
 
-  /**
-   * ****************** Begin for pagination ******************
-   */
-  isSelectAll = false;
-  pageIndex = 1;
-  pageLength = 0;
-  pageSize = 5;
-  pageSizeOptions: number[] = [10, 20, 50, 100];
-
-  /**
-   * onCheckAllSelected
-   */
-  onCheckAllSelected() {
-    this.isSelectAll = !this.isSelectAll;
-
-    // check or uncheck all item
-    for (let i = 0; i < this.dataSources.length; i++) {
-      this.dataSources[i].checked = this.isSelectAll;
-    }
-  }
-
-  /**
-   *
-   * @param id
-   */
-  onItemSelected(id: String) {
-    // check or uncheck item with id
-    for (let i = 0; i < this.dataSources.length; i++) {
-      if (this.dataSources[i].id === id) {
-        this.dataSources[i].checked = !this.dataSources[i].checked;
-        break;
-      }
-    }
-  }
-
-  /**
-   * getSelection
-   * @returns
-   */
-  getSelection() {
-    return this.dataSources.filter((x) => x.checked);
-  }
-
-  /**
-   *
-   */
-  onChangeSize() {
-    // uncheck select all
-    this.isSelectAll = false;
-
-    // reset page index and load grid
-    this.pageIndex = 1;
-    this.onLoadDataGrid();
-  }
-
-  /**
-   * onBeginClick
-   */
-  onBeginClick() {
-    if (this.pageIndex > 1) {
-      // uncheck select all
-      this.isSelectAll = false;
-
-      this.pageIndex = 1;
-      this.onLoadDataGrid();
-    }
-  }
-
-  /**
-   * onPreviousClick
-   */
-  onPreviousClick() {
-    if (this.pageIndex > 1) {
-      // uncheck select all
-      this.isSelectAll = false;
-
-      this.pageIndex -= 1;
-      this.onLoadDataGrid();
-    }
-  }
-
-  /**
-   * onNextClick
-   */
-  onNextClick() {
-    const lastPage = Math.ceil(this.pageLength / this.pageSize);
-    if (this.pageIndex < lastPage) {
-      // uncheck select all
-      this.isSelectAll = false;
-
-      this.pageIndex += 1;
-      this.onLoadDataGrid();
-    }
-  }
-
-  /**
-   * onEndClick
-   */
-  onEndClick() {
-    const lastPage = Math.ceil(this.pageLength / this.pageSize);
-
-    if (this.pageIndex < lastPage) {
-      // uncheck select all
-      this.isSelectAll = false;
-
-      this.pageIndex = lastPage;
-      this.onLoadDataGrid();
-    }
-  }
-
-  /**
-   * add New Condition To List
-   * @param condition
-   */
-  addNewConditionToList(condition: any) {
-    // check exists
-    let flg = false;
-    let i;
-
-    // check condition exists
-    for (i = 0; i < this.conditions.length; i++) {
-      if (this.conditions[i].key == condition.key) {
-        flg = true;
-        break;
-      }
-    }
-
-    // remove old key
-    if (flg) {
-      this.conditions.splice(i, 1);
-    }
-
-    // insert new seach condition if !=0
-    if (condition.value != '0') {
-      this.conditions.splice(0, 0, condition);
-    }
-
-    // render new condition filter
-    this.createConditionFilter();
-
-    // load grid with new condition
-    this.onLoadDataGrid();
-  }
-
-  /**
-   * create Condition Filter
-   */
-  createConditionFilter() {
-    this.conditonFilter = '';
-    this.conditions.forEach((item) => {
-      if (this.conditonFilter == '') {
-        this.conditonFilter = item.key + '=' + item.value + '';
-      } else {
-        this.conditonFilter += '&' + item.key + '=' + item.value + '';
-      }
-    });
-
-    if (this.conditonFilter != '') {
-      this.conditonFilter = '&' + this.conditonFilter;
-    }
-  }
-  /**
-   * ****************** End for pagination ******************
-   */
-
   // data source for grid
   dataSources: any[] = [];
-  dataSourcesSpecialize: any[] = [];
 
   // delete id
   deleteId: String;
+  isSelectAll = false;
 
   /**
-   * ************************************ constructor ************************************
-   * ************************************ constructor ************************************
    * ************************************ constructor ************************************
    * @param api
    * @param dialog
@@ -208,7 +36,7 @@ export class LearningPathComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private commonService: CommonService,
     private api: LearningPathService,
-    private apiSpecialize: LearningPathService
+    private authService: AuthService
   ) {
     // xử lý bất đồng bộ
     this.observable = Observable.create((observer: any) => {
@@ -220,17 +48,7 @@ export class LearningPathComponent implements OnInit, AfterViewInit, OnDestroy {
    * ngOnInit
    */
   ngOnInit() {
-    // load data reference
-    this.loadDataReference();
-
-    // check data reference loaded
-    this.observable.subscribe((data) => {
-      // number api reference call
-      if (data == 1) {
-        // load data user
-        this.onLoadDataGrid();
-      }
-    });
+    this.onLoadDataGrid();
   }
 
   /**
@@ -259,47 +77,49 @@ export class LearningPathComponent implements OnInit, AfterViewInit, OnDestroy {
    * on Load Data Grid
    */
   onLoadDataGrid() {
-    const filter = {
-      page: this.pageIndex,
-      limit: this.pageSize,
-      filter: this.conditonFilter,
-      fields: '',
-    };
+    const auth = this.authService.getAuthFromLocalStorage();
+    const createdBy = auth?.user._id;
+    const filter = `&isParent=true&sort=position&populate=courses&createdBy=${createdBy}`;
+
     this.subscription.push(
-      this.api.paginate(filter).subscribe((data) => {
-        this.dataSources = data.results;
-        this.pageLength = data.totalResults;
+      this.api.get(filter).subscribe((data) => {
+        this.dataSources = data;
       })
     );
   }
 
   /**
-   * load Data Reference
+   * getSelection
+   * @returns
    */
-  loadDataReference() {
-    this.subscription.push(
-      this.apiSpecialize.get().subscribe((data) => {
-        this.dataSourcesSpecialize = data;
-
-        // loading finished
-        this.call += 1;
-        this.observer.next(this.call);
-      })
-    );
+  getSelection() {
+    return this.dataSources.filter((x) => x.checked);
   }
 
   /**
-   * getSpecializeById
+   *
    * @param id
    */
-  getSpecializeById(id: string) {
-    const result = this.dataSourcesSpecialize.filter((item) => item._id == id);
-
-    // check exists
-    if (result.length > 0) {
-      return result[0].name;
+  onItemSelected(id: String) {
+    // check or uncheck item with id
+    for (let i = 0; i < this.dataSources.length; i++) {
+      if (this.dataSources[i].id === id) {
+        this.dataSources[i].checked = !this.dataSources[i].checked;
+        break;
+      }
     }
-    return '';
+  }
+
+  /**
+   * onCheckAllSelected
+   */
+  onCheckAllSelected() {
+    this.isSelectAll = !this.isSelectAll;
+
+    // check or uncheck all item
+    for (let i = 0; i < this.dataSources.length; i++) {
+      this.dataSources[i].checked = this.isSelectAll;
+    }
   }
 
   /**
@@ -309,7 +129,7 @@ export class LearningPathComponent implements OnInit, AfterViewInit, OnDestroy {
     const condition = { key: 'idSpecialize', value: event };
 
     // add new condition to list
-    this.addNewConditionToList(condition);
+    // this.addNewConditionToList(condition);
   }
 
   /**
@@ -330,10 +150,7 @@ export class LearningPathComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   onDeleteManyBtnClick() {
     // get list id select
-    const listIdSelect = this.getSelection()
-      .map((item) => item.id)
-      .join(',');
-
+    const listIdSelect = '';
     // delete many by list id select
     this.subscription.push(
       this.api.deleteManyByIds(listIdSelect).subscribe(() => {

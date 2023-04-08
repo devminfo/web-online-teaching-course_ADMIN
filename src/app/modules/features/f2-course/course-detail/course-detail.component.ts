@@ -10,6 +10,7 @@ import { CourseService } from 'src/app/core/services/features/f2-course.service'
 import { CommonService } from 'src/app/core/services/common.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChapterService } from 'src/app/core/services/features/f3-chapter.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-course-detail',
@@ -44,7 +45,8 @@ export class CourseDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private _location: Location
   ) {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
@@ -77,6 +79,10 @@ export class CourseDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscription.forEach((item) => {
       item.unsubscribe();
     });
+  }
+
+  onGoBack() {
+    this._location.back();
   }
 
   /**

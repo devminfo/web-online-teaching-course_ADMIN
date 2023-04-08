@@ -4,12 +4,16 @@ import {
   OnDestroy,
   AfterViewInit,
   ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LearningPathService } from 'src/app/core/services/features/f5-learning-path.service';
+import { Location } from '@angular/common';
+import { AuthService } from 'src/app/core/services/api/00auth.service';
 
 @Component({
   selector: 'app-learning-path-add',
@@ -24,14 +28,19 @@ export class LearningPathAddComponent
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
 
+  // binding uploads image or file
+  @ViewChild('inputThumbnail', { static: false })
+  inputThumbnail: ElementRef;
+
   // binding data
   input: any = {
-    idSpecialize: '',
-    name: '',
-    position: '',
+    desc: '',
+    thumbnail: '',
+    title: '',
+    position: 1,
   };
 
-  learningPaths: any[];
+  learningpaths: any[];
 
   //form
   form: FormGroup;
@@ -48,24 +57,22 @@ export class LearningPathAddComponent
    */
   constructor(
     private api: LearningPathService,
-    private learningPathService: LearningPathService,
     private common: CommonService,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private formBuilder: FormBuilder
+    private authService: AuthService,
+    private formBuilder: FormBuilder,
+    private _location: Location
   ) {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
     );
-
-    // Get learningPaths
-    this.getAllSpecializes();
-
     // add validate for controls
     this.form = this.formBuilder.group({
-      idSpecialize: [null, [Validators.required]],
-      name: [null, [Validators.required]],
-      position: [null, [Validators.required]],
+      desc: [null, [Validators.required]],
+      thumbnail: [null, [Validators.required]],
+      title: [null, [Validators.required]],
+      position: null,
     });
   }
 
@@ -88,15 +95,29 @@ export class LearningPathAddComponent
     });
   }
 
+  onGoBack() {
+    this._location.back();
+  }
+
   /**
-   * Get all learningPaths
+   * onThumbnailUploadClick
    */
-  getAllSpecializes() {
+  onThumbnailUploadClick() {
     this.subscription.push(
-      this.learningPathService.get().subscribe((data) => {
-        this.learningPaths = data;
+      this.common.uploadImageCore(this.inputThumbnail).subscribe((data) => {
+        if (data) {
+          this.input.thumbnail = data['files'][0];
+        }
       })
     );
+  }
+
+  /**
+   * onThumbnailDeleteClick
+   */
+  onThumbnailDeleteClick() {
+    const isDelete = confirm('Bạn có muốn xóa hình? ');
+    if (isDelete) this.input.thumbnail = '';
   }
 
   /**
@@ -107,10 +128,38 @@ export class LearningPathAddComponent
     this.form.markAllAsTouched();
 
     // check form pass all validate
-    if (!this.form.invalid) {
-      // show loading
-      this.isLoading$.next(true);
+    if (this.form.invalid) return;
 
+    // show loading
+    this.isLoading$.next(true);
+
+    const auth = this.authService.getAuthFromLocalStorage();
+    const createdBy = auth?.user._id;
+
+    this.input.createdBy = createdBy;
+
+    if (this.input.price > 0) this.input.isPrivate = true;
+
+    if (this.input.thumbnail) {
+      this.common
+        .comfirmImages([this.input.thumbnail])
+        .subscribe((dataImage) => {
+          this.input.thumbnail = dataImage[0][2];
+
+          this.subscription.push(
+            this.api.add(this.input).subscribe(() => {
+              // hide loading
+              this.isLoading$.next(false);
+              this.cdr.detectChanges();
+
+              this.common.showSuccess('Insert new success!');
+
+              // redirect to list
+              this.router.navigate(['/features/learningpaths']);
+            })
+          );
+        });
+    } else {
       this.subscription.push(
         this.api.add(this.input).subscribe(() => {
           // hide loading
@@ -120,7 +169,7 @@ export class LearningPathAddComponent
           this.common.showSuccess('Insert new success!');
 
           // redirect to list
-          this.router.navigate(['/features/learningPaths']);
+          this.router.navigate(['/features/learningpaths']);
         })
       );
     }

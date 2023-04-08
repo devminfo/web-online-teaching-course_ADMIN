@@ -37,6 +37,28 @@
           Add New
         </a>
       </div>
+
+      <!-- begin::Menu -->
+      <button
+        type="button"
+        class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
+        data-kt-menu-trigger="click"
+        data-kt-menu-placement="bottom-end"
+        data-kt-menu-flip="top-end"
+      >
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/general/gen024.svg'"
+          class="svg-icon svg-icon-2"
+        ></span>
+      </button>
+      <!-- begin::Menu 1 -->
+      <chapter-filter
+        [courses]="coursesFilter"
+        (applyBtnClick)="onApplyBtnClick($event)"
+      >
+      </chapter-filter>
+      <!-- end::Menu 1 -->
+      <!-- end::Menu -->
     </div>
   </div>
   <!-- end::Header -->
@@ -85,7 +107,7 @@
               >
                 <input
                   [(ngModel)]="data.checked"
-                  (click)="onItemSelected(data.id)"
+                  (click)="onItemSelected(data._id)"
                   class="form-check-input widget-13-check"
                   type="checkbox"
                   value="1"
@@ -96,13 +118,13 @@
             <!-- ID -->
             <td>
               <a
-                routerLink="/features/chapters/update/{{ data.id }}"
+                routerLink="/features/chapters/update/{{ data._id }}"
                 class="text-dark fw-bolder text-hover-primary fs-6"
               >
                 <p
                   class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
                 >
-                  {{ data.id }}
+                  {{ data._id }}
                 </p>
               </a>
             </td>
@@ -112,7 +134,7 @@
               <p
                 class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
               >
-                {{ data.course?.title }}
+                {{ data.idCourse?.title }}
               </p>
             </td>
 
@@ -127,19 +149,20 @@
 
             <!-- position -->
             <td>
-              <p
-                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
-              >
+              <p class="text-dark text-hover-primary d-block mb-1 fs-6">
                 {{ data.position }}
               </p>
             </td>
 
             <!-- lectures -->
             <td>
-              <p
-                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
-              >
-                {{ data.lectures.length }}
+              <p class="text-dark text-hover-primary d-block mb-1 fs-6">
+                <span
+                  routerLink="/features/lectures/chapter/{{ data._id }}"
+                  class="badge badge-circle badge-primary cursor-pointer"
+                >
+                  {{ data.lectures.length }}</span
+                >
               </p>
             </td>
 

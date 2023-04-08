@@ -2,7 +2,11 @@
   <!-- begin::Header -->
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bolder fs-3 mb-1">Sub Specialize</span>
+      <span class="card-label fw-bolder fs-3 mb-1">Learning Paths</span>
+
+      <!-- <p class="text-dark d-block mb-1 fs-6" style="max-width: 240px">
+        {{ data.desc }}
+      </p> -->
       <span class="text-muted mt-1 fw-bold fs-7"
         >Selected {{ getSelection().length }} records</span
       >
@@ -11,7 +15,7 @@
       <!-- delete -->
       <div class="card-toolbar" *ngIf="getSelection().length > 0">
         <a
-          routerLink="/features/learningPaths"
+          routerLink="/features/learning-paths"
           data-toggle="modal"
           data-target="#deleteManyModal"
           class="btn btn-sm btn-light-danger mr-1"
@@ -27,7 +31,7 @@
       <!-- new data -->
       <div class="card-toolbar">
         <a
-          routerLink="/features/learningPaths/add"
+          routerLink="/features/learningpaths/add"
           class="btn btn-sm btn-light-primary mr-1"
         >
           <span
@@ -37,28 +41,6 @@
           Add New
         </a>
       </div>
-
-      <!-- begin::Menu -->
-      <button
-        type="button"
-        class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
-        data-kt-menu-trigger="click"
-        data-kt-menu-placement="bottom-end"
-        data-kt-menu-flip="top-end"
-      >
-        <span
-          [inlineSVG]="'./assets/media/icons/duotune/general/gen024.svg'"
-          class="svg-icon svg-icon-2"
-        ></span>
-      </button>
-      <!-- begin::Menu 1 -->
-      <learning-path-filter
-        [learningPaths]="dataSourcesSpecialize"
-        (applyBtnClick)="onApplyBtnClick($event)"
-      >
-      </learning-path-filter>
-      <!-- end::Menu 1 -->
-      <!-- end::Menu -->
     </div>
   </div>
   <!-- end::Header -->
@@ -88,10 +70,10 @@
                 />
               </div>
             </th>
-            <th class="min-w-150px">ID</th>
-            <th class="min-w-140px">Specialize Name</th>
-            <th class="min-w-140px">Sub Specialize Name</th>
-            <th class="min-w-120px">Position</th>
+            <th class="min-w-140px">Thumbnail</th>
+            <th class="min-w-140px">Title</th>
+            <th class="min-w-140px">Courses</th>
+            <th style="max-width: 200px">Description</th>
             <th class="min-w-100px text-end">Actions</th>
           </tr>
         </thead>
@@ -106,7 +88,7 @@
               >
                 <input
                   [(ngModel)]="data.checked"
-                  (click)="onItemSelected(data.id)"
+                  (click)="onItemSelected(data._id)"
                   class="form-check-input widget-13-check"
                   type="checkbox"
                   value="1"
@@ -114,52 +96,73 @@
               </div>
             </td>
 
-            <!-- ID -->
+            <!-- Thumbnail -->
             <td>
-              <a
-                routerLink="/features/learningPaths/update/{{ data.id }}"
-                class="text-dark fw-bolder text-hover-primary fs-6"
-              >
-                <p
-                  class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
-                >
-                  {{ data.id }}
-                </p>
-              </a>
+              <img
+                class="image-input-wrapper w-100px h-100px"
+                src="{{ data.thumbnail }}"
+                alt="{{ data.title }}"
+              />
             </td>
 
-            <!-- Id Specialize -->
+            <!-- Title -->
             <td>
-              <p
-                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
-              >
-                {{ getSpecializeById(data.idSpecialize) }}
+              <p class="text-dark fw-bolder d-block mb-1 fs-6">
+                {{ data.title }}
               </p>
             </td>
 
-            <!-- Specialize Name -->
-            <td>
-              <p
-                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
+            <!-- Courses -->
+            <td style="max-width: 200px">
+              <span
+                class="cursor-pointer"
+                style="padding-right: 2px"
+                *ngFor="let course of data.courses"
+                routerLink="/features/courses/detail/{{ course._id }}"
               >
-                {{ data.name }}
-              </p>
+                <img
+                  src="{{ course.thumbnail }}"
+                  width="40px"
+                  height="40px"
+                  style="
+                    border-radius: 50%;
+                    padding: 2px;
+                    border: 2px solid #d5d5d5;
+                    object-fit: cover;
+                  "
+              /></span>
             </td>
 
-            <!-- Posision -->
-            <td>
+            <!-- Desc -->
+            <td style="max-width: 200px">
               <p
-                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
-              >
-                {{ data.position }}
-              </p>
+                class="text-dark d-block mb-1 fs-6"
+                [innerHTML]="data.desc"
+              ></p>
             </td>
 
             <!-- Actions -->
             <td class="text-end">
+              <a routerLink="/features/learning-paths/{{ data._id }}">
+                <svg
+                  style="
+                    width: 38px;
+                    background-color: #f5f8fa;
+                    padding: 10px;
+                    margin-right: 2px;
+                  "
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 576 512"
+                >
+                  <path
+                    d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"
+                  />
+                </svg>
+              </a>
+
               <!-- update -->
               <a
-                routerLink="/features/learningPaths/update/{{ data.id }}"
+                routerLink="/features/learningpaths/update/{{ data._id }}"
                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
               >
                 <span
@@ -171,10 +174,10 @@
 
               <!-- delete -->
               <a
-                (click)="updateDeleteId(data.id)"
+                (click)="updateDeleteId(data._id)"
                 data-toggle="modal"
                 data-target="#deleteOneModal"
-                routerLink="/features/learningPaths"
+                routerLink="/features/learningpaths"
                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
               >
                 <span
@@ -197,74 +200,6 @@
     <!-- end::Table container -->
   </div>
   <!-- begin::Body -->
-</div>
-
-<div
-  class="d-flex flex-stack flex-wrap pt-10"
-  style="float: right"
-  *ngIf="dataSources"
->
-  <div class="fs-6 fw-bold text-gray-700">Items per page:</div>
-
-  <div>
-    <select
-      [(ngModel)]="pageSize"
-      (change)="onChangeSize()"
-      class="form-select form-select-solid form-select-md"
-      name="currency"
-    >
-      <option value="5">5</option>
-      <option value="20">20</option>
-      <option value="50">50</option>
-      <option value="80">80</option>
-    </select>
-  </div>
-
-  <!-- <div class="fs-6 fw-bold text-gray-700">Showing {{(pageIndex-1)*pageSize+1}} to
-        {{(pageIndex-1)*pageSize+dataSources.length}}
-        of {{pageLength}} entries</div> -->
-
-  <div class="fs-6 fw-bold text-gray-700 mr-lr-20">
-    {{ (pageIndex - 1) * pageSize + 1 }} -
-    {{ (pageIndex - 1) * pageSize + dataSources.length }}
-    of {{ pageLength }}
-  </div>
-
-  <ul class="pagination">
-    <!-- begin page -->
-    <li class="page-item previous" (click)="onBeginClick()" disabled="true">
-      <a class="page-link cursor-pointer">
-        <span
-          [inlineSVG]="'./assets/media/icons/duotune/arrows/arr079.svg'"
-          class="svg-icon svg-icon-3"
-        ></span>
-      </a>
-    </li>
-
-    <!-- previous page -->
-    <li class="page-item previous" (click)="onPreviousClick()">
-      <a class="page-link cursor-pointer">
-        <i class="previous"></i>
-      </a>
-    </li>
-
-    <!-- next page -->
-    <li class="page-item next" (click)="onNextClick()">
-      <a class="page-link cursor-pointer">
-        <i class="next"></i>
-      </a>
-    </li>
-
-    <!-- end page -->
-    <li class="page-item next" (click)="onEndClick()">
-      <a class="page-link cursor-pointer">
-        <span
-          [inlineSVG]="'./assets/media/icons/duotune/arrows/arr080.svg'"
-          class="svg-icon svg-icon-3"
-        ></span>
-      </a>
-    </li>
-  </ul>
 </div>
 
 <!-- Delete one Modal -->

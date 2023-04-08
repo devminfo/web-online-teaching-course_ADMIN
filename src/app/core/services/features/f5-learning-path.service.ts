@@ -29,9 +29,9 @@ export class LearningPathService {
    * HttpClient API get() method => Fetch group apis list
    * @returns
    */
-  get(): Observable<any> {
+  get(filter = ``): Observable<any> {
     return this.http
-      .get<any>(this.apiURL + '/learning-paths')
+      .get<any>(this.apiURL + '/learning-paths' + `?${filter}`)
       .pipe(retry(1), catchError(this.handleError));
   }
 

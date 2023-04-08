@@ -9,13 +9,13 @@
     <div class="card-toolbar">
       <!-- new data -->
       <div class="card-toolbar">
-        <a routerLink="/features/courses" class="btn btn-sm btn-light-primary">
+        <span class="btn btn-sm btn-light-primary mr-1" (click)="onGoBack()">
           <span
             [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'"
             class="svg-icon svg-icon-3"
           ></span>
           Go back
-        </a>
+        </span>
       </div>
     </div>
   </div>
@@ -64,7 +64,10 @@
             <!-- totalChapter -->
             <td>
               <p class="text-dark text-hover-primary d-block mb-1 fs-6">
-                <span class="badge badge-circle badge-primary">
+                <span
+                  routerLink="/features/chapters/course/{{ data._id }}"
+                  class="badge badge-circle badge-primary cursor-pointer"
+                >
                   {{ data.totalChapter }}</span
                 >
               </p>
@@ -73,9 +76,12 @@
             <!-- totalLectures -->
             <td>
               <p class="text-dark text-hover-primary d-block mb-1 fs-6">
-                <span class="badge badge-circle badge-success">{{
-                  data.totalLectures
-                }}</span>
+                <span
+                  routerLink="/features/chapters/course/{{ data._id }}"
+                  class="badge badge-circle badge-primary cursor-pointer"
+                >
+                  {{ data.totalLectures }}
+                </span>
               </p>
             </td>
 

@@ -4,12 +4,16 @@ import {
   OnDestroy,
   AfterViewInit,
   ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LearningPathService } from 'src/app/core/services/features/f5-learning-path.service';
+import { Location } from '@angular/common';
+
 @Component({
   selector: 'app-learning-path-update',
   templateUrl: './learning-path-update.component.html',
@@ -23,19 +27,24 @@ export class LearningPathUpdateComponent
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
 
+  // binding uploads image or file
+  @ViewChild('inputThumbnail', { static: false })
+  inputThumbnail: ElementRef;
+
   // binding data
   input: any = {
-    idSpecialize: '',
-    name: '',
-    position: '',
+    desc: '',
+    thumbnail: '',
+    title: '',
+    position: 1,
   };
 
-  learningPaths: any[];
+  learningpaths: any[];
+  thumbnailOld: string;
+  id: any;
 
   //form
   form: FormGroup;
-
-  id: any;
 
   amGet: boolean = false;
   amPost: boolean = false;
@@ -49,25 +58,22 @@ export class LearningPathUpdateComponent
    */
   constructor(
     private api: LearningPathService,
-    private learningPathService: LearningPathService,
     private common: CommonService,
-    private router: Router,
     private route: ActivatedRoute,
+    private router: Router,
     private cdr: ChangeDetectorRef,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private _location: Location
   ) {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
     );
-
-    // Get learningPaths
-    this.getAllSpecializes();
-
     // add validate for controls
     this.form = this.formBuilder.group({
-      idSpecialize: [null, [Validators.required]],
-      name: [null, [Validators.required]],
-      position: [null, [Validators.required]],
+      desc: [null, [Validators.required]],
+      thumbnail: [null, []],
+      title: [null, [Validators.required]],
+      position: null,
     });
   }
 
@@ -98,6 +104,10 @@ export class LearningPathUpdateComponent
     });
   }
 
+  onGoBack() {
+    this._location.back();
+  }
+
   /**
    * onLoadDataById
    * @param id
@@ -110,10 +120,14 @@ export class LearningPathUpdateComponent
       this.api.find(id).subscribe((data) => {
         // load data to view input
         this.input = {
-          name: data.name,
+          desc: data.desc,
+          createdBy: data.createdBy,
+          thumbnail: data.thumbnail,
           position: data.position,
-          idSpecialize: data.idSpecialize,
+          title: data.title,
         };
+
+        this.thumbnailOld = data.thumbnail;
 
         // hide loading
         this.isLoading$.next(false);
@@ -121,30 +135,63 @@ export class LearningPathUpdateComponent
       })
     );
   }
-
   /**
-   * Get all learningPaths
+   * onThumbnailUploadClick
    */
-  getAllSpecializes() {
+  onThumbnailUploadClick() {
     this.subscription.push(
-      this.learningPathService.get().subscribe((data) => {
-        this.learningPaths = data;
+      this.common.uploadImageCore(this.inputThumbnail).subscribe((data) => {
+        if (data) {
+          this.input.thumbnail = data['files'][0];
+        }
       })
     );
   }
 
   /**
-   * onUpdateBtnClick
+   * onThumbnailDeleteClick
    */
-  onUpdateBtnClick() {
+  onThumbnailDeleteClick() {
+    const isDelete = confirm('Bạn có muốn xóa hình? ');
+    if (isDelete) this.input.thumbnail = '';
+  }
+
+  /**
+   * onSaveChangeBtnClick
+   */
+  onSaveChangeBtnClick() {
     // touch all control to show error
     this.form.markAllAsTouched();
+    console.log({ input: this.input });
 
     // check form pass all validate
-    if (!this.form.invalid) {
-      // show loading
-      this.isLoading$.next(true);
+    if (this.form.invalid) return;
 
+    // show loading
+    this.isLoading$.next(true);
+
+    console.log({ input: this.input });
+
+    // confirm use course
+    if (this.input.thumbnail !== this.thumbnailOld && this.input.thumbnail) {
+      this.common
+        .comfirmImages([this.input.thumbnail])
+        .subscribe((dataImage) => {
+          this.input.thumbnail = dataImage[0][2];
+          this.subscription.push(
+            this.api.update(this.id, this.input).subscribe(() => {
+              // hide loading
+              this.isLoading$.next(false);
+              this.cdr.detectChanges();
+
+              this.common.showSuccess('Update Success!');
+
+              // redirect to list
+              this.router.navigate(['/features/learningpaths']);
+            })
+          );
+        });
+    } else {
       this.subscription.push(
         this.api.update(this.id, this.input).subscribe(() => {
           // hide loading
@@ -154,7 +201,7 @@ export class LearningPathUpdateComponent
           this.common.showSuccess('Update Success!');
 
           // redirect to list
-          this.router.navigate(['/features/learningPaths']);
+          this.router.navigate(['/features/learningpaths']);
         })
       );
     }

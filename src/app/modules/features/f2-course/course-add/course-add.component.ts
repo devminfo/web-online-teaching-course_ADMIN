@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CourseService } from 'src/app/core/services/features/f2-course.service';
+import { Location } from '@angular/common';
+import { AuthService } from 'src/app/core/services/api/00auth.service';
 
 @Component({
   selector: 'app-course-add',
@@ -63,7 +65,9 @@ export class CourseAddComponent implements OnInit, AfterViewInit, OnDestroy {
     private common: CommonService,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private _location: Location
   ) {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
@@ -102,6 +106,10 @@ export class CourseAddComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  onGoBack() {
+    this._location.back();
+  }
+
   /**
    * onThumbnailUploadClick
    */
@@ -136,7 +144,10 @@ export class CourseAddComponent implements OnInit, AfterViewInit, OnDestroy {
     // show loading
     this.isLoading$.next(true);
 
-    this.input.instructor = '642793fa6340df24f6806213';
+    const auth = this.authService.getAuthFromLocalStorage();
+    const createdBy = auth?.user._id;
+
+    this.input.instructor = createdBy;
     if (this.input.price > 0) this.input.isPrivate = true;
 
     if (this.input.thumbnail) {

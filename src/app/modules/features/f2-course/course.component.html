@@ -66,9 +66,10 @@
                 />
               </div>
             </th>
-            <th class="min-w-150px">ID</th>
-            <th class="min-w-140px">Title</th>
             <th class="min-w-140px">Thumbnail</th>
+            <th class="min-w-140px">Title</th>
+            <th class="min-w-140px">Chapters</th>
+            <th class="min-w-140px">Lectures</th>
             <th class="min-w-140px">Students</th>
             <th class="min-w-120px">Price</th>
             <th class="min-w-120px">Views</th>
@@ -82,7 +83,7 @@
             <!-- Select -->
             <td>
               <div
-                class="form-check form-check-sm form-check-custom form-check-solid"
+                class="form-check form-check-sm form-check-custom form-check-solid h-125px"
               >
                 <input
                   [(ngModel)]="data.checked"
@@ -94,29 +95,6 @@
               </div>
             </td>
 
-            <!-- ID -->
-            <td>
-              <a
-                routerLink="/features/courses/update/{{ data._id }}"
-                class="text-dark fw-bolder text-hover-primary fs-6"
-              >
-                <p
-                  class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
-                >
-                  {{ data._id }}
-                </p>
-              </a>
-            </td>
-
-            <!-- Title -->
-            <td>
-              <p
-                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
-              >
-                {{ data.title }}
-              </p>
-            </td>
-
             <!-- Image -->
             <td>
               <img
@@ -124,6 +102,39 @@
                 src="{{ data.thumbnail }}"
                 alt="{{ data.title }}"
               />
+            </td>
+
+            <!-- Title -->
+            <td>
+              <p
+                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6 h-125px"
+              >
+                {{ data.title }}
+              </p>
+            </td>
+
+            <!--Total Chapter -->
+            <td>
+              <p class="text-dark text-hover-primary d-block mb-1 fs-6">
+                <span
+                  routerLink="/features/chapters/course/{{ data._id }}"
+                  class="badge badge-circle badge-primary cursor-pointer"
+                >
+                  {{ data.totalChapter }}</span
+                >
+              </p>
+            </td>
+
+            <!-- totalLectures -->
+            <td>
+              <p class="text-dark text-hover-primary d-block mb-1 fs-6">
+                <span
+                  routerLink="/features/chapters/course/{{ data._id }}"
+                  class="badge badge-circle badge-primary cursor-pointer"
+                >
+                  {{ data.totalLectures }}
+                </span>
+              </p>
             </td>
 
             <!-- Students -->

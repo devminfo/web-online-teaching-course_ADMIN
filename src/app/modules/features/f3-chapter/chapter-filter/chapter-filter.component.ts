@@ -18,13 +18,13 @@ export class ChapterFilterComponent implements OnInit {
   @HostBinding('attr.data-kt-menu') dataKtMenu = 'true';
 
   // input data source for select
-  @Input() chapters: any[] = [];
+  @Input() courses: any[] = [];
 
   // output
   @Output() applyBtnClick = new EventEmitter<string>();
 
   // binding
-  chapterSelect: string = '0';
+  courseSelect: string = '0';
 
   /**
    * constructor
@@ -40,6 +40,6 @@ export class ChapterFilterComponent implements OnInit {
    * onApplyBtnClick
    */
   onApplyBtnClick() {
-    this.applyBtnClick.emit(this.chapterSelect);
+    this.applyBtnClick.emit(this.courseSelect);
   }
 }

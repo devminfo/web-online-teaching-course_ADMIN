@@ -45,16 +45,13 @@
 
       <!-- new data -->
       <div class="card-toolbar">
-        <a
-          routerLink="/features/chapters/update/{{ chapter?._id }}/"
-          class="btn btn-sm btn-light-primary mr-1"
-        >
+        <span class="btn btn-sm btn-light-primary mr-1" (click)="onGoBack()">
           <span
             [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'"
             class="svg-icon svg-icon-3"
           ></span>
           Go back
-        </a>
+        </span>
       </div>
     </div>
   </div>
