@@ -7,6 +7,7 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
 import { LearningPathAddComponent } from './learning-path-add/learning-path-add.component';
 import { LearningPathUpdateComponent } from './learning-path-update/learning-path-update.component';
 import { LearningPathFilterComponent } from './learning-path-filter/learning-path-filter.component';
+import { CKEditorModule } from 'ckeditor4-angular';
 @NgModule({
   declarations: [
     LearningPathComponent,
@@ -16,6 +17,7 @@ import { LearningPathFilterComponent } from './learning-path-filter/learning-pat
   ],
   imports: [
     CommonModule,
+    CKEditorModule,
     RouterModule.forChild([
       {
         path: '',
@@ -33,7 +35,6 @@ import { LearningPathFilterComponent } from './learning-path-filter/learning-pat
     ]),
     FormsModule,
     ReactiveFormsModule.withConfig({ warnOnNgModelWithFormControl: 'never' }),
-
     InlineSVGModule,
   ],
   entryComponents: [],

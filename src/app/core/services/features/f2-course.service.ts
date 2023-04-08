@@ -29,9 +29,9 @@ export class CourseService {
    * HttpClient API get() method => Fetch group apis list
    * @returns
    */
-  get(): Observable<any> {
+  get(filter = ''): Observable<any> {
     return this.http
-      .get<any>(this.apiURL + '/courses')
+      .get<any>(this.apiURL + '/courses' + `?${filter}`)
       .pipe(retry(1), catchError(this.handleError));
   }
 

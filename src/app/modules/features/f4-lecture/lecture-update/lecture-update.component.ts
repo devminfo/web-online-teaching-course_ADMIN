@@ -13,6 +13,7 @@ import { CommonService } from 'src/app/core/services/common.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LectureService } from 'src/app/core/services/features/f4-lecture.service';
 import { ChapterService } from 'src/app/core/services/features/f3-chapter.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-lecture-update',
@@ -64,7 +65,8 @@ export class LectureUpdateComponent
     private router: Router,
     private cdr: ChangeDetectorRef,
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private _location: Location
   ) {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
@@ -101,6 +103,10 @@ export class LectureUpdateComponent
     this.subscription.forEach((item) => {
       item.unsubscribe();
     });
+  }
+
+  onGoBack() {
+    this._location.back();
   }
 
   /**

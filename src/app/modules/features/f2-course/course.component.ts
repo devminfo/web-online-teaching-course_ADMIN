@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { CourseService } from 'src/app/core/services/features/f2-course.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { AuthService } from 'src/app/core/services/api/00auth.service';
 
 @Component({
   selector: 'app-course',
@@ -201,7 +202,8 @@ export class CourseComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   constructor(
     private commonService: CommonService,
-    private api: CourseService
+    private api: CourseService,
+    private authService: AuthService
   ) {
     // xử lý bất đồng bộ
     this.observable = Observable.create((observer: any) => {
@@ -242,7 +244,10 @@ export class CourseComponent implements OnInit, AfterViewInit, OnDestroy {
    * on Load Data Grid
    */
   onLoadDataGrid() {
-    const filter = 'instructor=642793fa6340df24f6806213';
+    const auth = this.authService.getAuthFromLocalStorage();
+    const createdBy = auth?.user._id;
+
+    const filter = `instructor=${createdBy}`;
     this.subscription.push(
       this.api
         .paginate({

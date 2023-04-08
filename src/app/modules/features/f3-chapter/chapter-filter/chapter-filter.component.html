@@ -7,18 +7,18 @@
 <div class="px-7 py-5">
   <!-- Select Specialize -->
   <div class="mb-10">
-    <label class="form-label fw-bold">Specialize:</label>
+    <label class="form-label fw-bold">Course:</label>
     <div>
       <select
-        [(ngModel)]="chapterSelect"
+        [(ngModel)]="courseSelect"
         class="form-select form-select-solid"
         data-kt-select2="true"
         data-placeholder="Select option"
         data-allow-clear="true"
       >
         <option value="0">Tất cả</option>
-        <option *ngFor="let item of chapters" value="{{ item._id }}">
-          {{ item.name }}
+        <option *ngFor="let item of courses" value="{{ item._id }}">
+          {{ item.title }}
         </option>
       </select>
     </div>

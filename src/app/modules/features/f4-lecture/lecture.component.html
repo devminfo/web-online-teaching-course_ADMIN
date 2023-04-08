@@ -2,7 +2,7 @@
   <!-- begin::Header -->
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bolder fs-3 mb-1">Sub Specialize</span>
+      <span class="card-label fw-bolder fs-3 mb-1">Lectures</span>
       <span class="text-muted mt-1 fw-bold fs-7"
         >Selected {{ getSelection().length }} records</span
       >
@@ -88,10 +88,10 @@
                 />
               </div>
             </th>
-            <th class="min-w-150px">ID</th>
-            <th class="min-w-140px">Specialize Name</th>
-            <th class="min-w-140px">Sub Specialize Name</th>
-            <th class="min-w-120px">Position</th>
+            <th class="min-w-120px">Video</th>
+            <th class="min-w-140px">Lecture</th>
+            <th class="min-w-150px">Course</th>
+            <th class="min-w-140px">Chapter</th>
             <th class="min-w-100px text-end">Actions</th>
           </tr>
         </thead>
@@ -106,7 +106,7 @@
               >
                 <input
                   [(ngModel)]="data.checked"
-                  (click)="onItemSelected(data.id)"
+                  (click)="onItemSelected(data._id)"
                   class="form-check-input widget-13-check"
                   type="checkbox"
                   value="1"
@@ -116,42 +116,38 @@
 
             <!-- ID -->
             <td>
-              <a
-                routerLink="/features/lectures/update/{{ data.id }}"
-                class="text-dark fw-bolder text-hover-primary fs-6"
-              >
-                <p
-                  class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
-                >
-                  {{ data.id }}
-                </p>
-              </a>
+              <div width="160" height="120">
+                <video width="160" height="120" controls>
+                  <source src="{{ data.url }}" type="video/mp4" />
+                  <source src="{{ data.url }}" type="video/ogg" />
+                </video>
+              </div>
             </td>
 
-            <!-- Id Specialize -->
+            <!-- Lecture -->
             <td>
               <p
                 class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
               >
-                {{ getSpecializeById(data.idSpecialize) }}
+                {{ data.title }}
               </p>
             </td>
 
-            <!-- Specialize Name -->
+            <!-- Course -->
             <td>
               <p
                 class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
               >
-                {{ data.name }}
+                {{ data.idChapter?.idCourse?.title || "" }}
               </p>
             </td>
 
-            <!-- Posision -->
+            <!-- Chapter -->
             <td>
               <p
                 class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
               >
-                {{ data.position }}
+                {{ data.idChapter?.title }}
               </p>
             </td>
 
@@ -159,7 +155,7 @@
             <td class="text-end">
               <!-- update -->
               <a
-                routerLink="/features/lectures/update/{{ data.id }}"
+                routerLink="/features/lectures/update/{{ data._id }}"
                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
               >
                 <span
@@ -171,7 +167,7 @@
 
               <!-- delete -->
               <a
-                (click)="updateDeleteId(data.id)"
+                (click)="updateDeleteId(data._id)"
                 data-toggle="modal"
                 data-target="#deleteOneModal"
                 routerLink="/features/lectures"

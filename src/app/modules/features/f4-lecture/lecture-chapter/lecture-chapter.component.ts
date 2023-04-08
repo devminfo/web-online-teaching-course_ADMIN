@@ -4,6 +4,7 @@ import { ChapterService } from 'src/app/core/services/features/f3-chapter.servic
 import { CommonService } from 'src/app/core/services/common.service';
 import { LectureService } from 'src/app/core/services/features/f4-lecture.service';
 import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-lecture-chapter',
@@ -76,7 +77,8 @@ export class LectureChapterComponent
     private commonService: CommonService,
     private chapterService: ChapterService,
     private route: ActivatedRoute,
-    private api: LectureService
+    private api: LectureService,
+    private _location: Location
   ) {
     // xử lý bất đồng bộ
     this.observable = Observable.create((observer: any) => {
@@ -108,6 +110,10 @@ export class LectureChapterComponent
     this.subscription.forEach((item) => {
       item.unsubscribe();
     });
+  }
+
+  onGoBack() {
+    this._location.back();
   }
 
   /**

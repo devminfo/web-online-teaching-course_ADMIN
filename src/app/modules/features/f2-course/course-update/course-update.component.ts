@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CourseService } from 'src/app/core/services/features/f2-course.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-course-update',
@@ -79,7 +80,8 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private _location: Location
   ) {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
@@ -125,6 +127,10 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscription.forEach((item) => {
       item.unsubscribe();
     });
+  }
+
+  onGoBack() {
+    this._location.back();
   }
 
   /**
@@ -202,7 +208,6 @@ export class CourseUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
     // touch all control to show error
     if (this.input.price > 0) this.input.isPrivate = true;
     this.form.markAllAsTouched();
-    console.log({ form: this.form });
     // check form pass all validate
     if (this.form.invalid) return;
 

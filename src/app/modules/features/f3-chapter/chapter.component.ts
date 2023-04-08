@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { ChapterService } from 'src/app/core/services/features/f3-chapter.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { CourseService } from 'src/app/core/services/features/f2-course.service';
+import { AuthService } from 'src/app/core/services/api/00auth.service';
 
 @Component({
   selector: 'app-chapter',
@@ -15,6 +17,7 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
   observable: Observable<any>;
   observer: Observer<any>;
   call: number = 0;
+  coursesFilter: any[] = [];
 
   // condition fillter
   conditonFilter: string = '';
@@ -200,7 +203,9 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   constructor(
     private commonService: CommonService,
-    private api: ChapterService
+    private api: ChapterService,
+    private authService: AuthService,
+    private courseService: CourseService
   ) {
     // xử lý bất đồng bộ
     this.observable = Observable.create((observer: any) => {
@@ -213,6 +218,7 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   ngOnInit() {
     this.onLoadDataGrid();
+    this.getCourses();
   }
 
   /**
@@ -238,19 +244,34 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
+   * Get courses
+   * @param id
+   */
+  getCourses() {
+    const auth = this.authService.getAuthFromLocalStorage();
+    const createdBy = auth?.user._id;
+
+    const filter = `instructor=${createdBy}`;
+    this.subscription.push(
+      this.courseService.get(filter).subscribe((data) => {
+        this.coursesFilter = data;
+      })
+    );
+  }
+
+  /**
    * on Load Data Grid
    */
   onLoadDataGrid() {
     const filter = {
       page: this.pageIndex,
       limit: this.pageSize,
-      filter: this.conditonFilter,
+      filter: this.conditonFilter + `&sort=position`,
       fields: '',
       populate: 'idCourse',
     };
     this.subscription.push(
       this.api.paginate(filter).subscribe((data) => {
-        console.log({ data });
         this.dataSources = data.results;
         this.pageLength = data.totalResults;
       })
@@ -260,8 +281,8 @@ export class ChapterComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * onApplyBtnClick
    */
-  onApplyBtnClick(event: string) {
-    const condition = { key: 'idSpecialize', value: event };
+  onApplyBtnClick(idCourse: string) {
+    const condition = { key: 'idCourse', value: idCourse };
 
     // add new condition to list
     this.addNewConditionToList(condition);
