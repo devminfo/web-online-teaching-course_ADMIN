@@ -1,0 +1,205 @@
+<div class="card mb-5 mb-xl-10">
+  <!-- begin::Header -->
+  <div class="card-header border-0 pt-5">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bolder fs-3 mb-1">Transaction</span>
+      <span class="text-muted mt-1 fw-bold fs-7">Add New</span>
+    </h3>
+    <div class="card-toolbar">
+      <!-- new data -->
+      <div class="card-toolbar">
+        <a
+          routerLink="/features/transactions"
+          class="btn btn-sm btn-light-primary"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr002.svg'"
+            class="svg-icon svg-icon-3"
+          ></span>
+          Go back
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- end::Header -->
+
+  <div id="kt_account_profile_details" class="collapse show">
+    <form [formGroup]="form" novalidate="" class="form">
+      <div class="card-body border-top p-9">
+        <!-- Tittle -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Title</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="text"
+              [(ngModel)]="input.text"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Enter title"
+              name="text"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['text']!.invalid &&
+                (form.controls['text'].dirty || form.controls['text'].touched)
+              "
+            >
+              <span *ngIf="form.controls['text'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Image -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Image</span>
+          </label>
+
+          <!-- Image -->
+          <div class="col-lg-8 fv-row">
+            <!--begin::Image input-->
+            <div class="image-input image-input-outline">
+              <!--begin::Image preview wrapper-->
+              <div
+                class="image-input-wrapper w-125px h-125px"
+                *ngIf="input.image != undefined && input.image != null"
+              >
+                <img
+                  class="image-input-wrapper w-125px h-125px"
+                  *ngIf="input.image != ''"
+                  [src]="input.image"
+                  alt="izi software"
+                  width="250"
+                  height="250"
+                />
+              </div>
+              <!--end::Image preview wrapper-->
+
+              <!--begin::Edit button-->
+              <label
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="change"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Change avatar"
+                (change)="onImageUploadClick()"
+              >
+                <i class="bi bi-pencil-fill fs-7"></i>
+
+                <!--begin::Inputs-->
+                <input
+                  type="file"
+                  formControlName="image"
+                  accept="image/*"
+                  #inputImage
+                  name="image"
+                />
+                <!--end::Inputs-->
+              </label>
+              <!--end::Edit button-->
+
+              <!--begin::Remove button-->
+              <span
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="remove"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Remove avatar"
+                (click)="onImageDeleteClick()"
+              >
+                <i class="bi bi-x fs-2"></i>
+              </span>
+              <!--end::Remove button-->
+            </div>
+            <!--end::Image input-->
+          </div>
+        </div>
+
+        <!-- Position -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Position</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="position"
+              [(ngModel)]="input.position"
+              type="number"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Position"
+              name="position"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['position']!.invalid &&
+                (form.controls['position'].dirty ||
+                  form.controls['position'].touched)
+              "
+            >
+              <span *ngIf="form.controls['position'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Link to Page -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">Link</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="link"
+              [(ngModel)]="input.link"
+              type="text"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Enter title"
+              name="link"
+            />
+
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['link']!.invalid &&
+                (form.controls['link'].dirty || form.controls['link'].touched)
+              "
+            >
+              <span *ngIf="form.controls['link'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add New -->
+      <div class="card-footer d-flex justify-content-end py-6 px-9">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="isLoading"
+          (click)="onAddNewBtnClick()"
+        >
+          <ng-container *ngIf="!isLoading">Add New</ng-container>
+          <ng-container *ngIf="isLoading">
+            <span clas="indicator-progress" [style.display]="'block'">
+              Please wait...{{ " " }}
+              <span
+                class="spinner-border spinner-border-sm align-middle ms-2"
+              ></span>
+            </span>
+          </ng-container>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

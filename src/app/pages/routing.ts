@@ -221,6 +221,13 @@ const Routing: Routes = [
       ),
   },
   {
+    path: 'features/transactions',
+    loadChildren: () =>
+      import('../modules/common/c8-transaction/transaction.module').then(
+        (m) => m.TransactionModule
+      ),
+  },
+  {
     path: 'features/posts',
     loadChildren: () =>
       import('../modules/features/f7-post/post.module').then(

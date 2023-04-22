@@ -1,15 +1,14 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Observable, Observer, Subscription } from 'rxjs';
-import { CourseService } from 'src/app/core/services/features/f2-course.service';
+import { TransactionService } from 'src/app/core/services/common/c9-transaction.service';
 import { CommonService } from 'src/app/core/services/common.service';
-import { AuthService } from 'src/app/core/services/api/00auth.service';
 
 @Component({
-  selector: 'app-course',
-  templateUrl: './course.component.html',
-  styleUrls: ['./course.component.scss'],
+  selector: 'app-transaction',
+  templateUrl: './transaction.component.html',
+  styleUrls: ['./transaction.component.scss'],
 })
-export class CourseComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
   // subscription
   subscription: Subscription[] = [];
 
@@ -188,7 +187,6 @@ export class CourseComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // data source for grid
   dataSources: any[] = [];
-  dataSourcesCourse: any[] = [];
 
   // delete id
   deleteId: String;
@@ -202,8 +200,7 @@ export class CourseComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   constructor(
     private commonService: CommonService,
-    private api: CourseService,
-    private authService: AuthService
+    private api: TransactionService
   ) {
     // xử lý bất đồng bộ
     this.observable = Observable.create((observer: any) => {
@@ -244,19 +241,18 @@ export class CourseComponent implements OnInit, AfterViewInit, OnDestroy {
    * on Load Data Grid
    */
   onLoadDataGrid() {
-    const auth = this.authService.getAuthFromLocalStorage();
-    const createdBy = auth?.user._id;
-
-    const filter = `instructor=${createdBy}`;
+    const filter = '';
     this.subscription.push(
       this.api
         .paginate({
-          limit: this.pageSize,
-          fields: '',
-          filter,
           page: this.pageIndex,
+          limit: this.pageSize,
+          filter: this.conditonFilter,
+          populate: 'idUser,idCourse',
+          fields: '',
         })
         .subscribe((data) => {
+          console.log({ data });
           this.dataSources = data.results;
           this.pageLength = data.totalResults;
         })
@@ -264,24 +260,10 @@ export class CourseComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * getCourseById
-   * @param id
-   */
-  getCourseById(id: string) {
-    const result = this.dataSourcesCourse.filter((item) => item._id == id);
-
-    // check exists
-    if (result.length > 0) {
-      return result[0].name;
-    }
-    return '';
-  }
-
-  /**
    * onApplyBtnClick
    */
   onApplyBtnClick(event: string) {
-    const condition = { key: 'idCourse', value: event };
+    const condition = { key: 'idSpecialize', value: event };
 
     // add new condition to list
     this.addNewConditionToList(condition);
