@@ -33,7 +33,7 @@ export class ProfileDetailsComponent implements OnInit {
 
   userDetail: any = {
     phone: '',
-    born: '',
+    dateOfBirth: '',
     avatar: '',
   };
 
@@ -41,8 +41,7 @@ export class ProfileDetailsComponent implements OnInit {
   input: any = {
     fullName: '',
     phone: '',
-    address: '',
-    born: '',
+    dateOfBirth: '',
     avatar: '',
     gender: '',
   };
@@ -65,8 +64,7 @@ export class ProfileDetailsComponent implements OnInit {
     this.form = this.formBuilder.group({
       fullName: [null, [Validators.required]],
       phone: [null, [Validators.required]],
-      address: [null, [Validators.required]],
-      born: [null, [Validators.required]],
+      dateOfBirth: [null, [Validators.required]],
       avatar: [null, []],
     });
 
@@ -74,7 +72,7 @@ export class ProfileDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    flatpickr('#born_datepicker', {
+    flatpickr('#dateOfBirth_datepicker', {
       // locale: Vietnamese,
       dateFormat: 'd/m/Y',
       minDate: '12/12/1940',
@@ -107,14 +105,13 @@ export class ProfileDetailsComponent implements OnInit {
           this.input = {
             fullName: data.fullName,
             phone: data.phone,
-            address: data.address,
-            born: new Date(data.born).toLocaleDateString('vi-VN'),
+            dateOfBirth: new Date(data.dateOfBirth).toLocaleDateString('vi-VN'),
             avatar: data.avatar,
             gender: data.gender,
           };
           this.userDetail = {
             phone: data.phone,
-            born: new Date(data.born).toLocaleDateString('vi-VN'),
+            dateOfBirth: new Date(data.dateOfBirth).toLocaleDateString('vi-VN'),
             avatar: data.avatar,
           };
         })
@@ -128,6 +125,7 @@ export class ProfileDetailsComponent implements OnInit {
     this.subscription.push(
       this.commonService.uploadImageCore(this.inputAvatar).subscribe((data) => {
         if (data) {
+          console.log({ data });
           this.input.avatar = data['files'][0];
         }
       })
@@ -156,22 +154,23 @@ export class ProfileDetailsComponent implements OnInit {
 
       const dataUpdate: any = {
         avatar: this.input.avatar,
-        address: this.input.address,
         fullName: this.input.fullName,
-        gender: this.input.gender,
+        gender: this.input.gender.toUpperCase(),
       };
 
-      const oldBorn = this.userDetail.born;
-      const updateBorn = this.input.born;
+      const oldBorn = this.userDetail.dateOfBirth;
+      const updateBorn = this.input.dateOfBirth;
 
-      // check born change
+      // check dateOfBirth change
       if (oldBorn !== updateBorn) {
-        const [day, month, year] = this.input.born.split('/');
-        dataUpdate.born = new Date(year, +month - 1, day).getTime();
-        this.userDetail.born = new Date(dataUpdate.born).toLocaleDateString(
-          'vi-VN'
-        );
-        this.input.born = new Date(dataUpdate.born).toLocaleDateString('vi-VN');
+        const [day, month, year] = this.input.dateOfBirth.split('/');
+        dataUpdate.dateOfBirth = new Date(year, +month - 1, day).getTime();
+        this.userDetail.dateOfBirth = new Date(
+          dataUpdate.dateOfBirth
+        ).toLocaleDateString('vi-VN');
+        this.input.dateOfBirth = new Date(
+          dataUpdate.dateOfBirth
+        ).toLocaleDateString('vi-VN');
       }
 
       // check phone change
@@ -187,6 +186,7 @@ export class ProfileDetailsComponent implements OnInit {
           .comfirmImages([this.input.avatar])
           .subscribe((dataImage) => {
             dataUpdate['avatar'] = dataImage[0][4];
+            console.log(dataImage);
 
             this.subscription.push(
               this.userService.updateMe(dataUpdate).subscribe(
