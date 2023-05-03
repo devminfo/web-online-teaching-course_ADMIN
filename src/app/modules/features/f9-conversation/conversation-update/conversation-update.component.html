@@ -2,8 +2,8 @@
   <!-- begin::Header -->
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bolder fs-3 mb-1">Sub Specialize</span>
-      <span class="text-muted mt-1 fw-bold fs-7">Update datas</span>
+      <span class="card-label fw-bolder fs-3 mb-1">Conversation</span>
+      <span class="text-muted mt-1 fw-bold fs-7">Update data</span>
     </h3>
     <div class="card-toolbar">
       <!-- new data -->
@@ -26,41 +26,6 @@
   <div id="kt_account_profile_details" class="collapse show">
     <form [formGroup]="form" novalidate="" class="form">
       <div class="card-body border-top p-9">
-        <!-- Id Conversation -->
-        <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">Specialize</span>
-          </label>
-          <div class="col-lg-8 fv-row">
-            <select
-              [(value)]="input.idSpecialize"
-              class="form-control form-control-lg form-control-solid mb-2"
-              formControlName="idSpecialize"
-              [(ngModel)]="input.idSpecialize"
-              placeholder="Select conversation"
-            >
-              <option value="" disabled selected hidden>
-                Select IdSpecialize
-              </option>
-              <option *ngFor="let item of conversations" [value]="item._id">
-                {{ item.name }}
-              </option>
-            </select>
-            <span
-              class="text-danger"
-              *ngIf="
-                form.controls['idSpecialize']!.invalid &&
-                (form.controls['idSpecialize'].dirty ||
-                  form.controls['idSpecialize'].touched)
-              "
-            >
-              <span *ngIf="form.controls['idSpecialize'].errors!.required">
-                Vui lòng nhập trường này
-              </span>
-            </span>
-          </div>
-        </div>
-
         <!-- Name -->
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6">
@@ -68,58 +33,96 @@
           </label>
           <div class="col-lg-8 fv-row">
             <input
-              formControlName="name"
-              [(ngModel)]="input.name"
+              formControlName="chatName"
+              [(ngModel)]="input.chatName"
               type="text"
               class="form-control form-control-lg form-control-solid mrb-5"
-              placeholder="Name"
-              name="name"
+              placeholder="Enter title"
+              name="chatName"
             />
 
             <span
               class="text-danger"
               *ngIf="
-                form.controls['name']!.invalid &&
-                (form.controls['name'].dirty || form.controls['name'].touched)
+                form.controls['chatName']!.invalid &&
+                (form.controls['chatName'].dirty ||
+                  form.controls['chatName'].touched)
               "
             >
-              <span *ngIf="form.controls['name'].errors!.required">
+              <span *ngIf="form.controls['chatName'].errors!.required">
                 Vui lòng nhập trường này
               </span>
             </span>
           </div>
         </div>
 
-        <!-- Position -->
+        <!-- Image -->
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">Position</span>
+            <span class="required">Avatar</span>
           </label>
-          <div class="col-lg-8 fv-row">
-            <input
-              formControlName="position"
-              [(ngModel)]="input.position"
-              type="number"
-              class="form-control form-control-lg form-control-solid mrb-5"
-              placeholder="Position"
-              name="position"
-            />
 
-            <span
-              class="text-danger"
-              *ngIf="
-                form.controls['position']!.invalid &&
-                (form.controls['position'].dirty ||
-                  form.controls['position'].touched)
-              "
-            >
-              <span *ngIf="form.controls['position'].errors!.required">
-                Vui lòng nhập trường này
+          <!-- Image -->
+          <div class="col-lg-8 fv-row">
+            <!--begin::Image input-->
+            <div class="image-input image-input-outline">
+              <!--begin::Image preview wrapper-->
+              <div
+                class="image-input-wrapper w-125px h-125px"
+                *ngIf="input.avatar != undefined && input.avatar != null"
+              >
+                <img
+                  class="image-input-wrapper w-125px h-125px"
+                  *ngIf="input.avatar != ''"
+                  [src]="input.avatar"
+                  alt="e8 learning"
+                  width="250"
+                  height="250"
+                />
+              </div>
+              <!--end::Image preview wrapper-->
+
+              <!--begin::Edit button-->
+              <label
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="change"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Change avatar"
+                (change)="onImageUploadClick()"
+              >
+                <i class="bi bi-pencil-fill fs-7"></i>
+
+                <!--begin::Inputs-->
+                <input
+                  type="file"
+                  formControlName="avatar"
+                  accept="image/*"
+                  #inputImage
+                  name="avatar"
+                />
+                <!--end::Inputs-->
+              </label>
+              <!--end::Edit button-->
+
+              <!--begin::Remove button-->
+              <span
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="remove"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Remove avatar"
+                (click)="onImageDeleteClick()"
+              >
+                <i class="bi bi-x fs-2"></i>
               </span>
-            </span>
+              <!--end::Remove button-->
+            </div>
+            <!--end::Image input-->
           </div>
         </div>
       </div>
+
       <!-- Add New -->
       <div class="card-footer d-flex justify-content-end py-6 px-9">
         <button

@@ -2,32 +2,32 @@
   <!-- begin::Header -->
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bolder fs-3 mb-1">Sub Specialize</span>
+      <span class="card-label fw-bolder fs-3 mb-1">ClassRooms</span>
       <span class="text-muted mt-1 fw-bold fs-7"
         >Selected {{ getSelection().length }} records</span
       >
     </h3>
     <div class="card-toolbar">
-      <!-- delete -->
+      <!-- finish -->
       <div class="card-toolbar" *ngIf="getSelection().length > 0">
         <a
           routerLink="/features/classRooms"
           data-toggle="modal"
-          data-target="#deleteManyModal"
+          data-target="#finishManyModal"
           class="btn btn-sm btn-light-danger mr-1"
         >
           <span
             [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
             class="svg-icon svg-icon-3"
           ></span>
-          Delete
+          Finish
         </a>
       </div>
 
       <!-- new data -->
       <div class="card-toolbar">
         <a
-          routerLink="/features/classRooms/add"
+          routerLink="/features/classrooms/add"
           class="btn btn-sm btn-light-primary mr-1"
         >
           <span
@@ -37,28 +37,6 @@
           Add New
         </a>
       </div>
-
-      <!-- begin::Menu -->
-      <button
-        type="button"
-        class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
-        data-kt-menu-trigger="click"
-        data-kt-menu-placement="bottom-end"
-        data-kt-menu-flip="top-end"
-      >
-        <span
-          [inlineSVG]="'./assets/media/icons/duotune/general/gen024.svg'"
-          class="svg-icon svg-icon-2"
-        ></span>
-      </button>
-      <!-- begin::Menu 1 -->
-      <class-room-filter
-        [classRooms]="dataSourcesSpecialize"
-        (applyBtnClick)="onApplyBtnClick($event)"
-      >
-      </class-room-filter>
-      <!-- end::Menu 1 -->
-      <!-- end::Menu -->
     </div>
   </div>
   <!-- end::Header -->
@@ -88,10 +66,12 @@
                 />
               </div>
             </th>
-            <th class="min-w-150px">ID</th>
-            <th class="min-w-140px">Specialize Name</th>
-            <th class="min-w-140px">Sub Specialize Name</th>
-            <th class="min-w-120px">Position</th>
+            <th class="min-w-150px">Thumbnail</th>
+            <th class="min-w-140px">Name</th>
+            <th class="min-w-120px">Total students</th>
+            <th class="min-w-120px">Start Time</th>
+            <th class="min-w-100px">End Time</th>
+            <th class="min-w-100px">Status</th>
             <th class="min-w-100px text-end">Actions</th>
           </tr>
         </thead>
@@ -114,30 +94,16 @@
               </div>
             </td>
 
-            <!-- ID -->
+            <!-- Image -->
             <td>
-              <a
-                routerLink="/features/classRooms/update/{{ data.id }}"
-                class="text-dark fw-bolder text-hover-primary fs-6"
-              >
-                <p
-                  class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
-                >
-                  {{ data.id }}
-                </p>
-              </a>
+              <img
+                class="image-input-wrapper w-125px h-125px"
+                src="{{ data.thumbnail }}"
+                alt="{{ data.name }}"
+              />
             </td>
 
-            <!-- Id Specialize -->
-            <td>
-              <p
-                class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
-              >
-                {{ getSpecializeById(data.idSpecialize) }}
-              </p>
-            </td>
-
-            <!-- Specialize Name -->
+            <!-- Name -->
             <td>
               <p
                 class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
@@ -146,41 +112,73 @@
               </p>
             </td>
 
-            <!-- Posision -->
+            <!-- Total students -->
             <td>
               <p
                 class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
               >
-                {{ data.position }}
+                {{ data.members.length }}
+              </p>
+            </td>
+
+            <!-- Start time -->
+            <td>
+              <p class="text-dark text-hover-primary d-block mb-1 fs-6">
+                {{ data.startTime | date : "dd/MM/yyyy" }}
+              </p>
+            </td>
+
+            <!-- End time -->
+            <td>
+              <p class="text-dark text-hover-primary d-block mb-1 fs-6">
+                <span
+                  *ngIf="!data.endTime"
+                  class="badge badge-light-info fs-8 fw-bolder"
+                  >pending...</span
+                >
+                {{ data.endTime ? (data.endTime | date : "dd/MM/yyyy") : "" }}
+              </p>
+            </td>
+
+            <!-- Status -->
+            <td>
+              <p class="text-dark text-hover-primary d-block mb-1 fs-6">
+                <span class="badge badge-light-primary fs-8 fw-bolder">{{
+                  data.status
+                }}</span>
               </p>
             </td>
 
             <!-- Actions -->
             <td class="text-end">
+              <!-- finish -->
+              <a
+                [class.disabled]="data.endTime"
+                (click)="updateFinishId(data.id)"
+                data-toggle="modal"
+                data-target="#checkFinishModal"
+                routerLink="/features/classrooms"
+                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  style="fill: #009000"
+                >
+                  <path
+                    d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"
+                  ></path>
+                </svg>
+              </a>
               <!-- update -->
               <a
-                routerLink="/features/classRooms/update/{{ data.id }}"
+                routerLink="/features/classrooms/update/{{ data._id }}"
                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
               >
                 <span
                   [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
-                  class="svg-icon svg-icon-3"
-                >
-                </span>
-              </a>
-
-              <!-- delete -->
-              <a
-                (click)="updateDeleteId(data.id)"
-                data-toggle="modal"
-                data-target="#deleteOneModal"
-                routerLink="/features/classRooms"
-                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
-              >
-                <span
-                  [inlineSVG]="
-                    './assets/media/icons/duotune/general/gen027.svg'
-                  "
                   class="svg-icon svg-icon-3"
                 >
                 </span>
@@ -267,20 +265,20 @@
   </ul>
 </div>
 
-<!-- Delete one Modal -->
+<!-- Finish one Modal -->
 <div
   class="modal fade"
-  id="deleteOneModal"
+  id="checkFinishModal"
   tabindex="-1"
   role="dialog"
-  aria-labelledby="deleteOneModalLabel"
+  aria-labelledby="checkFinishModalLabel"
   aria-hidden="true"
 >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deleteOneModalLabel">
-          <b>CONFIRM REMOVE DATA</b>
+        <h5 class="modal-title" id="checkFinishModalLabel">
+          <b>CONFIRM FINISH DATA</b>
         </h5>
         <button
           type="button"
@@ -292,7 +290,7 @@
         </button>
       </div>
       <div class="modal-body">
-        Do you really want to delete these records? This process cannot be
+        Do you really want to finish these records? This process cannot be
         undone.
       </div>
       <div class="modal-footer">
@@ -303,7 +301,7 @@
           type="button"
           class="btn btn-danger"
           data-dismiss="modal"
-          (click)="onDeleteBtnClick()"
+          (click)="onFinishBtnClick()"
         >
           Accept
         </button>
@@ -312,20 +310,20 @@
   </div>
 </div>
 
-<!-- Delete many Modal -->
+<!-- Finish many Modal -->
 <div
   class="modal fade"
-  id="deleteManyModal"
+  id="finishManyModal"
   tabindex="-1"
   role="dialog"
-  aria-labelledby="deleteManyModalLabel"
+  aria-labelledby="finishManyModalLabel"
   aria-hidden="true"
 >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deleteManyModalLabel">
-          <b>CONFIRM REMOVE DATA</b>
+        <h5 class="modal-title" id="finishManyModalLabel">
+          <b>CONFIRM FINISH DATA</b>
         </h5>
         <button
           type="button"
@@ -337,7 +335,7 @@
         </button>
       </div>
       <div class="modal-body">
-        Do you really want to delete {{ getSelection().length }} select records?
+        Do you really want to finish {{ getSelection().length }} select records?
         This process cannot be undone.
       </div>
       <div class="modal-footer">
@@ -348,7 +346,7 @@
           type="button"
           class="btn btn-danger"
           data-dismiss="modal"
-          (click)="onDeleteManyBtnClick()"
+          (click)="onFinishManyBtnClick()"
         >
           Accept
         </button>

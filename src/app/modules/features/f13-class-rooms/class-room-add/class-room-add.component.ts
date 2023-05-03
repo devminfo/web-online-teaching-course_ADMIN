@@ -4,12 +4,16 @@ import {
   OnDestroy,
   AfterViewInit,
   ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ClassRoomService } from 'src/app/core/services/features/f13-class-room.service';
+import flatpickr from 'flatpickr';
+import { AuthService } from 'src/app/core/services/api/00auth.service';
 
 @Component({
   selector: 'app-class-room-add',
@@ -22,11 +26,19 @@ export class ClassRoomAddComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
 
+  // binding uploads thumbnail or file
+  @ViewChild('inputImage', { static: false })
+  inputImage: ElementRef;
+
   // binding data
   input: any = {
-    idSpecialize: '',
+    members: [],
+    teacher: '',
     name: '',
-    position: '',
+    thumbnail: '',
+    desc: '',
+    startTime: 0,
+    endTime: 0,
   };
 
   classRooms: any[];
@@ -46,31 +58,36 @@ export class ClassRoomAddComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   constructor(
     private api: ClassRoomService,
-    private classRoomService: ClassRoomService,
     private common: CommonService,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private authService: AuthService
   ) {
     this.subscription.push(
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
     );
-
-    // Get classRooms
-    this.getAllSpecializes();
-
     // add validate for controls
     this.form = this.formBuilder.group({
-      idSpecialize: [null, [Validators.required]],
       name: [null, [Validators.required]],
-      position: [null, [Validators.required]],
+      thumbnail: [null, [Validators.required]],
+      desc: [null, [Validators.required]],
+      startTime: [null, [Validators.required]],
     });
   }
 
   /**
    * ngOnInit
    */
-  ngOnInit() {}
+  ngOnInit() {
+    flatpickr('#startTime_datepicker', {
+      // locale: Vietnamese,
+      dateFormat: 'd/m/Y',
+      minDate: '12/12/1940',
+      maxDate: '12/12/2015',
+      defaultDate: '12/12/2000',
+    });
+  }
 
   /**
    * ng After View Init
@@ -87,14 +104,24 @@ export class ClassRoomAddComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Get all classRooms
+   * onImageUploadClick
    */
-  getAllSpecializes() {
+  onImageUploadClick() {
     this.subscription.push(
-      this.classRoomService.get().subscribe((data) => {
-        this.classRooms = data;
+      this.common.uploadImageCore(this.inputImage).subscribe((data) => {
+        if (data) {
+          this.input.thumbnail = data['files'][0];
+        }
       })
     );
+  }
+
+  /**
+   * onImageDeleteClick
+   */
+  onImageDeleteClick() {
+    const isDelete = confirm('Bạn có muốn xóa hình? ');
+    if (isDelete) this.input.thumbnail = '';
   }
 
   /**
@@ -109,18 +136,45 @@ export class ClassRoomAddComponent implements OnInit, AfterViewInit, OnDestroy {
       // show loading
       this.isLoading$.next(true);
 
-      this.subscription.push(
-        this.api.add(this.input).subscribe(() => {
-          // hide loading
-          this.isLoading$.next(false);
-          this.cdr.detectChanges();
+      const auth = this.authService.getAuthFromLocalStorage();
+      this.input.teacher = auth?.user._id;
 
-          this.common.showSuccess('Insert new success!');
+      if (this.input.thumbnail) {
+        this.common
+          .comfirmImages([this.input.thumbnail])
+          .subscribe((dataImage) => {
+            this.input.thumbnail = dataImage[0][2];
 
-          // redirect to list
-          this.router.navigate(['/features/classRooms']);
-        })
-      );
+            const [day, month, year] = this.input.startTime.split('/');
+            this.input.startTime = new Date(year, +month - 1, day).getTime();
+
+            this.subscription.push(
+              this.api.add(this.input).subscribe(() => {
+                // hide loading
+                this.isLoading$.next(false);
+                this.cdr.detectChanges();
+
+                this.common.showSuccess('Insert new success!');
+
+                // redirect to list
+                this.router.navigate(['/features/classrooms']);
+              })
+            );
+          });
+      } else {
+        this.subscription.push(
+          this.api.add(this.input).subscribe(() => {
+            // hide loading
+            this.isLoading$.next(false);
+            this.cdr.detectChanges();
+
+            this.common.showSuccess('Insert new success!');
+
+            // redirect to list
+            this.router.navigate(['/features/classrooms']);
+          })
+        );
+      }
     }
   }
 }

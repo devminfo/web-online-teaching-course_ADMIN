@@ -1,13 +1,8 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  AfterViewInit,
-  HostBinding,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Observable, Observer, Subscription } from 'rxjs';
 import { ConversationService } from 'src/app/core/services/features/f9-conversation.service';
 import { CommonService } from 'src/app/core/services/common.service';
+import { AuthService } from 'src/app/core/services/api/00auth.service';
 
 @Component({
   selector: 'app-conversation',
@@ -193,22 +188,14 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // data source for grid
   dataSources: any[] = [];
-  dataSourcesSpecialize: any[] = [];
 
   // delete id
-  deleteId: String;
+  finishId: String;
 
-  /**
-   * ************************************ constructor ************************************
-   * ************************************ constructor ************************************
-   * ************************************ constructor ************************************
-   * @param api
-   * @param dialog
-   */
   constructor(
     private commonService: CommonService,
-    private api: ConversationService,
-    private apiSpecialize: ConversationService
+    private authService: AuthService,
+    private api: ConversationService
   ) {
     // xử lý bất đồng bộ
     this.observable = Observable.create((observer: any) => {
@@ -220,17 +207,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnDestroy {
    * ngOnInit
    */
   ngOnInit() {
-    // load data reference
-    this.loadDataReference();
-
-    // check data reference loaded
-    this.observable.subscribe((data) => {
-      // number api reference call
-      if (data == 1) {
-        // load data user
-        this.onLoadDataGrid();
-      }
-    });
+    this.onLoadDataGrid();
   }
 
   /**
@@ -248,58 +225,35 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * updateDeleteId
+   * updateFinishId
    * @param id
    */
-  updateDeleteId(id: String) {
-    this.deleteId = id;
+  updateFinishId(id: String) {
+    this.finishId = id;
   }
 
   /**
    * on Load Data Grid
    */
   onLoadDataGrid() {
-    const filter = {
-      page: this.pageIndex,
-      limit: this.pageSize,
-      filter: this.conditonFilter,
-      fields: '',
-    };
+    const auth = this.authService.getAuthFromLocalStorage();
+    const teacher = auth?.user._id;
+
+    const filter = `createdBy=${teacher}`;
     this.subscription.push(
-      this.api.paginate(filter).subscribe((data) => {
-        this.dataSources = data.results;
-        this.pageLength = data.totalResults;
-      })
+      this.api
+        .paginate({
+          fields: '',
+          filter,
+          limit: 10,
+          page: 1,
+          populate: 'idClassRoom',
+        })
+        .subscribe((data) => {
+          this.dataSources = data.results;
+          this.pageLength = data.totalResults;
+        })
     );
-  }
-
-  /**
-   * load Data Reference
-   */
-  loadDataReference() {
-    this.subscription.push(
-      this.apiSpecialize.get().subscribe((data) => {
-        this.dataSourcesSpecialize = data;
-
-        // loading finished
-        this.call += 1;
-        this.observer.next(this.call);
-      })
-    );
-  }
-
-  /**
-   * getSpecializeById
-   * @param id
-   */
-  getSpecializeById(id: string) {
-    const result = this.dataSourcesSpecialize.filter((item) => item._id == id);
-
-    // check exists
-    if (result.length > 0) {
-      return result[0].name;
-    }
-    return '';
   }
 
   /**
@@ -313,22 +267,27 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * onDeleteBtnClick
+   * onFinishBtnClick
    */
-  onDeleteBtnClick() {
+  onFinishBtnClick() {
     this.subscription.push(
-      this.api.delete(this.deleteId).subscribe(() => {
-        this.commonService.showSuccess('Delete Success!');
-        // load new data
-        this.onLoadDataGrid();
-      })
+      this.api
+        .update(this.finishId, {
+          status: 'FINISH',
+          endTime: new Date().getTime(),
+        })
+        .subscribe(() => {
+          this.commonService.showSuccess('Finish Success!');
+          // load new data
+          this.onLoadDataGrid();
+        })
     );
   }
 
   /**
-   * onDeleteManyBtnClick
+   * onFinishManyBtnClick
    */
-  onDeleteManyBtnClick() {
+  onFinishManyBtnClick() {
     // get list id select
     const listIdSelect = this.getSelection()
       .map((item) => item.id)
@@ -337,7 +296,7 @@ export class ConversationComponent implements OnInit, AfterViewInit, OnDestroy {
     // delete many by list id select
     this.subscription.push(
       this.api.deleteManyByIds(listIdSelect).subscribe(() => {
-        this.commonService.showSuccess('Delete Success!');
+        this.commonService.showSuccess('Finish Success!');
         // load new data
         this.onLoadDataGrid();
       })
