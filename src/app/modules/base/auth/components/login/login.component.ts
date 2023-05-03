@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
@@ -16,8 +16,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // KeenThemes mock, change it to:
   defaultAuth: any = {
-    email: 'admin@gmail.com',
-    password: 'admin123123',
+    email: '',
+    password: '',
   };
   loginForm: FormGroup;
   hasError: boolean;
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   /**
    * constructor
-   * @param fb
+   * @param fbEmail
    * @param authService
    * @param route
    * @param router
@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.email,
           Validators.minLength(3),
-          Validators.maxLength(320), // https://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
+          Validators.maxLength(320),
         ]),
       ],
       password: [

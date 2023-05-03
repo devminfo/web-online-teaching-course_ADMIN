@@ -166,6 +166,7 @@ export class BannerUpdateComponent implements OnInit, AfterViewInit, OnDestroy {
     // confirm use banner
     if (this.input.image !== this.imageOld && this.input.image) {
       this.common.comfirmImages([this.input.image]).subscribe((dataImage) => {
+        console.log({ dataImage });
         this.input.image = dataImage[0][2];
         this.subscription.push(
           this.api.update(this.id, this.input).subscribe(() => {

@@ -145,50 +145,21 @@
           <div class="col-lg-8 fv-row">
             <input
               placeholder="Pick a date"
-              formControlName="born"
-              [(ngModel)]="input.born"
+              formControlName="dateOfBirth"
+              [(ngModel)]="input.dateOfBirth"
               class="form-control form-control-lg form-control-solid mrb-5"
               placeholder="Pick a date"
-              id="born_datepicker"
+              id="dateOfBirth_datepicker"
             />
             <span
               class="text-danger"
               *ngIf="
-                form.controls['born']!.invalid &&
-                (form.controls['born'].dirty || form.controls['born'].touched)
+                form.controls['dateOfBirth']!.invalid &&
+                (form.controls['dateOfBirth'].dirty ||
+                  form.controls['dateOfBirth'].touched)
               "
             >
-              <span *ngIf="form.controls['born'].errors!.required">
-                Vui lòng nhập trường này
-              </span>
-            </span>
-          </div>
-        </div>
-
-        <!-- Address -->
-        <div class="row mb-6">
-          <label class="col-lg-4 col-form-label required fw-bold fs-6"
-            >Address</label
-          >
-          <div class="col-lg-8 fv-row">
-            <input
-              formControlName="address"
-              [(ngModel)]="input.address"
-              type="text"
-              class="form-control form-control-lg form-control-solid mrb-5"
-              placeholder="Enter address"
-              name="address"
-            />
-
-            <span
-              class="text-danger"
-              *ngIf="
-                form.controls['address']!.invalid &&
-                (form.controls['address'].dirty ||
-                  form.controls['address'].touched)
-              "
-            >
-              <span *ngIf="form.controls['address'].errors!.required">
+              <span *ngIf="form.controls['dateOfBirth'].errors!.required">
                 Vui lòng nhập trường này
               </span>
             </span>
@@ -214,7 +185,7 @@
                   type="radio"
                   name="gender"
                   id="female"
-                  value="female"
+                  value="FEMALE"
                   [(ngModel)]="input.gender"
                 />
                 <label
@@ -234,7 +205,7 @@
                   [ngModelOptions]="{ standalone: true }"
                   class="form-check-input"
                   type="radio"
-                  value="male"
+                  value="MALE"
                   name="gender"
                   id="male"
                   [(ngModel)]="input.gender"
@@ -256,7 +227,7 @@
                   [ngModelOptions]="{ standalone: true }"
                   class="form-check-input"
                   type="radio"
-                  value="other"
+                  value="OTHER"
                   name="gender"
                   id="other"
                   [(ngModel)]="input.gender"
