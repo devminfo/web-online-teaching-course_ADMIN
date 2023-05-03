@@ -2,14 +2,14 @@
   <!-- begin::Header -->
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bolder fs-3 mb-1">Sub Specialize</span>
+      <span class="card-label fw-bolder fs-3 mb-1">ClassRoom</span>
       <span class="text-muted mt-1 fw-bold fs-7">Update datas</span>
     </h3>
     <div class="card-toolbar">
       <!-- new data -->
       <div class="card-toolbar">
         <a
-          routerLink="/features/classRooms"
+          routerLink="/features/classrooms"
           class="btn btn-sm btn-light-primary"
         >
           <span
@@ -26,41 +26,6 @@
   <div id="kt_account_profile_details" class="collapse show">
     <form [formGroup]="form" novalidate="" class="form">
       <div class="card-body border-top p-9">
-        <!-- Id ClassRoom -->
-        <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">Specialize</span>
-          </label>
-          <div class="col-lg-8 fv-row">
-            <select
-              [(value)]="input.idSpecialize"
-              class="form-control form-control-lg form-control-solid mb-2"
-              formControlName="idSpecialize"
-              [(ngModel)]="input.idSpecialize"
-              placeholder="Select classRoom"
-            >
-              <option value="" disabled selected hidden>
-                Select IdSpecialize
-              </option>
-              <option *ngFor="let item of classRooms" [value]="item._id">
-                {{ item.name }}
-              </option>
-            </select>
-            <span
-              class="text-danger"
-              *ngIf="
-                form.controls['idSpecialize']!.invalid &&
-                (form.controls['idSpecialize'].dirty ||
-                  form.controls['idSpecialize'].touched)
-              "
-            >
-              <span *ngIf="form.controls['idSpecialize'].errors!.required">
-                Vui lòng nhập trường này
-              </span>
-            </span>
-          </div>
-        </div>
-
         <!-- Name -->
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6">
@@ -72,7 +37,7 @@
               [(ngModel)]="input.name"
               type="text"
               class="form-control form-control-lg form-control-solid mrb-5"
-              placeholder="Name"
+              placeholder="Enter title"
               name="name"
             />
 
@@ -90,36 +55,131 @@
           </div>
         </div>
 
-        <!-- Position -->
+        <!-- Image -->
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">Position</span>
+            <span class="required">Thumbnail</span>
+          </label>
+
+          <!-- Image -->
+          <div class="col-lg-8 fv-row">
+            <!--begin::Image input-->
+            <div class="image-input image-input-outline">
+              <!--begin::Image preview wrapper-->
+              <div
+                class="image-input-wrapper w-125px h-125px"
+                *ngIf="input.thumbnail != undefined && input.thumbnail != null"
+              >
+                <img
+                  class="image-input-wrapper w-125px h-125px"
+                  *ngIf="input.thumbnail != ''"
+                  [src]="input.thumbnail"
+                  alt="e8 learning"
+                  width="250"
+                  height="250"
+                />
+              </div>
+              <!--end::Image preview wrapper-->
+
+              <!--begin::Edit button-->
+              <label
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="change"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Change thumbnail"
+                (change)="onImageUploadClick()"
+              >
+                <i class="bi bi-pencil-fill fs-7"></i>
+
+                <!--begin::Inputs-->
+                <input
+                  type="file"
+                  formControlName="thumbnail"
+                  accept="image/*"
+                  #inputImage
+                  name="thumbnail"
+                />
+                <!--end::Inputs-->
+              </label>
+              <!--end::Edit button-->
+
+              <!--begin::Remove button-->
+              <span
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="remove"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Remove avatar"
+                (click)="onImageDeleteClick()"
+              >
+                <i class="bi bi-x fs-2"></i>
+              </span>
+              <!--end::Remove button-->
+            </div>
+            <!--end::Image input-->
+          </div>
+        </div>
+
+        <!-- desc -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">desc</span>
           </label>
           <div class="col-lg-8 fv-row">
-            <input
-              formControlName="position"
-              [(ngModel)]="input.position"
-              type="number"
+            <textarea
+              [(ngModel)]="input.desc"
+              formControlName="desc"
+              placeholder="desc..."
+              name="desc"
               class="form-control form-control-lg form-control-solid mrb-5"
-              placeholder="Position"
-              name="position"
-            />
+              aria-label="With textarea"
+            ></textarea>
 
             <span
               class="text-danger"
               *ngIf="
-                form.controls['position']!.invalid &&
-                (form.controls['position'].dirty ||
-                  form.controls['position'].touched)
+                form.controls['desc']!.invalid &&
+                (form.controls['desc'].dirty || form.controls['desc'].touched)
               "
             >
-              <span *ngIf="form.controls['position'].errors!.required">
+              <span *ngIf="form.controls['desc'].errors!.required">
+                Vui lòng nhập trường này
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <!-- startTime -->
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">startTime</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              placeholder="Pick a date"
+              formControlName="startTime"
+              [(ngModel)]="input.startTime"
+              class="form-control form-control-lg form-control-solid mrb-5"
+              placeholder="Pick a date"
+              id="startTime_datepicker"
+            />
+            <span
+              class="text-danger"
+              *ngIf="
+                form.controls['startTime']!.invalid &&
+                (form.controls['startTime'].dirty ||
+                  form.controls['startTime'].touched)
+              "
+            >
+              <span *ngIf="form.controls['startTime'].errors!.required">
                 Vui lòng nhập trường này
               </span>
             </span>
           </div>
         </div>
       </div>
+
       <!-- Add New -->
       <div class="card-footer d-flex justify-content-end py-6 px-9">
         <button

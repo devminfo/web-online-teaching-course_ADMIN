@@ -2,25 +2,25 @@
   <!-- begin::Header -->
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bolder fs-3 mb-1">Sub Specialize</span>
+      <span class="card-label fw-bolder fs-3 mb-1">Conversations</span>
       <span class="text-muted mt-1 fw-bold fs-7"
         >Selected {{ getSelection().length }} records</span
       >
     </h3>
     <div class="card-toolbar">
-      <!-- delete -->
+      <!-- finish -->
       <div class="card-toolbar" *ngIf="getSelection().length > 0">
         <a
           routerLink="/features/conversations"
           data-toggle="modal"
-          data-target="#deleteManyModal"
+          data-target="#finishManyModal"
           class="btn btn-sm btn-light-danger mr-1"
         >
           <span
             [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'"
             class="svg-icon svg-icon-3"
           ></span>
-          Delete
+          Finish
         </a>
       </div>
 
@@ -37,28 +37,6 @@
           Add New
         </a>
       </div>
-
-      <!-- begin::Menu -->
-      <button
-        type="button"
-        class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
-        data-kt-menu-trigger="click"
-        data-kt-menu-placement="bottom-end"
-        data-kt-menu-flip="top-end"
-      >
-        <span
-          [inlineSVG]="'./assets/media/icons/duotune/general/gen024.svg'"
-          class="svg-icon svg-icon-2"
-        ></span>
-      </button>
-      <!-- begin::Menu 1 -->
-      <conversation-filter
-        [conversations]="dataSourcesSpecialize"
-        (applyBtnClick)="onApplyBtnClick($event)"
-      >
-      </conversation-filter>
-      <!-- end::Menu 1 -->
-      <!-- end::Menu -->
     </div>
   </div>
   <!-- end::Header -->
@@ -88,10 +66,10 @@
                 />
               </div>
             </th>
-            <th class="min-w-150px">ID</th>
-            <th class="min-w-140px">Specialize Name</th>
-            <th class="min-w-140px">Sub Specialize Name</th>
-            <th class="min-w-120px">Position</th>
+            <th class="min-w-150px">Avatar</th>
+            <th class="min-w-140px">Class room</th>
+            <th class="min-w-140px">Chat Name</th>
+            <th class="min-w-120px">Total students</th>
             <th class="min-w-100px text-end">Actions</th>
           </tr>
         </thead>
@@ -114,44 +92,39 @@
               </div>
             </td>
 
-            <!-- ID -->
+            <!-- Image -->
             <td>
-              <a
-                routerLink="/features/conversations/update/{{ data.id }}"
-                class="text-dark fw-bolder text-hover-primary fs-6"
-              >
-                <p
-                  class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
-                >
-                  {{ data.id }}
-                </p>
-              </a>
+              <img
+                class="image-input-wrapper w-125px h-125px"
+                src="{{ data.avatar }}"
+                alt="{{ data.chatName }}"
+              />
             </td>
 
-            <!-- Id Specialize -->
+            <!-- Name -->
             <td>
               <p
                 class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
               >
-                {{ getSpecializeById(data.idSpecialize) }}
+                {{ data.chatName }}
               </p>
             </td>
 
-            <!-- Specialize Name -->
+            <!-- Class rooms -->
             <td>
               <p
                 class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
               >
-                {{ data.name }}
+                {{ data.idClassRoom?.name }}
               </p>
             </td>
 
-            <!-- Posision -->
+            <!-- Total students -->
             <td>
               <p
                 class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6"
               >
-                {{ data.position }}
+                {{ data.users.length }}
               </p>
             </td>
 
@@ -159,28 +132,11 @@
             <td class="text-end">
               <!-- update -->
               <a
-                routerLink="/features/conversations/update/{{ data.id }}"
+                routerLink="/features/conversations/update/{{ data._id }}"
                 class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
               >
                 <span
                   [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'"
-                  class="svg-icon svg-icon-3"
-                >
-                </span>
-              </a>
-
-              <!-- delete -->
-              <a
-                (click)="updateDeleteId(data.id)"
-                data-toggle="modal"
-                data-target="#deleteOneModal"
-                routerLink="/features/conversations"
-                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
-              >
-                <span
-                  [inlineSVG]="
-                    './assets/media/icons/duotune/general/gen027.svg'
-                  "
                   class="svg-icon svg-icon-3"
                 >
                 </span>
@@ -267,20 +223,20 @@
   </ul>
 </div>
 
-<!-- Delete one Modal -->
+<!-- Finish one Modal -->
 <div
   class="modal fade"
-  id="deleteOneModal"
+  id="checkFinishModal"
   tabindex="-1"
   role="dialog"
-  aria-labelledby="deleteOneModalLabel"
+  aria-labelledby="checkFinishModalLabel"
   aria-hidden="true"
 >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deleteOneModalLabel">
-          <b>CONFIRM REMOVE DATA</b>
+        <h5 class="modal-title" id="checkFinishModalLabel">
+          <b>CONFIRM FINISH DATA</b>
         </h5>
         <button
           type="button"
@@ -292,7 +248,7 @@
         </button>
       </div>
       <div class="modal-body">
-        Do you really want to delete these records? This process cannot be
+        Do you really want to finish these records? This process cannot be
         undone.
       </div>
       <div class="modal-footer">
@@ -303,7 +259,7 @@
           type="button"
           class="btn btn-danger"
           data-dismiss="modal"
-          (click)="onDeleteBtnClick()"
+          (click)="onFinishBtnClick()"
         >
           Accept
         </button>
@@ -312,20 +268,20 @@
   </div>
 </div>
 
-<!-- Delete many Modal -->
+<!-- Finish many Modal -->
 <div
   class="modal fade"
-  id="deleteManyModal"
+  id="finishManyModal"
   tabindex="-1"
   role="dialog"
-  aria-labelledby="deleteManyModalLabel"
+  aria-labelledby="finishManyModalLabel"
   aria-hidden="true"
 >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deleteManyModalLabel">
-          <b>CONFIRM REMOVE DATA</b>
+        <h5 class="modal-title" id="finishManyModalLabel">
+          <b>CONFIRM FINISH DATA</b>
         </h5>
         <button
           type="button"
@@ -337,7 +293,7 @@
         </button>
       </div>
       <div class="modal-body">
-        Do you really want to delete {{ getSelection().length }} select records?
+        Do you really want to finish {{ getSelection().length }} select records?
         This process cannot be undone.
       </div>
       <div class="modal-footer">
@@ -348,7 +304,7 @@
           type="button"
           class="btn btn-danger"
           data-dismiss="modal"
-          (click)="onDeleteManyBtnClick()"
+          (click)="onFinishManyBtnClick()"
         >
           Accept
         </button>

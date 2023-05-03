@@ -1,15 +1,19 @@
+import flatpickr from 'flatpickr';
 import {
   Component,
   OnInit,
   OnDestroy,
   AfterViewInit,
   ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from 'src/app/core/services/common.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ClassRoomService } from 'src/app/core/services/features/f13-class-room.service';
+
 @Component({
   selector: 'app-class-room-update',
   templateUrl: './class-room-update.component.html',
@@ -22,15 +26,21 @@ export class ClassRoomUpdateComponent
   subscription: Subscription[] = [];
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
+  // binding uploads thumbnail or file
+  @ViewChild('inputImage', { static: false })
+  inputImage: ElementRef;
 
   // binding data
   input: any = {
-    idSpecialize: '',
+    members: [],
+    teacher: '',
     name: '',
-    position: '',
+    thumbnail: '',
+    desc: '',
+    startTime: 0,
   };
 
-  classRooms: any[];
+  thumbnailOld: string;
 
   //form
   form: FormGroup;
@@ -49,7 +59,6 @@ export class ClassRoomUpdateComponent
    */
   constructor(
     private api: ClassRoomService,
-    private classRoomService: ClassRoomService,
     private common: CommonService,
     private router: Router,
     private route: ActivatedRoute,
@@ -60,14 +69,12 @@ export class ClassRoomUpdateComponent
       this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res))
     );
 
-    // Get classRooms
-    this.getAllSpecializes();
-
     // add validate for controls
     this.form = this.formBuilder.group({
-      idSpecialize: [null, [Validators.required]],
       name: [null, [Validators.required]],
-      position: [null, [Validators.required]],
+      thumbnail: [null, [Validators.required]],
+      desc: [null, [Validators.required]],
+      startTime: [null, [Validators.required]],
     });
   }
 
@@ -82,6 +89,14 @@ export class ClassRoomUpdateComponent
     if (this.id) {
       this.onLoadDataById(this.id);
     }
+
+    flatpickr('#startTime_datepicker', {
+      // locale: Vietnamese,
+      dateFormat: 'd/m/Y',
+      minDate: '12/12/1940',
+      maxDate: '12/12/2015',
+      defaultDate: '12/12/2000',
+    });
   }
 
   /**
@@ -110,10 +125,13 @@ export class ClassRoomUpdateComponent
       this.api.find(id).subscribe((data) => {
         // load data to view input
         this.input = {
+          teacher: data.teacher,
           name: data.name,
-          position: data.position,
-          idSpecialize: data.idSpecialize,
+          thumbnail: data.thumbnail,
+          desc: data.desc,
+          startTime: new Date(data.startTime).toLocaleDateString('vi-VN'),
         };
+        this.thumbnailOld = data.thumbnail;
 
         // hide loading
         this.isLoading$.next(false);
@@ -123,14 +141,24 @@ export class ClassRoomUpdateComponent
   }
 
   /**
-   * Get all classRooms
+   * onImageUploadClick
    */
-  getAllSpecializes() {
+  onImageUploadClick() {
     this.subscription.push(
-      this.classRoomService.get().subscribe((data) => {
-        this.classRooms = data;
+      this.common.uploadImageCore(this.inputImage).subscribe((data) => {
+        if (data) {
+          this.input.thumbnail = data['files'][0];
+        }
       })
     );
+  }
+
+  /**
+   * onImageDeleteClick
+   */
+  onImageDeleteClick() {
+    const isDelete = confirm('Bạn có muốn xóa hình? ');
+    if (isDelete) this.input.thumbnail = '';
   }
 
   /**
@@ -141,10 +169,35 @@ export class ClassRoomUpdateComponent
     this.form.markAllAsTouched();
 
     // check form pass all validate
-    if (!this.form.invalid) {
-      // show loading
-      this.isLoading$.next(true);
+    if (this.form.invalid) return;
 
+    // show loading
+    this.isLoading$.next(true);
+
+    const [day, month, year] = this.input.startTime.split('/');
+    this.input.startTime = new Date(year, +month - 1, day).getTime();
+
+    // confirm use classRoom
+    if (this.input.thumbnail !== this.thumbnailOld && this.input.thumbnail) {
+      this.common
+        .comfirmImages([this.input.thumbnail])
+        .subscribe((dataImage) => {
+          console.log({ dataImage });
+          this.input.thumbnail = dataImage[0][2];
+          this.subscription.push(
+            this.api.update(this.id, this.input).subscribe(() => {
+              // hide loading
+              this.isLoading$.next(false);
+              this.cdr.detectChanges();
+
+              this.common.showSuccess('Update Success!');
+
+              // redirect to list
+              this.router.navigate(['/features/classrooms']);
+            })
+          );
+        });
+    } else {
       this.subscription.push(
         this.api.update(this.id, this.input).subscribe(() => {
           // hide loading
@@ -154,7 +207,7 @@ export class ClassRoomUpdateComponent
           this.common.showSuccess('Update Success!');
 
           // redirect to list
-          this.router.navigate(['/features/classRooms']);
+          this.router.navigate(['/features/classrooms']);
         })
       );
     }
