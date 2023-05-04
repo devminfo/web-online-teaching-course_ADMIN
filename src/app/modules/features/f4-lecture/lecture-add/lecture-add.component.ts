@@ -176,8 +176,7 @@ export class LectureAddComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.input.url) {
       this.common.comfirmImages([this.input.url]).subscribe((urls) => {
-        this.input.url = urls[0][0];
-
+        item.url = urls[0][0];
         this.subscription.push(
           this.api.add(item).subscribe(() => {
             // hide loading
