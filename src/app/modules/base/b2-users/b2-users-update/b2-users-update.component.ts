@@ -320,7 +320,7 @@ export class B2UsersUpdateComponent
       this.onLoadData();
     }
 
-    flatpickr('#born_datepicker', {
+    flatpickr('#dateOfBirth_datepicker', {
       // locale: Vietnamese,
       dateFormat: 'd/m/Y',
       minDate: '12/12/1940',
@@ -716,22 +716,24 @@ export class B2UsersUpdateComponent
       // show loading
       this.isLoading$.next(true);
 
-      // update born
-      const { born, phone, email, role, ...rest } = this.inputUserInfo;
+      // update dateOfBirth
+      const { dateOfBirth, role, ...rest } = this.inputUserInfo;
+      const [day, month, year] = dateOfBirth
+        ? dateOfBirth.split('/')
+        : [0, 0, 0];
 
-      const [day, month, year] = born ? born.split('/') : [0, 0, 0];
-
-      if (!phone || phone === this.inputUserInfoOriginal.phone)
+      if (!rest.phone || rest.phone === this.inputUserInfoOriginal.phone)
         delete rest.phone;
-      if (!email || email === this.inputUserInfoOriginal.email)
+      if (!rest.email || rest.email === this.inputUserInfoOriginal.email)
         delete rest.email;
 
       // new useritem
       let userItem: any = {
         ...rest,
-        born: born ? new Date(year, +month - 1, day).getTime() : 0,
+        dateOfBirth: dateOfBirth
+          ? new Date(year, +month - 1, day).getTime()
+          : 0,
       };
-
       // check update manager
       if (this.isManager) {
         const authorizationItem = {

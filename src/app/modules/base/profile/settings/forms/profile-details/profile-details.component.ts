@@ -158,11 +158,11 @@ export class ProfileDetailsComponent implements OnInit {
         gender: this.input.gender.toUpperCase(),
       };
 
-      const oldBorn = this.userDetail.dateOfBirth;
-      const updateBorn = this.input.dateOfBirth;
+      const oldDateOfBirth = this.userDetail.dateOfBirth;
+      const updateDateOfBirth = this.input.dateOfBirth;
 
       // check dateOfBirth change
-      if (oldBorn !== updateBorn) {
+      if (oldDateOfBirth !== updateDateOfBirth) {
         const [day, month, year] = this.input.dateOfBirth.split('/');
         dataUpdate.dateOfBirth = new Date(year, +month - 1, day).getTime();
         this.userDetail.dateOfBirth = new Date(

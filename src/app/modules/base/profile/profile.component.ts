@@ -83,7 +83,7 @@ export class ProfileComponent implements OnInit {
             this.profileCompletionPercentage += 10;
             this.profileCompletionPercentageProgressWith = `${this.profileCompletionPercentage}%`;
           }
-          if (data.born) {
+          if (data.dateOfBirth) {
             this.profileCompletionPercentage += 10;
             this.profileCompletionPercentageProgressWith += 10;
           }

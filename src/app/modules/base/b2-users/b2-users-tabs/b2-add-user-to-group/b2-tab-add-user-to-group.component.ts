@@ -226,7 +226,7 @@ export class B8TabAddUserToGroupComponent
       .paginate({
         page: this.usersPageIndex,
         limit: this.usersPageSize,
-        fields: 'fullName,avatar,born,role,gender,address',
+        fields: 'fullName,avatar,dateOfBirth,role,gender,address',
         filter,
       })
       .subscribe((data) => {

@@ -311,22 +311,24 @@
                   <div class="col-lg-8 fv-row">
                     <input
                       placeholder="Pick a date"
-                      formControlName="born"
-                      [(ngModel)]="inputUserInfo.born"
+                      formControlName="dateOfBirth"
+                      [(ngModel)]="inputUserInfo.dateOfBirth"
                       class="form-control form-control-lg form-control-solid mrb-5"
                       placeholder="Pick a date"
-                      id="born_datepicker"
+                      id="dateOfBirth_datepicker"
                     />
                     <span
                       class="text-danger"
                       *ngIf="
-                        formUserInfo.controls['born']!.invalid &&
-                        (formUserInfo.controls['born'].dirty ||
-                          formUserInfo.controls['born'].touched)
+                        formUserInfo.controls['dateOfBirth']!.invalid &&
+                        (formUserInfo.controls['dateOfBirth'].dirty ||
+                          formUserInfo.controls['dateOfBirth'].touched)
                       "
                     >
                       <span
-                        *ngIf="formUserInfo.controls['born'].errors!.required"
+                        *ngIf="
+                          formUserInfo.controls['dateOfBirth'].errors!.required
+                        "
                       >
                         Vui lòng nhập trường này
                       </span>
