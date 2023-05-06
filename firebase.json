@@ -1,6 +1,6 @@
 {
     "hosting": {
-        "public": "dist/p36traficlight-admin",
+        "public": "dist/web-online-teaching-admin",
         "ignore": [
             "firebase.json",
             "**/.*",

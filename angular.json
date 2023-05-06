@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "p36traficlight-admin": {
+    "web-online-teaching-admin": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/p36traficlight-admin",
+            "outputPath": "dist/web-online-teaching-admin",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -79,10 +79,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "p36traficlight-admin:build:production"
+              "browserTarget": "web-online-teaching-admin:build:production"
             },
             "development": {
-              "browserTarget": "p36traficlight-admin:build:development"
+              "browserTarget": "web-online-teaching-admin:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -90,7 +90,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "p36traficlight-admin:build"
+            "browserTarget": "web-online-teaching-admin:build"
           }
         },
         "test": {
@@ -114,5 +114,5 @@
       }
     }
   },
-  "defaultProject": "p36traficlight-admin"
+  "defaultProject": "web-online-teaching-admin"
 }
