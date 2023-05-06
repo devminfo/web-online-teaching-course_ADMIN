@@ -16,10 +16,10 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'p36traficlight-admin'`, () => {
+  it(`should have as title 'web-online-teaching-admin'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('p36traficlight-admin');
+    expect(app.title).toEqual('web-online-teaching-admin');
   });
 
   it('should render title', () => {
@@ -27,7 +27,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.content span')?.textContent).toContain(
-      'p36traficlight-admin app is running!'
+      'web-online-teaching-admin app is running!'
     );
   });
 });
