@@ -53,7 +53,7 @@ export class B2UsersAddComponent implements OnInit, AfterViewInit, OnDestroy {
     gender: 'female',
     role: 'customer',
     groups: [],
-    born: 0,
+    dateOfBirth: 0,
   };
 
   // group apis
@@ -109,7 +109,7 @@ export class B2UsersAddComponent implements OnInit, AfterViewInit, OnDestroy {
       password: [null, [Validators.required]],
       groups: [null, []],
       phone: [null, []],
-      born: [null, []],
+      dateOfBirth: [null, []],
       role: [null, []],
     });
   }
@@ -300,7 +300,7 @@ export class B2UsersAddComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.onLoadData();
 
-    flatpickr('#born_datepicker', {
+    flatpickr('#dateOfBirth_datepicker', {
       // locale: Vietnamese,
       dateFormat: 'd/m/Y',
       minDate: '12/12/1940',
@@ -558,14 +558,18 @@ export class B2UsersAddComponent implements OnInit, AfterViewInit, OnDestroy {
 
       if (!this.inputUserInfo['phone']) delete this.inputUserInfo.phone;
 
-      // update born
-      const { born, role, ...rest } = this.inputUserInfo;
-      const [day, month, year] = born ? born.split('/') : [0, 0, 0];
+      // update dateOfBirth
+      const { dateOfBirth, role, ...rest } = this.inputUserInfo;
+      const [day, month, year] = dateOfBirth
+        ? dateOfBirth.split('/')
+        : [0, 0, 0];
 
       // new useritem
       let userItem: any = {
         ...rest,
-        born: born ? new Date(year, +month - 1, day).getTime() : 0,
+        dateOfBirth: dateOfBirth
+          ? new Date(year, +month - 1, day).getTime()
+          : 0,
       };
 
       // check add manager
