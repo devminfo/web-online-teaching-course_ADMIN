@@ -93,9 +93,8 @@ export class ClassRoomUpdateComponent
     flatpickr('#startTime_datepicker', {
       // locale: Vietnamese,
       dateFormat: 'd/m/Y',
-      minDate: '12/12/1940',
-      maxDate: '12/12/2015',
-      defaultDate: '12/12/2000',
+      minDate: '12/12/2020',
+      maxDate: '12/12/2030',
     });
   }
 
